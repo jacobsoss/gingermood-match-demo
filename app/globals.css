@@ -1,0 +1,156 @@
+@import "tailwindcss";
+
+/* ===========================================================================
+   Gingermood demo — design system (DESIGN.md §1)
+   Governing rule (§0): ~90% neutral · ~7% purple · ~3% orange.
+   Orange is reserved EXCLUSIVELY for primary actions + progress fill.
+   Purple lives quietly as tints, selected states, links, fit bars, and ink.
+   Every component reads these tokens — zero hardcoded hex in components.
+   =========================================================================== */
+:root {
+  /* Brand */
+  --gm-orange-500: #f18a00; /* brand orange — actions only */
+  --gm-orange-600: #d97300; /* hover/pressed */
+  --gm-orange-100: #fdeedc; /* rare warm tint */
+  --gm-purple-500: #5e3b8e; /* links, selected states, fit bars */
+  --gm-purple-700: #46286e; /* hover on purple elements */
+  --gm-purple-100: #efeaf7; /* lavender tint surface */
+  --gm-purple-50: #f7f4fb; /* faintest lavender wash */
+
+  /* Neutrals & text */
+  --gm-ink: #2b2140; /* headings + primary text: near-black aubergine */
+  --gm-text-2: #6b6380; /* secondary text */
+  --gm-bg: #faf8f5; /* page background: warm off-white */
+  --gm-surface: #ffffff; /* cards */
+  --gm-border: #e9e4f0; /* hairlines, lavender-tinted */
+
+  /* Semantic (sparing) */
+  --gm-success: #2e7d45;
+  --gm-error: #c73a2b;
+  --gm-focus-ring: rgba(241, 138, 0, 0.35);
+
+  /* Persistent chrome: 3px brand stripe + 68px nav */
+  --nav-h: 71px;
+}
+
+/* Map tokens to Tailwind v4 utility colours */
+@theme {
+  --color-page: var(--gm-bg);
+  --color-surface: var(--gm-surface);
+  --color-ink: var(--gm-ink);
+  --color-muted: var(--gm-text-2);
+  --color-hair: var(--gm-border);
+
+  --color-orange: var(--gm-orange-500);
+  --color-orange-600: var(--gm-orange-600);
+  --color-orange-100: var(--gm-orange-100);
+
+  --color-purple: var(--gm-purple-500);
+  --color-purple-700: var(--gm-purple-700);
+  --color-tint: var(--gm-purple-100);
+  --color-wash: var(--gm-purple-50);
+
+  --color-success: var(--gm-success);
+  --color-error: var(--gm-error);
+
+  /* Radius (§3): cards 20 · inputs 14 · controls pill */
+  --radius-card: 20px;
+  --radius-input: 14px;
+
+  /* The ONE allowed shadow — matched-coach card only (§3) */
+  --shadow-coach: 0 8px 24px rgba(43, 33, 64, 0.08);
+}
+
+/* Fonts injected as CSS vars on <html> by next/font; expose as families (§2) */
+@theme inline {
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-source);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--gm-bg);
+  color: var(--gm-ink);
+  font-family: var(--font-source), ui-sans-serif, system-ui, sans-serif;
+  font-size: 17px; /* body never below 17px (§2) */
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior-y: none;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Fraunces: display only — h1/h2/h3, coach name, score (§2). Tight tracking. */
+.font-display {
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+/* Focus ring (§1) — purple border handled per-component, ring here */
+.gm-focus:focus-visible {
+  outline: none;
+  border-color: var(--gm-purple-500);
+  box-shadow: 0 0 0 4px var(--gm-focus-ring);
+}
+
+/* ---- Motion (§6): transform + opacity only, 200–250ms ease-out ---- */
+@keyframes gm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.gm-rise {
+  animation: gm-rise 0.24s ease-out both;
+}
+
+/* Fit bars animate from 0 once, transform-only (origin left) */
+@keyframes gm-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.gm-grow {
+  transform-origin: left center;
+  animation: gm-grow 0.5s ease-out both;
+}
+
+/* Processing dot-trio pulse — opacity only (§5) */
+@keyframes gm-dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .gm-grow {
+    transform: scaleX(1) !important;
+  }
+}

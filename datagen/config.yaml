@@ -1,0 +1,253 @@
+# ============================================================================
+# Gingermood Synthetic Data Generator — assumption registry
+# Every coefficient, rate, size, and seed used by the DGP lives here.
+# Nothing is hardcoded elsewhere. Same seed -> identical dataset.
+# Section references (§) point at DATAGEN.md.
+# ============================================================================
+
+seed: 20250601                      # master seed; all stages derive sub-seeds from it
+
+paths:
+  output_dir: data/synth/v1         # public CSVs (relative to repo root)
+  latents_dir: data/synth/v1/latents
+  plots_dir: data/synth/v1/plots
+
+# ----------------------------------------------------------------------------
+# Sizes & timeline
+# ----------------------------------------------------------------------------
+sizes:
+  n_coaches: 120                    # §2a target pool size
+  # §2b / §6: yearly client volumes proportional to real growth 653:852:941
+  clients_per_year:
+    2023: 653
+    2024: 852
+    2025: 941
+
+years: [2023, 2024, 2025]
+
+# §2b / §4d: monthly intake seasonality — Sept & Jan peaks, summer dip.
+# Weights are relative; normalized per year before sampling.
+seasonality_month_weights:
+  1: 1.35    # Jan peak
+  2: 1.05
+  3: 1.05
+  4: 1.00
+  5: 0.95
+  6: 0.80
+  7: 0.55    # summer dip
+  8: 0.65
+  9: 1.45    # Sept peak
+  10: 1.20
+  11: 1.05
+  12: 0.75
+
+# ----------------------------------------------------------------------------
+# COACHES (§2a)
+# ----------------------------------------------------------------------------
+coaches:
+  gender_female_p: 0.55
+  # NL provinces, Randstad-weighted; small east/south/north presence (§2a)
+  region_weights:
+    Noord-Holland: 0.20
+    Zuid-Holland: 0.20
+    Utrecht: 0.16
+    Noord-Brabant: 0.11
+    Gelderland: 0.10
+    Overijssel: 0.05
+    Limburg: 0.05
+    Groningen: 0.04
+    Friesland: 0.03
+    Flevoland: 0.03
+    Drenthe: 0.02
+    Zeeland: 0.01
+  language_probs:                   # NL 100%, EN ~70%, other ~10%
+    nl: 1.00
+    en: 0.70
+    other: 0.10
+  years_experience:                 # lognormal, clipped 3–30 (§2a)
+    meanlog: 2.30                   # exp(2.30) ≈ 10 yrs median
+    sdlog: 0.45
+    min: 3
+    max: 30
+  n_specialisms_weights: {1: 0.45, 2: 0.40, 3: 0.15}
+  n_methods_weights: {1: 0.30, 2: 0.45, 3: 0.25}
+  n_sectors_weights: {1: 0.40, 2: 0.40, 3: 0.20}
+  working_style_beta: [2.0, 2.0]    # Beta(a,b) per axis (directive/structured/challenging↔...)
+  personality_beta: [2.0, 2.0]      # Big-5-lite, 5 axes
+  capacity:                         # max concurrent trajectories, 2–8 (§2a)
+    min: 2
+    max: 8
+    poisson_lambda: 7.0             # shifted-Poisson shape, then clipped to [min,max]
+  # visible_profile_appeal (public): polished-profile signal, weakly tied to experience (§2c)
+  appeal:
+    experience_coef: 0.025          # per year (small)
+    base: 0.45
+    noise_sd: 0.30
+  # join/leave dynamics (§2a, §4e)
+  churn:
+    joiners_per_year: 8
+    leavers_per_year: 10
+    low_match_threshold_k: 3        # matches/year below which leave-hazard is elevated
+    base_leave_hazard: 0.095        # per year, well-matched coach
+    low_match_hazard: 0.22          # per year, after 2 consecutive low-match years
+    prejoin_fraction: 0.80          # fraction of pool already active before 2023
+  # LATENT: true_competence per specialism (§2a) — weak corr with experience (Graßmann)
+  true_competence:
+    mean: 0.55
+    sd: 0.18
+    experience_corr: 0.20           # target Pearson r with years_experience
+    min: 0.02
+    max: 0.99
+
+# ----------------------------------------------------------------------------
+# CLIENTS (§2b)
+# ----------------------------------------------------------------------------
+clients:
+  age_band_weights: {"25-34": 0.28, "35-44": 0.34, "45-54": 0.24, "55-64": 0.14}
+  gender_female_p: 0.58
+  sector_weights:                   # mirror real client mix (§2b)
+    insurance_finance: 0.24
+    transport_logistics: 0.18
+    zorg: 0.17
+    professional_services: 0.20
+    public: 0.13
+    tech: 0.08
+  employer_size_weights: {small: 0.18, medium: 0.34, large: 0.48}
+  role_level_weights: {employee: 0.70, manager: 0.25, director: 0.05}
+  language_probs: {nl: 1.00, en: 0.25, other: 0.04}
+  # region follows employer footprint -> Randstad-weighted like coaches
+  region_weights:
+    Noord-Holland: 0.21
+    Zuid-Holland: 0.21
+    Utrecht: 0.15
+    Noord-Brabant: 0.12
+    Gelderland: 0.10
+    Overijssel: 0.05
+    Limburg: 0.05
+    Groningen: 0.04
+    Friesland: 0.02
+    Flevoland: 0.03
+    Drenthe: 0.01
+    Zeeland: 0.01
+  n_needs_weights: {2: 0.40, 3: 0.40, 4: 0.20}     # idiosyncratic_needs count
+  n_desired_char: {2: 0.55, 3: 0.45}               # desired_coach_characteristics count
+  # stated desired chars only partially overlap what truly helps (§2b, planted)
+  desired_pref_true_overlap: 0.60
+  working_style_pref_beta: [2.0, 2.0]
+  personality_beta: [2.0, 2.0]
+  urgency_weights: {low: 0.30, med: 0.50, high: 0.20}
+  secondary_theme_prob: 0.70        # P(client has a secondary theme)
+  # primary_theme: 2025 anchor weights (§3); plus year drift below
+  theme_drift:                      # multiplicative share drift vs 2025 baseline
+    # stress & zelfonderzoek share RISES 2023->2025; apply inverse for earlier years
+    rising_themes: [stress, zelfonderzoek]
+    factor_2023: 0.78               # rising themes were smaller in 2023
+    factor_2024: 0.90
+    factor_2025: 1.00
+  # LATENT: motivation ~ Beta(alpha,beta), mean ≈ 0.6 (§2b) — unobserved confounder
+  motivation_beta: [3.0, 2.0]       # mean = 3/(3+2) = 0.60
+
+# ----------------------------------------------------------------------------
+# DGP COEFFICIENTS (§4)
+# ----------------------------------------------------------------------------
+dgp:
+  true_fit:                         # §4a
+    beta1_need_competency: 0.50     # dominant
+    beta2_true_competence: 0.20     # competence, NOT years
+    beta3_sector_match: 0.12
+    beta4_working_style: 0.10
+    beta5_personality_sim: 0.00     # PLANTED NULL
+    eps_sd: 0.15
+
+  legacy:                           # §4b — deliberately imperfect shortlist
+    w_theme_match: 0.40
+    w_personality_sim: 0.30         # overweights the WRONG feature
+    w_availability: 0.20
+    noise_sd: 0.008                 # lower noise -> sharper ranking -> concentration
+    shortlist_size: 3
+
+  choice:                           # §4c — softmax with outside option
+    gamma_appeal: 4.6
+    gamma_stated_pref: 1.8
+    position_bias: [0.45, 0.15, 0.0]  # rank 1,2,3
+    outside_option_utility: 5.15    # tuned so first-shortlist failure ≈ 30–40%
+    temperature: 1.0
+
+  outcomes:                         # §4d
+    alliance:
+      w_true_fit: 0.50
+      w_motivation: 0.30
+      noise_sd: 0.10
+    dropout:                        # logit(δ0 − δ1·TrueFit − δ2·Motivation), calibrate ≈20%
+      delta0: 0.18
+      delta1_true_fit: 1.7
+      delta2_motivation: 1.3
+      year_offset: {2023: -0.24, 2024: 0.18, 2025: 0.19}   # hit 16.7/20.2/20.7%
+      employer_segment_extra:       # up to ~33% in some segments
+        public: 0.55
+    n_sessions:                     # shifted Poisson, typical 5–12
+      base_lambda: 2.8
+      true_fit_coef: 4.5
+      motivation_coef: 2.5
+      shift: 1                      # minimum sessions for a started trajectory
+      session_interval_days: 10     # trajectory occupancy = n_sessions * this (capacity turnover)
+    satisfaction:                   # 0–1 latent then scaled to 1–10
+      a1_alliance: 0.45
+      a2_true_fit: 0.30
+      a3_motivation: 0.20
+      a4_personality_sim: 0.05      # small PLANTED NEGATIVE (Solms)
+      noise_sd: 0.07
+    goal_achievement:               # alliance does NOT enter (planted)
+      b1_need_competency: 0.62
+      b2_motivation: 0.30
+      noise_sd: 0.08
+    rematch:                        # ↑ when early satisfaction low
+      base: 0.05
+      low_satis_slope: 0.55
+      low_satis_threshold: 0.45     # on the 0–1 satisfaction scale
+    evaluation_completed:           # MNAR (§4d) — base by year, lowered for dropout/low-satis
+      base_by_year: {2023: 0.92, 2024: 0.85, 2025: 0.78}   # monotone decline 2023>2024>2025
+      dropout_penalty: 0.28
+      low_satis_penalty: 0.22       # applied below low_satis_threshold
+      low_satis_threshold: 0.45
+  dropout_reason_weights:           # §2d / §6: disappeared > no-longer-wanted > external
+    disappeared: 0.42
+    no-longer-wanted: 0.30
+    external-coach: 0.18
+    other: 0.10
+
+# ----------------------------------------------------------------------------
+# VALIDATION (§6 / §7)
+# ----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
+# TEXTURE (LLM text layer, §6) — TEXT FIELDS ONLY, never structured fields.
+# Runs AFTER validation; conditioned on finished rows; batched, cached, resumable.
+# ----------------------------------------------------------------------------
+texture:
+  model: claude-haiku-4-5           # cheap/fast; text only (names, bios, narratives, comments)
+  temperature: 0.85
+  max_tokens: 2000
+  batch_size: 20                    # rows per API call
+  cache_dir: data/synth/v1/texture_cache
+
+validation:
+  rel_tolerance: 0.15               # ±15% relative on anchors
+  anchors:
+    client_volume_ratio: {2023: 653, 2024: 852, 2025: 941}
+    dropout_rate_by_year: {2023: 0.167, 2024: 0.202, 2025: 0.207}
+    first_shortlist_failure: [0.30, 0.40]      # acceptable band
+    evaluation_completion_by_year: {2023: 0.788, 2024: 0.721, 2025: 0.688}
+    top_coach_matches_per_year: [25, 30]
+    share_coaches_le2_matches_per_year: 0.25   # >= this
+    pool_size: 120
+    joiners_per_year: 8
+    leavers_per_year: 10
+  recovery:
+    test_size: 0.25
+    n_folds: 5                    # k-fold CV for the headline R² metrics
+    gbm_max_iter: 200
+    gbm_learning_rate: 0.05
+    gbm_max_depth: 3              # regularize: weak public signal must not overfit
+    gbm_min_samples_leaf: 30
+    gbm_l2_regularization: 1.0
+    n_permutation_repeats: 10

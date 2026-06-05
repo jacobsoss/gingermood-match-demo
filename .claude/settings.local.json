@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm --version)",
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "PowerShell($paths = @\\(\"$env:ProgramFiles\\\\nodejs\\\\node.exe\", \"${env:ProgramFiles\\(x86\\)}\\\\nodejs\\\\node.exe\", \"$env:LOCALAPPDATA\\\\Programs\\\\nodejs\\\\node.exe\", \"$env:APPDATA\\\\npm\\\\node.exe\", \"$env:LOCALAPPDATA\\\\fnm_multishells\", \"$env:USERPROFILE\\\\.nvm\", \"$env:USERPROFILE\\\\scoop\\\\apps\\\\nodejs\"\\); foreach \\($p in $paths\\) { if \\(Test-Path $p\\) { \"FOUND: $p\" } }; Get-Command nvm,fnm,volta,pnpm,yarn,bun -ErrorAction SilentlyContinue | Select-Object Name,Source; \"winget check:\"; \\(Get-Command winget -ErrorAction SilentlyContinue\\).Source)",
+      "mcp__Claude_Preview__preview_start",
+      "PowerShell($env:Path = \"C:\\\\Program Files\\\\nodejs;\" + $env:Path; Set-Location \"C:\\\\Users\\\\jacob\\\\Desktop\\\\Gingermood\"; npx tsc --noEmit)",
+      "Skill(claude-api)",
+      "Skill(claude-api:*)"
+    ]
+  }
+}
