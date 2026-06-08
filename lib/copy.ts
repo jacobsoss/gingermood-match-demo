@@ -10,7 +10,7 @@ export const COPY = {
     eyebrow: "Adaptieve intake",
     title: "Vind de coach die bij jou past",
     subtitle:
-      "Geen standaardformulier. Een paar slimme vragen die meebewegen met jouw antwoorden — en een match op je werkelijke behoeften, niet op een persoonlijkheidstype.",
+      "Geen standaardformulier. Een paar slimme vragen die meebewegen met jouw antwoorden; en een match op je werkelijke behoeften en wensen.",
     start: "Begin de intake",
     personasIntro: "Of bekijk direct een voorbeeld:",
     personaCta: "Probeer dit voorbeeld →",
@@ -21,6 +21,12 @@ export const COPY = {
   question: {
     progress: (current: number, total: number) => `Vraag ${current} van ${total}`,
     openPlaceholder: "Typ hier je antwoord… (of tik hieronder)",
+    cityPlaceholder: "Zoek je plaats…",
+    citySuggested: "Grootste steden",
+    listening: "Luisteren…",
+    micStart: "Spreek je antwoord in",
+    micStop: "Stop met dicteren",
+    micUnavailable: "Microfoon niet beschikbaar",
     chipsHintSingle: "Kies er één",
     chipsHintMulti: "Kies wat past — meerdere mag",
     continue: "Verder",
@@ -31,6 +37,10 @@ export const COPY = {
 
   processing: {
     lines: ["Je antwoorden lezen…", "Behoeften in kaart brengen…", "Coaches matchen…"],
+  },
+
+  thinking: {
+    lines: ["Je antwoord lezen…", "De volgende vraag voorbereiden…"],
   },
 
   result: {
@@ -55,6 +65,12 @@ export const COPY = {
     behindToggleClose: "Verberg de data",
     restart: "Opnieuw beginnen",
     tryAnother: "Probeer een ander profiel",
+    rangeRelaxed: (city: string, requestedKm: number, nearestKm: number) =>
+      `Geen coach binnen ${requestedKm} km van ${city}. We tonen de best passende coach daarbuiten — de dichtstbijzijnde zit op ongeveer ${nearestKm} km. Online coaching is overal mogelijk.`,
+    humanPrompt: "Niet tevreden met deze match?",
+    humanCta: "Laat een matchmaker het persoonlijk afstemmen",
+    humanConfirm:
+      "Genoteerd. Een van onze matchmakers kijkt persoonlijk naar je profiel en neemt contact met je op.",
     sourceAi: "Live AI-match",
     sourceFallback: "Offline reservematch",
   },

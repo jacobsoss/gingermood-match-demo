@@ -6,7 +6,7 @@ import type {
 } from "@/lib/types";
 import { COACHES, getCoach } from "@/data/coaches";
 import { nextQuestionFallback, runFallbackMatch } from "@/lib/fallback";
-import { extractFilters, poolForFilters } from "@/lib/filters";
+import { extractFilters, intakeCount, poolForFilters } from "@/lib/filters";
 
 /**
  * Client-side engine facade. The app runs in Live AI only.
@@ -26,9 +26,9 @@ function nextQuestionFallbackResponse(answers: Answer[]): NextQuestionResponse {
 }
 
 function matchFallbackResponse(answers: Answer[]): MatchResponse {
-  const { pool } = poolForFilters(COACHES, extractFilters(answers));
+  const { pool, rangeInfo } = poolForFilters(COACHES, extractFilters(answers));
   const { profile, match, coach, runnerUp } = runFallbackMatch(answers, pool);
-  return { profile, match, coach, runnerUp, source: "fallback" };
+  return { profile, match, coach, runnerUp, source: "fallback", rangeInfo };
 }
 
 /** POST with a timeout and one silent retry. Throws if both attempts fail. */
@@ -62,6 +62,7 @@ export async function getNextQuestion(answers: Answer[]): Promise<NextQuestionRe
       locale: LOCALE,
       answers,
       askedIds: answers.map((a) => a.questionId),
+      questionCount: intakeCount(answers),
     });
   } catch {
     return nextQuestionFallbackResponse(answers);

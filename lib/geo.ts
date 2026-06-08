@@ -1,49 +1,44 @@
 /**
- * Lightweight geo for the in-person / hybrid location filter.
- * Approximate [lat, lon] for the NL cities our coaches sit in, plus the major
- * cities offered as quick-picks. Unknown cities are treated as "no constraint"
- * (we never exclude a coach we can't place).
+ * Geo for the in-person / hybrid location filter + the city search box.
+ *
+ * Coordinates and the searchable place list come from lib/cities.json, generated
+ * from the GeoNames NL postal dump (CC-BY) by data/build_cities.py — ~2,400 Dutch
+ * towns and villages, so the search covers everyone and the range filter has real
+ * distances everywhere. Unknown places are treated as "no constraint".
  */
-const CITY_COORDS: Record<string, [number, number]> = {
-  amsterdam: [52.37, 4.9],
-  rotterdam: [51.92, 4.48],
-  "den haag": [52.08, 4.31],
-  utrecht: [52.09, 5.12],
-  eindhoven: [51.44, 5.48],
-  groningen: [53.22, 6.57],
-  tilburg: [51.56, 5.09],
-  breda: [51.59, 4.78],
-  nijmegen: [51.84, 5.86],
-  arnhem: [51.98, 5.91],
-  haarlem: [52.38, 4.64],
-  zwolle: [52.51, 6.09],
-  enschede: [52.22, 6.9],
-  maastricht: [50.85, 5.69],
-  leiden: [52.16, 4.49],
-  amersfoort: [52.16, 5.39],
-  apeldoorn: [52.21, 5.97],
-  "s-hertogenbosch": [51.7, 5.3],
-  "den bosch": [51.7, 5.3],
-  almere: [52.35, 5.26],
-};
+import citiesData from "./cities.json";
 
-/** Major NL cities offered as quick-pick chips for the location question. */
-export const CITY_OPTIONS = [
-  "Amsterdam", "Rotterdam", "Den Haag", "Utrecht", "Eindhoven",
-  "Groningen", "Tilburg", "Breda", "Nijmegen",
-];
+const CITY_COORDS = citiesData.coords as unknown as Record<string, [number, number]>;
+
+/** Searchable place list (display names). citiesData.top holds the 5 defaults. */
+export const NL_CITIES = citiesData.names as string[];
+const TOP_CITIES = citiesData.top as string[];
 
 function norm(city: string): string {
   return city
     .toLowerCase()
-    .replace(/\(.*?\)/g, "") // "Amsterdam (Zuidas)" -> "amsterdam"
+    .replace(/\(.*?\)/g, "")
     .replace(/[’'`]/g, "")
     .trim();
 }
 
+/** Suggestions for the search box: 5 largest when empty, else prefix-then-substring. */
+export function searchCities(query: string, limit = 8): string[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return TOP_CITIES;
+  const starts: string[] = [];
+  const incl: string[] = [];
+  for (const c of NL_CITIES) {
+    const lc = c.toLowerCase();
+    if (lc.startsWith(q)) starts.push(c);
+    else if (lc.includes(q)) incl.push(c);
+    if (starts.length >= limit) break;
+  }
+  return [...starts, ...incl].slice(0, limit);
+}
+
 function coords(city: string | undefined): [number, number] | undefined {
-  if (!city) return undefined;
-  return CITY_COORDS[norm(city)];
+  return city ? CITY_COORDS[norm(city)] : undefined;
 }
 
 function haversineKm(a: [number, number], b: [number, number]): number {
@@ -57,10 +52,17 @@ function haversineKm(a: [number, number], b: [number, number]): number {
   return 2 * R * Math.asin(Math.sqrt(h));
 }
 
-/** True if coachCity is within rangeKm of userCity. Unknown city → not excluded. */
+/** Distance in km between two place names, or undefined if either is unknown. */
+export function cityDistanceKm(a: string, b: string): number | undefined {
+  const ca = coords(a);
+  const cb = coords(b);
+  if (!ca || !cb) return undefined;
+  return haversineKm(ca, cb);
+}
+
+/** True if coachCity is within rangeKm of userCity. Unknown place → not excluded. */
 export function withinRange(coachCity: string, userCity: string, rangeKm: number): boolean {
-  const a = coords(coachCity);
-  const b = coords(userCity);
-  if (!a || !b) return true;
-  return haversineKm(a, b) <= rangeKm;
+  const d = cityDistanceKm(coachCity, userCity);
+  if (d === undefined) return true;
+  return d <= rangeKm;
 }

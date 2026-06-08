@@ -23,8 +23,10 @@ Chips:
 Belangrijk:
 - De praktische voorkeuren (vorm/online-in persoon, locatie, geslacht van de coach, taal) zijn AL gevraagd vóór dit gesprek. Vraag daar NIET opnieuw naar; richt je volledig op inhoudelijke behoeften en gewenste coach-eigenschappen.
 
-Stoppen:
-- Zet "done": true zodra je genoeg signaal hebt over de behoeften én gewenste coach-eigenschappen (meestal na 4–5 vragen). Laat dan prompt/helper leeg en chips leeg.
+Lengte van het gesprek:
+- De gebruiker koos zelf hoe uitgebreid de vragenlijst is (kort/gemiddeld/uitgebreid). Je krijgt per beurt te horen hoeveel vragen deze sessie telt en hoeveel er al beantwoord zijn.
+- Blijf relevante, niet-herhalende vragen stellen die echt voortbouwen op eerdere antwoorden, tot dat aantal bereikt is. Bij een langere sessie ga je dieper en verken je meer invalshoeken (concrete behoeften én gewenste coach-eigenschappen) zonder in herhaling te vallen.
+- Het SYSTEEM bepaalt wanneer er gestopt wordt; zet "done" op false en geef altijd een echte vraag terug.
 
 Antwoord UITSLUITEND met het gevraagde JSON-object. Geen extra tekst.`;
 

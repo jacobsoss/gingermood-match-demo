@@ -194,6 +194,8 @@ export interface Question {
   chips: Chip[];
   kind: QuestionKind;
   allowCustom: boolean;
+  /** Optional specialised input renderer (e.g. "city" → searchable combobox). */
+  widget?: "city";
 }
 
 /** The user's answer to one question. */
@@ -227,6 +229,8 @@ export interface NextQuestionRequest {
   locale: Locale;
   answers: Answer[];
   askedIds: string[];
+  /** How many adaptive questions to ask, from the user's depth choice. */
+  questionCount?: number;
 }
 
 export interface NextQuestionResponse {
@@ -252,10 +256,22 @@ export interface MatchRequest {
   filters?: MatchFilters;
 }
 
+/** Set when the in-person range was auto-widened because nobody was in radius. */
+export interface RangeInfo {
+  relaxed: boolean;
+  city: string;
+  requestedKm: number;
+  /** Distance to the nearest coach actually shown (km, rounded). */
+  nearestKm: number;
+}
+
 export interface MatchResponse {
   profile: NeedsProfile;
   match: Match;
   coach: Coach;
-  runnerUp: Coach;
+  /** Absent when the constraints leave only a single eligible coach. */
+  runnerUp?: Coach;
   source: EngineSource;
+  /** Present only when the range filter was auto-widened (notice shown to user). */
+  rangeInfo?: RangeInfo;
 }

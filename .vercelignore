@@ -1,0 +1,13 @@
+# Python synthetic-data generator — not part of the deployed web app.
+# (Respected by both `vercel` CLI uploads and Git deployments.)
+datagen/
+data/synth/
+data/build_cities.py
+*.py
+*.pyc
+__pycache__/
+DATAGEN.md
+
+# Local env / Vercel metadata (secrets live in Vercel project env vars)
+.env*
+.vercel

@@ -12,9 +12,9 @@ import { NEXT_QUESTION_SCHEMA, NEXT_QUESTION_SYSTEM, formatConversation } from "
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-// Bound the intake: never fewer than this before we allow "done", never more.
-const MIN_QUESTIONS = 4;
-const MAX_QUESTIONS = 6;
+// Hard safety clamp around the user's depth choice (short 3 / medium 5 / long 8).
+const DEFAULT_COUNT = 5;
+const MAX_CAP = 12;
 
 interface NextQuestionAI {
   done: boolean;
@@ -39,12 +39,15 @@ export async function POST(req: Request): Promise<Response> {
   // toward the adaptive question budget.
   const answered = answers.filter((a) => !a.questionId.startsWith("filter-")).length;
 
-  // Hard upper bound — stop the intake without another model call.
-  if (answered >= MAX_QUESTIONS) {
+  // How many adaptive questions to ask — the user's depth choice drives this.
+  const target = Math.min(MAX_CAP, Math.max(1, body.questionCount ?? DEFAULT_COUNT));
+
+  // Target reached — stop the intake without another model call.
+  if (answered >= target) {
     return NextResponse.json({
       done: true,
       question: null,
-      expectedTotal: answered,
+      expectedTotal: target,
       source: "ai",
     } satisfies NextQuestionResponse);
   }
@@ -61,9 +64,9 @@ export async function POST(req: Request): Promise<Response> {
         {
           role: "user",
           content:
-            `Gesprek tot nu toe (${answered} vragen beantwoord):\n` +
+            `Gesprek tot nu toe (${answered} van ${target} vragen beantwoord):\n` +
             `${formatConversation(answers)}\n\n` +
-            `Genereer de volgende, meest waardevolle vraag — of zet done=true als je genoeg signaal hebt.`,
+            `Deze sessie telt ${target} vragen. Genereer de volgende, meest waardevolle vraag die voortbouwt op het gesprek (niet herhalen). Het systeem bepaalt wanneer gestopt wordt — geef altijd een echte vraag terug.`,
         },
       ],
       output_config: {
@@ -73,14 +76,13 @@ export async function POST(req: Request): Promise<Response> {
 
     const parsed = extractJson<NextQuestionAI>(responseText(message));
 
-    // Apply bounds: don't let the model stop too early.
-    const done = parsed.done && answered >= MIN_QUESTIONS;
-
-    if (done) {
+    // Stopping is driven purely by the depth target (checked above). The model is
+    // told to always return a question; if it nonetheless returns none, stop here.
+    if (!parsed.prompt?.trim()) {
       return NextResponse.json({
         done: true,
         question: null,
-        expectedTotal: answered,
+        expectedTotal: target,
         source: "ai",
       } satisfies NextQuestionResponse);
     }
@@ -102,7 +104,7 @@ export async function POST(req: Request): Promise<Response> {
     return NextResponse.json({
       done: false,
       question,
-      expectedTotal: Math.min(MAX_QUESTIONS, Math.max(5, answered + 2)),
+      expectedTotal: target,
       source: "ai",
     } satisfies NextQuestionResponse);
   } catch (err) {

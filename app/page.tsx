@@ -3,18 +3,16 @@
 import { useCallback, useRef, useState } from "react";
 import type { Answer, MatchResponse, Question } from "@/lib/types";
 import { getMatch, getNextQuestion } from "@/lib/engine";
-import { filterTotal, selectNextFilter } from "@/lib/filters";
+import { filterTotal, intakeCount, selectNextFilter } from "@/lib/filters";
 import { PERSONAS_BY_ID } from "@/data/personas";
 import { NavBar } from "@/components/NavBar";
 import { WelcomeScreen } from "@/components/WelcomeScreen";
 import { QuestionScreen } from "@/components/QuestionScreen";
+import { ThinkingScreen } from "@/components/ThinkingScreen";
 import { ProcessingScreen } from "@/components/ProcessingScreen";
 import { ResultCard } from "@/components/ResultCard";
 
-type Screen = "welcome" | "question" | "processing" | "result";
-
-// Rough count of curated questions after the filters, for the progress bar.
-const ADAPTIVE_ESTIMATE = 5;
+type Screen = "welcome" | "question" | "thinking" | "processing" | "result";
 
 export default function Home() {
   const [screen, setScreen] = useState<Screen>("welcome");
@@ -46,12 +44,15 @@ export default function Home() {
       const filterQ = selectNextFilter(nextAnswers);
       if (filterQ) {
         setQuestion(filterQ);
-        setExpectedTotal(filterTotal(nextAnswers) + ADAPTIVE_ESTIMATE);
+        // Before depth is chosen intakeCount() defaults to the medium estimate.
+        setExpectedTotal(filterTotal(nextAnswers) + intakeCount(nextAnswers));
         setScreen("question");
         return;
       }
-      // Phase 2 — curated/adaptive AI loop.
+      // Phase 2 — curated/adaptive AI loop: animate into a loading phase while
+      // the next question is generated, then slide the question in.
       setBusy(true);
+      setScreen("thinking");
       try {
         const r = await getNextQuestion(nextAnswers);
         if (r.done || !r.question) {
@@ -151,6 +152,8 @@ export default function Home() {
           busy={busy}
         />
       )}
+
+      {screen === "thinking" && <ThinkingScreen />}
 
       {screen === "processing" && (
         <ProcessingScreen onComplete={handleProcessingComplete} />

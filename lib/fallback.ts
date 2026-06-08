@@ -11,7 +11,7 @@ import type {
   WorkingStyle,
 } from "@/lib/types";
 import { COACHES, getCoach } from "@/data/coaches";
-import { extractFilters } from "@/lib/filters";
+import { extractFilters, intakeCount, isFilterQuestion } from "@/lib/filters";
 import {
   QUESTION_BANK,
   QUESTION_BANK_BY_ID,
@@ -92,19 +92,27 @@ const ADAPTIVE = QUESTION_BANK.filter((q) => q.stage === "adaptive");
 const PRACTICAL = QUESTION_BANK.find((q) => q.stage === "practical")!;
 const CHARACTERISTICS = QUESTION_BANK.find((q) => q.stage === "characteristics")!;
 
-const MAX_ADAPTIVE = 2;
-
 function adaptiveScore(q: BankQuestion, signals: Signals): number {
   if (!q.triggerTags) return 0;
   return q.triggerTags.reduce((sum, t) => sum + (signals.needWeights.get(t) ?? 0), 0);
 }
 
+/** Adaptive (soft) intake questions answered so far — excludes the hard filters. */
+function intakeAnswered(answers: Answer[]): number {
+  return answers.filter((a) => !isFilterQuestion(a.questionId)).length;
+}
+
 /**
  * Choose the single most useful next question given everything answered so far.
- * Order: seeds → up to 2 best-matching cluster questions → practical → characteristics.
+ * Honors the user's depth choice (intakeCount): seeds → best-matching cluster
+ * questions → practical → characteristics (reserved as the closer), stopping once
+ * the target number of adaptive questions is reached.
  */
 export function selectNextQuestion(answers: Answer[]): BankQuestion | null {
   const asked = new Set(answers.map((a) => a.questionId));
+  const target = intakeCount(answers);
+  const answered = intakeAnswered(answers);
+  if (answered >= target) return null;
 
   // 1. Seeds, in priority order.
   for (const seed of SEEDS) {
@@ -112,34 +120,35 @@ export function selectNextQuestion(answers: Answer[]): BankQuestion | null {
   }
 
   const signals = collectSignals(answers);
+  const remaining = target - answered;
+  const characteristicsPending = !asked.has(CHARACTERISTICS.id);
+  const practicalPending = !asked.has(PRACTICAL.id) && !asked.has("filter-format");
 
-  // 2. Adaptive cluster-deepening: pick highest-scoring unasked question.
-  const adaptiveAsked = ADAPTIVE.filter((q) => asked.has(q.id)).length;
-  if (adaptiveAsked < MAX_ADAPTIVE) {
-    const ranked = ADAPTIVE.filter((q) => !asked.has(q.id))
-      .map((q) => ({ q, score: adaptiveScore(q, signals) }))
-      .filter((x) => x.score > 0)
-      .sort((a, b) => b.score - a.score || b.q.priority - a.q.priority);
-    if (ranked.length > 0) return ranked[0].q;
-  }
+  // Reserve the closing characteristics question for the final slot.
+  if (remaining <= 1 && characteristicsPending) return CHARACTERISTICS;
+
+  // 2. Adaptive cluster-deepening: highest-scoring unasked question.
+  const ranked = ADAPTIVE.filter((q) => !asked.has(q.id))
+    .map((q) => ({ q, score: adaptiveScore(q, signals) }))
+    .sort((a, b) => b.score - a.score || b.q.priority - a.q.priority);
+  const scored = ranked.filter((x) => x.score > 0);
+  if (scored.length > 0) return scored[0].q;
 
   // 3. Practical — skipped if format was already captured by the hard filter.
-  if (!asked.has(PRACTICAL.id) && !asked.has("filter-format")) return PRACTICAL;
+  if (practicalPending) return PRACTICAL;
 
   // 4. Closing characteristics question.
-  if (!asked.has(CHARACTERISTICS.id)) return CHARACTERISTICS;
+  if (characteristicsPending) return CHARACTERISTICS;
+
+  // 5. Longer sessions: keep going with any remaining adaptive question.
+  if (ranked.length > 0) return ranked[0].q;
 
   return null;
 }
 
-/** Expected number of questions in this run, for the progress indicator. */
+/** Expected number of adaptive questions, from the user's depth choice. */
 export function expectedTotal(answers: Answer[]): number {
-  const signals = collectSignals(answers);
-  const clusters = new Set<string>();
-  for (const tag of signals.needWeights.keys()) clusters.add(CLUSTER_OF[tag]);
-  const adaptiveExpected = Math.min(MAX_ADAPTIVE, Math.max(1, clusters.size));
-  // seeds (2) + adaptive + practical (1) + characteristics (1)
-  return SEEDS.length + adaptiveExpected + 2;
+  return intakeCount(answers);
 }
 
 // ── Needs profile ─────────────────────────────────────────────────────────────
@@ -381,7 +390,7 @@ export interface FallbackMatchResult {
   profile: NeedsProfile;
   match: Match;
   coach: Coach;
-  runnerUp: Coach;
+  runnerUp?: Coach;
 }
 
 export function runFallbackMatch(answers: Answer[], pool: Coach[] = COACHES): FallbackMatchResult {
@@ -389,12 +398,10 @@ export function runFallbackMatch(answers: Answer[], pool: Coach[] = COACHES): Fa
   const profile = buildProfile(answers, signals);
   const scored = rankCoaches(signals, pool);
   const match = buildMatch(scored, signals);
-  return {
-    profile,
-    match,
-    coach: getCoach(match.coachId)!,
-    runnerUp: getCoach(match.runnerUpId)!,
-  };
+  // No runner-up when the constraints leave only one eligible coach.
+  const runnerUp =
+    pool.length >= 2 && match.runnerUpId !== match.coachId ? getCoach(match.runnerUpId) : undefined;
+  return { profile, match, coach: getCoach(match.coachId)!, runnerUp };
 }
 
 /** Used by the API fallback path to hand the client the next bank question. */

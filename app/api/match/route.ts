@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type { Match, MatchRequest, MatchResponse, NeedsProfile } from "@/lib/types";
+import type { Coach, Match, MatchRequest, MatchResponse, NeedsProfile } from "@/lib/types";
 import { COACHES, COACHES_BY_ID } from "@/data/coaches";
 import { poolForFilters } from "@/lib/filters";
 import { MODEL, extractJson, getAnthropic, responseText } from "@/lib/anthropicClient";
@@ -25,7 +25,9 @@ export async function POST(req: Request): Promise<Response> {
   // Apply the hard up-front filters (gender/language/in-person range): the AI only
   // sees, and can only pick from, coaches that satisfy them. Relaxes to the full
   // pool if the constraints leave fewer than two coaches.
-  const { pool } = body.filters ? poolForFilters(COACHES, body.filters) : { pool: COACHES };
+  const { pool, rangeInfo } = body.filters
+    ? poolForFilters(COACHES, body.filters)
+    : { pool: COACHES, rangeInfo: undefined };
   const coachIds = pool.map((c) => c.id);
 
   try {
@@ -55,15 +57,15 @@ export async function POST(req: Request): Promise<Response> {
     const coach = COACHES_BY_ID[parsed.match.coachId];
     if (!coach) throw new Error(`Onbekende coach-id: ${parsed.match.coachId}`);
 
-    // Guard: runner-up must exist and differ from the winner.
-    let runnerUp = COACHES_BY_ID[parsed.match.runnerUpId];
-    if (!runnerUp || runnerUp.id === coach.id) {
+    // Runner-up: must exist, be in-pool, and differ from the winner. If the pool
+    // holds only one eligible coach (a tight range), there simply isn't one.
+    let runnerUp: Coach | undefined = COACHES_BY_ID[parsed.match.runnerUpId];
+    if (!runnerUp || runnerUp.id === coach.id || !pool.some((c) => c.id === runnerUp!.id)) {
       runnerUp =
         pool.find((c) => c.id !== coach.id && c.specialisms.includes("generalist")) ??
-        pool.find((c) => c.id !== coach.id) ??
-        coach;
-      parsed.match.runnerUpId = runnerUp.id;
+        pool.find((c) => c.id !== coach.id);
     }
+    if (runnerUp) parsed.match.runnerUpId = runnerUp.id;
 
     return NextResponse.json({
       profile: parsed.profile,
@@ -71,6 +73,7 @@ export async function POST(req: Request): Promise<Response> {
       coach,
       runnerUp,
       source: "ai",
+      rangeInfo,
     } satisfies MatchResponse);
   } catch (err) {
     console.error("match AI error:", err);

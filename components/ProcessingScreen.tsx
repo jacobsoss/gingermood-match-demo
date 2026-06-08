@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { COPY } from "@/lib/copy";
+import { LoadingDots } from "@/components/LoadingDots";
 
 /** Calm processing state (§5): a single pulsing dot-trio + one rotating line. */
 export function ProcessingScreen({
@@ -27,14 +28,8 @@ export function ProcessingScreen({
 
   return (
     <div className="mx-auto flex min-h-[calc(100dvh-var(--nav-h))] w-full max-w-md flex-col items-center justify-center bg-page px-6 text-center">
-      <div className="mb-8 flex items-center gap-2" aria-hidden="true">
-        {[0, 1, 2].map((i) => (
-          <span
-            key={i}
-            className="h-2.5 w-2.5 rounded-full bg-purple"
-            style={{ animation: "gm-dot 1.4s ease-in-out infinite", animationDelay: `${i * 0.18}s` }}
-          />
-        ))}
+      <div className="mb-8">
+        <LoadingDots />
       </div>
       <p key={step} className="gm-rise text-[15px] text-muted" aria-live="polite">
         {lines[step]}

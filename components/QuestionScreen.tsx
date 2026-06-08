@@ -4,6 +4,8 @@ import { useState } from "react";
 import type { Answer, Chip, Question } from "@/lib/types";
 import { COPY } from "@/lib/copy";
 import { ProgressBar } from "@/components/ProgressBar";
+import { CitySearch } from "@/components/CitySearch";
+import { DictationField } from "@/components/DictationField";
 
 function sameChip(a: Chip, b: Chip) {
   return a.label === b.label;
@@ -69,14 +71,16 @@ export function QuestionScreen({
           <p className="mt-3 text-[17px] leading-relaxed text-muted">{question.helper}</p>
         )}
 
-        {question.allowCustom && (
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder={COPY.question.openPlaceholder}
-            rows={3}
-            className="gm-focus mt-6 w-full resize-none rounded-[var(--radius-input)] border-[1.5px] border-hair bg-surface px-5 py-4 text-[17px] leading-relaxed text-ink outline-none transition-colors placeholder:text-muted"
-          />
+        {question.widget === "city" ? (
+          <CitySearch value={text} onChange={setText} onEnter={submit} />
+        ) : (
+          question.allowCustom && (
+            <DictationField
+              value={text}
+              onChange={setText}
+              placeholder={COPY.question.openPlaceholder}
+            />
+          )
         )}
 
         {question.chips.length > 0 && (

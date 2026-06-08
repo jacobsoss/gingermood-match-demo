@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { MatchResponse, NeedsProfile } from "@/lib/types";
 import { COPY } from "@/lib/copy";
 import { PERSONAS } from "@/data/personas";
@@ -31,6 +31,57 @@ function recognitionText(profile: NeedsProfile): string {
   return s;
 }
 
+function InfoIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"
+      aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 16v-4M12 8h.01" />
+    </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 shrink-0"
+      aria-hidden="true">
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
+  );
+}
+
+/** Quiet escape hatch — a human matchmaker, for the rare person who isn't happy.
+ *  Deliberately small/understated so it doesn't divert people from the AI match. */
+function HumanHandoff() {
+  const [requested, setRequested] = useState(false);
+  return (
+    <div className="border-t border-hair pt-5">
+      {requested ? (
+        <p className="flex items-start gap-2 text-[13px] leading-relaxed text-muted">
+          <span className="text-purple">
+            <CheckIcon />
+          </span>
+          {COPY.result.humanConfirm}
+        </p>
+      ) : (
+        <p className="text-[13px] leading-relaxed text-muted">
+          {COPY.result.humanPrompt}{" "}
+          <button
+            type="button"
+            onClick={() => setRequested(true)}
+            className="gm-focus rounded-sm font-semibold text-purple hover:underline"
+          >
+            {COPY.result.humanCta}
+          </button>
+          .
+        </p>
+      )}
+    </div>
+  );
+}
+
 function ArrowLR() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -49,7 +100,7 @@ export function ResultCard({
   onRestart: () => void;
   onPickPersona: (id: string) => void;
 }) {
-  const { profile, match, coach, runnerUp, source } = result;
+  const { profile, match, coach, runnerUp, source, rangeInfo } = result;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -69,6 +120,18 @@ export function ResultCard({
             </p>
           </div>
         </Section>
+
+        {/* Range auto-widened notice (only when nobody was within the chosen radius) */}
+        {rangeInfo?.relaxed && (
+          <Section delay={60}>
+            <p className="flex items-start gap-2.5 rounded-[var(--radius-input)] bg-wash px-4 py-3 text-[14px] leading-relaxed text-muted">
+              <span className="text-purple">
+                <InfoIcon />
+              </span>
+              {COPY.result.rangeRelaxed(rangeInfo.city, rangeInfo.requestedKm, rangeInfo.nearestKm)}
+            </p>
+          </Section>
+        )}
 
         {/* 2 · Matched coach — the only shadow on the page */}
         <Section delay={80}>
@@ -131,17 +194,19 @@ export function ResultCard({
           </div>
         </Section>
 
-        {/* 4 · Runner-up — reduced weight */}
-        <Section delay={240}>
-          <p className="mb-2.5 text-[13px] font-semibold uppercase tracking-[0.14em] text-muted">
-            {COPY.result.runnerUp}
-          </p>
-          <CoachCardCompact
-            coach={runnerUp}
-            fitScore={Math.max(40, match.fitScore - 14)}
-            reason={match.runnerUpReason}
-          />
-        </Section>
+        {/* 4 · Runner-up — reduced weight. Absent when only one coach is eligible. */}
+        {runnerUp && (
+          <Section delay={240}>
+            <p className="mb-2.5 text-[13px] font-semibold uppercase tracking-[0.14em] text-muted">
+              {COPY.result.runnerUp}
+            </p>
+            <CoachCardCompact
+              coach={runnerUp}
+              fitScore={Math.max(40, match.fitScore - 14)}
+              reason={match.runnerUpReason}
+            />
+          </Section>
+        )}
 
         {/* 5 · Behind the scenes */}
         <Section delay={320}>
@@ -177,6 +242,11 @@ export function ResultCard({
               </div>
             </div>
           </div>
+        </Section>
+
+        {/* Quiet human-matchmaker escape hatch */}
+        <Section delay={480}>
+          <HumanHandoff />
         </Section>
       </div>
     </div>
