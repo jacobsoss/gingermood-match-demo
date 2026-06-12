@@ -102,3 +102,16 @@ pretending to be.
 Not built (per brief): real email, payments, employer drill-downs, admin, i18n toggle,
 dark mode. Also consciously skipped: drawer-style mobile sidebar (mobile uses a reliable
 horizontal pill nav — fewer failure modes on stage).
+
+### D15 — Lint purity fixes touched three quiz-adjacent files (behavior-preserving)
+`npm run lint` (React hooks purity rules) flagged pre-existing patterns in
+`components/CoachCard.tsx`, `components/DictationField.tsx` and
+`lib/useSpeechDictation.ts`. Fixes are minimal and semantically identical: state setters
+deferred one frame via `requestAnimationFrame`, a latest-value ref write moved from
+render into an effect. No visual or behavioral change; documented here because of the
+"don't touch the quiz" constraint — these are maintenance, not restyling.
+
+### D16 — Demo content language
+Platform chrome is English (D1); user-generated-style content (coach message thread)
+is also English for on-screen consistency, while names, roles, topics and testimonial
+voices are Dutch-flavoured. The quiz itself remains fully Dutch.

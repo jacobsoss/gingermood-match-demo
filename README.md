@@ -1,91 +1,116 @@
-# Gingermood — Adaptive Match Demo
+# Gingermood — Demo Platform
 
-An iPad-demoable prototype of Gingermood's headline feature: an **adaptive AI intake** that
-matches a person's *specific, idiosyncratic needs* to a coach's *actual competencies* —
-explicitly **not** personality or similarity — and explains its reasoning in those terms.
+A complete, demo-ready coaching platform built around Gingermood's headline feature:
+an **adaptive AI intake** that matches a person's *specific, idiosyncratic needs* to a
+coach's *actual competencies* — explicitly **not** personality or "klik" — with a human
+confirming every match.
 
-Built with Next.js (App Router) + TypeScript + Tailwind v4. Dutch UI copy (centralised in
-`lib/copy.ts` for an easy language swap).
+Next.js (App Router) + TypeScript + Tailwind v4. Platform UI in English; the intake quiz
+is Dutch (`lib/copy.ts`). Everything outside the quiz's two AI routes is mocked and
+seeded — no real backend, no real auth, no external services in the demo path.
 
-> ⚠️ **All coach and coachee data is synthetic sample data** and is labelled as such in the UI.
-> No real records (GDPR Art. 9).
+> ⚠️ **All people, companies, statistics and content are fictional.** Aggregate numbers
+> carry an "Illustrative data" tag in the UI. No real records (GDPR Art. 9).
 
-## Live AI (with a silent safety net)
-
-The app runs **Live AI only** — real adaptive questioning + matching via Claude
-(`claude-sonnet-4-6`). On any error/timeout it does one silent retry, then **degrades
-invisibly to the deterministic engine** so the flow never breaks (no user-facing mode
-switch; the fallback is just resilience). A run that fell back is labelled
-"Offline reservematch" on the result.
-
-## Architecture
+## Route map
 
 ```
-data/coaches.ts        7 synthetic coaches (weighted competencies, distinct clusters)
-data/personas.ts       3 sample coachees (instant, contrasting matches)
-data/questionBank.ts   fallback adaptive questions (chips carry need/style tags)
-lib/types.ts           Coach · NeedsProfile · Match · API contracts
-lib/taxonomy.ts        tag → human phrasing, clusters, free-text keyword scan
-lib/fallback.ts        deterministic next-question + tag-scoring matcher
-lib/engine.ts          client facade: Live (API + retry) → deterministic fallback
-lib/prompts.ts         system prompts + JSON schemas for the two Claude calls
-lib/anthropicClient.ts server-only Anthropic client (key never reaches the browser)
-app/api/next-question  server route: adaptive next question (structured JSON)
-app/api/match          server route: needs profile + idiosyncratic-fit match
-app/page.tsx           single-page state machine (welcome → questions → result)
-components/*            WelcomeScreen · QuestionScreen · ProcessingScreen ·
-                       ResultCard · CoachCard · DataReveal · ProgressBar · ModeToggle
+/                      Marketing home (public)
+/about                 Company story, values, team (public)
+/privacy               The privacy promise, designed (public)
+/how-it-works          Matching approach in 3 steps (public)
+/login                 Demo sign-in (any email/password works)
+/register              Create account → role choice: Employee | Employer
+
+/dashboard             Employee home — State A (no match) / State B (matched)
+/dashboard/match       THE QUIZ (adaptive intake, voice dictation) — unchanged logic
+/dashboard/match/result  Match reveal + "Confirm my coach" (simulated human review)
+/dashboard/coach       Coach profile, next session, message thread
+/dashboard/sessions    Booking (seeded availability), reschedule/cancel, history + rating
+/dashboard/library     12 items, search + category filter, 3 fully written articles
+/dashboard/checkin     Quarterly wellbeing pulse (6 questions) + trends
+/dashboard/settings    Account, privacy promises, Stage mode, Reset demo
+
+/employer              Employer preview screen (employer role only)
+/match, /quiz          → redirect to /dashboard/match (old links keep working)
+```
+
+Auth gating is a client-side guard on the demo session (localStorage). Logged-out visits
+to `/dashboard*` or `/employer` land on `/login`; wrong-role visits are routed home.
+
+## Demo accounts
+
+| Account | Who | State |
+| --- | --- | --- |
+| `emma@demo.gingermood.nl` | Emma de Jong — employee | Fresh: no match, onboarding tour, "Get matched" journey from zero |
+| `daan@demo.gingermood.nl` | Daan Bakker — employee | Living: matched 5 weeks ago with Mara de Wit, 3/8 sessions done, next session booked, check-in history, messages, nudge |
+| `hr@demo.gingermood.nl` | Sanne Visser — employer | Lands on `/employer` |
+
+Quick-login buttons live under **"Demo accounts"** on the login page. Any other
+email/password also signs in (as a fresh employee).
+
+**Reset demo:** Settings → "Reset demo data", or hold **Shift** and press **R** then **D**
+anywhere. Restores all three accounts to their seeded state and returns to login.
+
+**Stage mode:** Settings → "Stage mode" forces the intake onto the deterministic engine —
+zero network calls, immune to venue wifi. Off by default (live AI with a silent fallback).
+
+## The Monday demo script (~3 minutes)
+
+> Before the meeting: open the site, run `Shift+R,D` once to reset, decide on Stage mode
+> (flaky wifi → turn it on in Settings under Daan or Emma; it persists per browser).
+
+1. **Start on `/`** — "This is Gingermood today: matching as the product, not an
+   afterthought." Scroll once past the three steps. Click **Log in**.
+2. **Demo accounts → Emma de Jong.** Land on her dashboard: "New employee, first visit.
+   One obvious thing to do." Skip or play the 3-step tour — then click **Get matched**.
+3. **The quiz** (the crown jewel). Either answer the first question live — type *or tap
+   the mic and speak* — or, for pace, tap a persona card ("Opgebrande consultant") to run
+   a pre-filled intake. The match computes live.
+4. **The reveal:** matched coach with the *why* — needs ↔ expertise, evidence pairs, fit
+   breakdown. Scroll briefly. Then click **Confirm my coach**: "Software proposes —
+   a human confirms. Every match is reviewed by our team." The badge animates in.
+5. **Dashboard, State B:** her coach is now the center of the product — book a session,
+   message the coach, recommendations tuned to her theme.
+6. **Switch to Daan** (sign out → Demo accounts → Daan Bakker): "Five weeks later this is
+   what a living trajectory looks like." Point at: session 4 of 8, energy trending up,
+   the habit nudge from his last session. Open **Sessions**, book a slot in two clicks.
+7. **Switch to `hr@`** → the employer view: "And this is what the employer sees — and
+   crucially, all they ever see: anonymous, team-level, minimum group of 15. Individual
+   answers stay individual." Point at the matching-quality panel: "We measure whether
+   matches work."
+8. Close on `/privacy` or the pilot-programme footer line, depending on the room.
+
+Fallback line if wifi drops mid-quiz: nothing — the engine falls back silently and the
+demo continues. (That resilience is itself worth mentioning.)
+
+## Architecture (short)
+
+```
+lib/demo/        seeds (accounts, sessions, check-ins, library, employer aggregates),
+                 typed store (Context + localStorage), ics builder, articles
+components/platform/  shells (dashboard sidebar/topbar, marketing nav/footer),
+                 ui primitives, SVG charts, guards, notifications, tour
+app/api/*        the quiz's two Claude routes (unchanged)
+lib/engine.ts    quiz client facade: Stage-mode check → live AI → silent fallback
+DECISIONS.md     build plan + every judgment call documented
+BUILD_SUMMARY.md what was built, rough edges, next steps
 ```
 
 ## Local development
 
 ```bash
 npm install
-# create .env.local with your key (server-side only — never commit it):
-#   ANTHROPIC_API_KEY=sk-ant-...
+# optional, for live AI in the quiz — server-side only, never committed:
+#   .env.local → ANTHROPIC_API_KEY=sk-ant-...
 npm run dev      # http://localhost:3000
 ```
 
-Live AI requires `ANTHROPIC_API_KEY` in `.env.local`. Without it (or offline) the app still
-runs end-to-end via the silent deterministic fallback.
+Without a key (or offline, or in Stage mode) the entire platform still works end-to-end —
+the intake runs on the deterministic engine.
 
-## Environment
+## Deploy
 
-| Variable            | Where                         | Notes                                  |
-| ------------------- | ----------------------------- | -------------------------------------- |
-| `ANTHROPIC_API_KEY` | `.env.local` (local) + Vercel | **Server-side only.** Never in client code or git. `.env*` is gitignored. |
-
-## Deploy to Vercel
-
-1. Push this repo to GitHub (or run `npx vercel`).
-   - If not yet a git repo: `git init && git add . && git commit -m "Gingermood match demo"`
-     then create a GitHub repo and push. `.env.local` is gitignored and will **not** be pushed.
-2. Import the project in Vercel (framework auto-detected as Next.js).
-3. In **Project → Settings → Environment Variables**, add `ANTHROPIC_API_KEY`
-   (Production + Preview). Server-side only — do **not** prefix with `NEXT_PUBLIC_`.
-4. Deploy. You'll get a real HTTPS URL for the iPad.
-
-The model string, temperature, and `max_tokens` live in `app/api/*/route.ts` and
-`lib/anthropicClient.ts`. Brand colours/fonts are CSS variables in `app/globals.css` +
-`app/layout.tsx` — drop real brand assets in there to re-skin.
-
-## iPad test checklist (run before the dinner)
-
-Open the deployed HTTPS URL in **Safari on the actual iPad, on the venue wifi**.
-
-- [ ] **Add to Home Screen** for a full-screen, chrome-free view (optional but nice).
-- [ ] **Portrait + landscape** both legible; rotate mid-flow — no layout breakage.
-- [ ] **Persona quick-picks**: tap each of the 3 personas → 3 *different* coaches, each with
-      idiosyncratic-fit reasoning. Expect ~15–20s on the matching step (live).
-- [ ] **Full intake**: "Begin de intake" → tap through. Confirm the questions branch on your
-      answers and the result shows "Live AI-match".
-- [ ] **Graceful degradation**: turn wifi off, run a persona → it should still complete
-      (labelled "Offline reservematch"). Turn wifi back on.
-- [ ] **Behind the scenes**: open "Toon de data" on the result → structured JSON shows.
-- [ ] **Try another profile** from the result screen → instantly shows a different match.
-- [ ] Full run (welcome → result) completes well under ~90s.
-- [ ] Tap targets are large; text is readable across a table.
-
-**Note for the dinner:** the app is Live AI, so test the venue wifi beforehand. If the
-network is flaky it still completes via the silent fallback — but live gives the real
-adaptive "wow", so a solid connection is worth ensuring.
+Pushes to `master` auto-deploy via Vercel (project linked to this GitHub repo).
+`ANTHROPIC_API_KEY` is set in Vercel project env vars. The Python data generator
+(`datagen/`, `data/synth/`) is excluded from deploys via `.vercelignore`.
