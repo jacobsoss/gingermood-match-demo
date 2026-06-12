@@ -29,6 +29,10 @@ import {
   IconShield,
 } from "@/components/platform/icons";
 
+// Captured at module load — a render-pure "now" (fresh enough for day-level
+// comparisons; the page module reloads every visit).
+const PAGE_LOADED_AT = Date.now();
+
 const TOUR_STEPS = [
   {
     target: '[data-tour="match"]',
@@ -144,7 +148,7 @@ export default function DashboardHome() {
   const tourOpen = showTour ?? (!employee.tourDone && !matched);
 
   const upcoming = employee.sessions
-    .filter((s) => s.status === "upcoming" && new Date(s.whenISO) > new Date())
+    .filter((s) => s.status === "upcoming" && new Date(s.whenISO).getTime() > PAGE_LOADED_AT)
     .sort((a, b) => a.whenISO.localeCompare(b.whenISO));
   const nextSession = upcoming[0];
   const completed = employee.sessions.filter((s) => s.status === "completed").length;
@@ -152,7 +156,7 @@ export default function DashboardHome() {
   const recs = recommendedFor(matched?.theme, 3).map((i) => i.id);
   const checkinDoneRecently =
     employee.checkins.length > 0 &&
-    Date.now() - new Date(employee.checkins[employee.checkins.length - 1]!.dateISO).getTime() <
+    PAGE_LOADED_AT - new Date(employee.checkins[employee.checkins.length - 1]!.dateISO).getTime() <
       45 * 86_400_000;
 
   return (

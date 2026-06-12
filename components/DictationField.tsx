@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { COPY } from "@/lib/copy";
 import { useSpeechDictation } from "@/lib/useSpeechDictation";
 
@@ -48,8 +48,12 @@ export function DictationField({
 }) {
   const [interim, setInterim] = useState("");
   // Read the latest committed value inside the (stable) dictation callbacks.
+  // Updated in an effect (not render) per the React ref rules; dictation events
+  // can only fire after effects have run, so callbacks always see the latest.
   const valueRef = useRef(value);
-  valueRef.current = value;
+  useEffect(() => {
+    valueRef.current = value;
+  }, [value]);
 
   const { supported, recording, denied, toggle } = useSpeechDictation({
     lang,
@@ -83,7 +87,6 @@ export function DictationField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={autoFocus}
         className={`gm-focus absolute inset-0 h-full w-full resize-none border-hair bg-surface text-ink outline-none transition-colors placeholder:text-muted ${box}`}
       />

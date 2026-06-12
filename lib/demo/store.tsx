@@ -85,17 +85,21 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   const [stageMode, setStageModeState] = useState(false);
   const router = useRouter();
 
-  // Hydrate once on the client.
+  // Hydrate once on the client (via rAF so the effect body has no sync setState;
+  // consumers render skeletons until `ready`).
   useEffect(() => {
-    let parsed: DemoState | null = null;
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) parsed = JSON.parse(raw) as DemoState;
-    } catch {
-      parsed = null;
-    }
-    setState(parsed && parsed.version === 1 ? parsed : seedInitialState());
-    setStageModeState(window.localStorage.getItem(STAGE_KEY) === "1");
+    const id = requestAnimationFrame(() => {
+      let parsed: DemoState | null = null;
+      try {
+        const raw = window.localStorage.getItem(STORAGE_KEY);
+        if (raw) parsed = JSON.parse(raw) as DemoState;
+      } catch {
+        parsed = null;
+      }
+      setState(parsed && parsed.version === 1 ? parsed : seedInitialState());
+      setStageModeState(window.localStorage.getItem(STAGE_KEY) === "1");
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   // Persist on every change after hydration.

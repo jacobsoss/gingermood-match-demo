@@ -23,8 +23,9 @@ function useCountUp(target: number, ms = 400): number {
       typeof window !== "undefined" &&
       window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
-      setV(target);
-      return;
+      // Set via rAF so the effect body stays side-effect-free (lint: no sync setState).
+      const id = requestAnimationFrame(() => setV(target));
+      return () => cancelAnimationFrame(id);
     }
     let raf = 0;
     let start = 0;

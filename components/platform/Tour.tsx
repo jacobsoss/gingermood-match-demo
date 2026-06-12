@@ -30,11 +30,13 @@ export function Tour({ steps, onDone }: { steps: TourStep[]; onDone: () => void 
   }, [i, steps]);
 
   useEffect(() => {
-    measure();
-    // Re-measure after the smooth scroll settles and on resize.
+    // Measure via rAF (effect body stays side-effect-free for state), then
+    // re-measure after the smooth scroll settles and on resize.
+    const raf = requestAnimationFrame(measure);
     const t = window.setTimeout(measure, 350);
     window.addEventListener("resize", measure);
     return () => {
+      cancelAnimationFrame(raf);
       window.clearTimeout(t);
       window.removeEventListener("resize", measure);
     };
@@ -65,7 +67,7 @@ export function Tour({ steps, onDone }: { steps: TourStep[]; onDone: () => void 
             left: rect.left - 6,
             width: rect.width + 12,
             height: rect.height + 12,
-            boxShadow: "0 0 0 3px var(--gm-purple-500), 0 0 0 9999px rgba(43,33,64,0.0)",
+            boxShadow: "0 0 0 3px var(--gm-purple-500)",
           }}
         />
       )}

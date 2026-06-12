@@ -164,10 +164,13 @@ export function ZoneBar({
   );
 }
 
-export function ZoneLegend() {
-  const Dot = ({ color }: { color: string }) => (
+function Dot({ color }: { color: string }) {
+  return (
     <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: color }} />
   );
+}
+
+export function ZoneLegend() {
   return (
     <div className="flex items-center gap-4 text-[13px] text-muted">
       <span className="inline-flex items-center gap-1.5">

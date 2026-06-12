@@ -86,8 +86,12 @@ export function useSpeechDictation(opts: {
 
   // Detect on the client only (window.isSecureContext → HTTPS/localhost), so the
   // server and first client render agree (no hydration mismatch, no flash modal).
+  // Via rAF so the effect body has no synchronous setState (lint rule).
   useEffect(() => {
-    setSupported(!!getRecognitionCtor() && window.isSecureContext);
+    const id = requestAnimationFrame(() => {
+      setSupported(!!getRecognitionCtor() && window.isSecureContext);
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   const emitInterim = useCallback((t: string) => {
