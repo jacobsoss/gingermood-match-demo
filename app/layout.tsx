@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Source_Sans_3 } from "next/font/google";
+import { DemoProvider } from "@/lib/demo/store";
 import "./globals.css";
 
 // Display only (h1/h2/h3, coach name, score). Weight 500–600 per §2.
@@ -19,9 +20,9 @@ const sourceSans = Source_Sans_3({
 });
 
 export const metadata: Metadata = {
-  title: "Gingermood — Vind de coach die bij jou past",
+  title: "Gingermood — The right coach for every person",
   description:
-    "Adaptieve intake die jouw specifieke behoeften matcht aan de werkelijke expertise van een coach. Demo met synthetische voorbeeldgegevens.",
+    "Coaching that starts with a proper match: tell us your story, we match you on real needs, a human confirms. Product demo with illustrative data.",
 };
 
 export const viewport: Viewport = {
@@ -38,10 +39,12 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="nl"
+      lang="en"
       className={`${fraunces.variable} ${sourceSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        <DemoProvider>{children}</DemoProvider>
+      </body>
     </html>
   );
 }

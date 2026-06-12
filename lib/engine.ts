@@ -20,6 +20,18 @@ const LOCALE: Locale = "nl";
 // silent retry / deterministic fallback kicks in.
 const TIMEOUT_MS = 28000;
 
+/**
+ * Stage mode: presenter-controlled flag (Settings → "Stage mode") that forces
+ * the deterministic engine — zero network calls during a live demo.
+ */
+function stageModeOn(): boolean {
+  try {
+    return typeof window !== "undefined" && window.localStorage.getItem("gm-stage-mode") === "1";
+  } catch {
+    return false;
+  }
+}
+
 /** Deterministic fallback — the silent safety net when the live API fails. */
 function nextQuestionFallbackResponse(answers: Answer[]): NextQuestionResponse {
   return { ...nextQuestionFallback(answers), source: "fallback" };
@@ -57,6 +69,7 @@ async function postWithRetry<T>(url: string, body: unknown): Promise<T> {
 
 /** Live next-question (one retry), then deterministic fallback so it never breaks. */
 export async function getNextQuestion(answers: Answer[]): Promise<NextQuestionResponse> {
+  if (stageModeOn()) return nextQuestionFallbackResponse(answers);
   try {
     return await postWithRetry<NextQuestionResponse>("/api/next-question", {
       locale: LOCALE,
@@ -70,6 +83,7 @@ export async function getNextQuestion(answers: Answer[]): Promise<NextQuestionRe
 }
 
 export async function getMatch(answers: Answer[]): Promise<MatchResponse> {
+  if (stageModeOn()) return matchFallbackResponse(answers);
   try {
     return await postWithRetry<MatchResponse>("/api/match", {
       locale: LOCALE,

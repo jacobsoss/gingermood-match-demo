@@ -95,10 +95,14 @@ export function ResultCard({
   result,
   onRestart,
   onPickPersona,
+  confirmSlot,
 }: {
   result: MatchResponse;
   onRestart: () => void;
   onPickPersona: (id: string) => void;
+  /** Optional platform addition (e.g. "Confirm my coach") rendered after the
+   *  matched-coach section. Undefined ⇒ byte-identical to the original quiz. */
+  confirmSlot?: React.ReactNode;
 }) {
   const { profile, match, coach, runnerUp, source, rangeInfo } = result;
 
@@ -174,6 +178,8 @@ export function ResultCard({
             )}
           </div>
         </Section>
+
+        {confirmSlot && <Section delay={120}>{confirmSlot}</Section>}
 
         {/* 3 · Fit breakdown — thin purple bars */}
         <Section delay={160}>
