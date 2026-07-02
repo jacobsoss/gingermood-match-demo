@@ -1,23 +1,7 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Source_Sans_3 } from "next/font/google";
+import { zillaSlab, inter } from "./fonts";
 import { DemoProvider } from "@/lib/demo/store";
 import "./globals.css";
-
-// Display only (h1/h2/h3, coach name, score). Weight 500–600 per §2.
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["500", "600"],
-});
-
-// Body/UI — 400 body, 600 emphasis/buttons. Readable across a dinner table.
-const sourceSans = Source_Sans_3({
-  variable: "--font-source",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "600"],
-});
 
 export const metadata: Metadata = {
   title: "Gingermood — The right coach for every person",
@@ -40,9 +24,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${sourceSans.variable} h-full antialiased`}
+      className={`${zillaSlab.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full">
+      <body className="min-h-full font-body">
         <DemoProvider>{children}</DemoProvider>
       </body>
     </html>
