@@ -73,6 +73,9 @@ export const COPY = {
       "Genoteerd. Een van onze matchmakers kijkt persoonlijk naar je profiel en neemt contact met je op.",
     sourceAi: "Live AI-match",
     sourceFallback: "Offline reservematch",
+    rerunError:
+      "Dat profiel kon niet worden geladen. Je huidige match staat er nog — kies gerust nog eens een profiel.",
+    rerunErrorDismiss: "Sluiten",
   },
 
   format: {
