@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Pilotvoorstel — Gingermood</title>
-<meta name="description" content="Vertrouwelijk pilotvoorstel — Gingermood" />
+<title>Pilotvoorstel - Gingermood</title>
+<meta name="description" content="Vertrouwelijk pilotvoorstel - Gingermood" />
 <meta name="theme-color" content="#3B1A63" />
 
 <!-- Hanken Grotesk (display) + Spectral (body, serif). latin-ext = Dutch diacritics. -->
@@ -32,6 +32,9 @@
   --surface-2:#ECEAF3;
   --white:    #FFFFFF;
   --tint:     #ECE7F4;         /* aubergine wash for panels */
+  /* alternating section tones (near-white base + slightly deeper tint) */
+  --band-a:   var(--white);
+  --band-b:   var(--surface);
 
   /* ink ramp on light */
   --ink:   #221B30;            /* body */
@@ -142,6 +145,8 @@ input:focus-visible, [tabindex]:focus-visible {
 .band { width: 100%; }
 .band--dark { background: var(--aubergine); color: var(--on-dark); }
 .band--deep { background: var(--aubergine-deep); color: var(--on-dark); }
+.tone-a { background: var(--band-a); }
+.tone-b { background: var(--band-b); }
 .section { padding: clamp(3rem, 7vw, var(--s7)) clamp(1.1rem, 4vw, 2.5rem); }
 .section__inner { max-width: var(--maxw); margin: 0 auto; }
 
@@ -192,13 +197,13 @@ input:focus-visible, [tabindex]:focus-visible {
 /* =========================================================
    TRUST band
    ========================================================= */
-.trust { padding: var(--s5) clamp(1.1rem, 4vw, 2.5rem); background: var(--white); border-bottom: 1px solid var(--line); }
+.trust { padding: var(--s5) clamp(1.1rem, 4vw, 2.5rem); }
 .trust__inner { max-width: var(--maxw); margin: 0 auto; }
 .trust__label { text-align: center; font-family: var(--font-display); font-size: var(--fs-sm); color: var(--ink-3); margin-bottom: var(--s3); }
 .trust__row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1.3rem 3rem; }
 .brandlogo { height: 28px; width: auto; display: block; color: var(--ink-3); transition: color .15s; }
 .brandlogo path { fill: currentColor; }
-.trust__row a { display: inline-flex; align-items: center; }
+.trust__row a, .trust__logo { display: inline-flex; align-items: center; }
 .trust__row a:hover .brandlogo { color: var(--ink); }
 .brandlogo--ns { height: 34px; }
 .brandlogo--essent { height: 19px; }
@@ -239,13 +244,22 @@ input:focus-visible, [tabindex]:focus-visible {
 .chain__arrow { display: none; }
 
 /* matching diagram (signature visual) */
-.matchviz { width: 100%; max-width: 520px; height: auto; display: block; margin: var(--s2) 0; }
+.proof-layout {
+  display: grid; grid-template-columns: minmax(280px, .95fr) minmax(280px, 1fr);
+  gap: clamp(1.5rem, 4vw, 3rem); align-items: start; margin: var(--s4) 0;
+}
+.matchviz { width: 100%; max-width: 520px; height: auto; display: block; margin: 0; }
 .mv-h { font-family: var(--font-display); font-size: 13px; font-weight: 600; fill: var(--ink-3); }
 .mv-cand line { stroke: var(--line-2); stroke-width: 1; }
 .mv-match { stroke: var(--accent); stroke-width: 2.5; }
 .mv-node circle { fill: var(--line-2); }
 .mv-node circle.is-active { fill: var(--aubergine); }
-.viz-cap { font-size: var(--fs-sm); color: var(--ink-3); font-style: italic; max-width: 48ch; margin: 0 0 var(--s4); }
+.viz-cap { font-size: var(--fs-sm); color: var(--ink-3); font-style: italic; max-width: 48ch; margin: var(--s2) 0 0; }
+.proof-points { margin: 0; padding: 0; list-style: none; border-top: 2px solid var(--aubergine); }
+.proof-point { padding: var(--s2) 0; border-bottom: 1px solid var(--line-2); }
+.proof-point strong { display: block; font-family: var(--font-display); font-size: 1.05rem; margin-bottom: .25rem; }
+.proof-point span { display: block; color: var(--ink-2); font-size: var(--fs-sm); line-height: 1.55; }
+.proof-note { font-size: var(--fs-sm); color: var(--ink-3); margin-top: var(--s2); }
 
 /* =========================================================
    CALCULATOR — ledger / receipt
@@ -382,6 +396,10 @@ details[open] > summary .twist::after { opacity: 0; }
 .cta { text-align: left; margin-bottom: var(--s4); }
 .cta h3 { font-size: var(--fs-h2); color: var(--on-dark); margin-bottom: .6rem; }
 .cta p { color: var(--on-dark-2); max-width: 54ch; margin: 0; }
+.cta__actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: var(--s3); }
+.band--deep .btn--primary { box-shadow: none; }
+.band--deep .btn--ghost { color: var(--on-dark); border-color: var(--line-dark); }
+.band--deep .btn--ghost:hover { border-color: rgba(255,255,255,.55); background: rgba(255,255,255,.06); }
 .sidepaths { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); margin: var(--s4) 0; }
 .sidepath { display: block; text-decoration: none; padding: var(--s3); border: 1px solid var(--line-dark); border-radius: var(--radius); transition: background .15s, border-color .15s; }
 .sidepath:hover { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.4); }
@@ -393,6 +411,56 @@ details[open] > summary .twist::after { opacity: 0; }
 .contact__card .name { font-family: var(--font-display); font-weight: 600; font-size: 1.15rem; color: var(--on-dark); margin: .3rem 0; }
 .contact__card p { color: var(--on-dark-2); }
 .band--dark a { color: #fff; }
+
+/* =========================================================
+   INVESTERING
+   ========================================================= */
+.incl-list { list-style: none; margin: var(--s2) 0 var(--s3); padding: 0; display: grid; gap: .75rem; }
+.incl-list li { display: flex; align-items: flex-start; gap: .75rem; color: var(--ink); }
+.incl-list .tick { flex: 0 0 auto; width: 1.3rem; height: 1.3rem; margin-top: .2rem; color: var(--aubergine); }
+.incl-close { font-family: var(--font-display); font-weight: 600; font-size: var(--fs-lead); color: var(--ink); max-width: 52ch; margin-top: var(--s2); }
+.inv-fineline { font-family: var(--font-display); font-weight: 500; font-size: var(--fs-sm); color: var(--ink-3); }
+
+.credit { margin: var(--s3) 0; max-width: 30rem; }
+.credit__row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: .8rem 0; border-bottom: 1px dotted var(--line-2); }
+.credit__row:last-child { border-bottom: none; }
+.credit__k { font-family: var(--font-display); font-size: var(--fs-sm); color: var(--ink-2); }
+.credit__v { font-family: var(--font-display); font-weight: 600; }
+.credit__v s { color: var(--ink-3); font-weight: 500; text-decoration-thickness: 2px; }
+.credit__row--pay .credit__v { font-size: 1.7rem; color: var(--aubergine); }
+
+.price { margin: var(--s3) 0 var(--s2); }
+.price__amount { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-fig); color: var(--aubergine); line-height: 1; letter-spacing: -.02em; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+.price__unit { font-family: var(--font-display); font-weight: 500; color: var(--ink-2); margin-top: .5rem; }
+.price__month { font-size: var(--fs-sm); color: var(--ink-3); margin-top: .25rem; }
+.budget-card { margin: var(--s4) 0; padding: var(--s4); background: var(--tint); border-radius: var(--radius); max-width: 34rem; }
+.budget-card__line { font-family: var(--font-display); font-weight: 600; color: var(--ink); margin-bottom: var(--s3); }
+.budget-card__grid { margin: 0; display: grid; gap: var(--s3); }
+.budget-card__grid dt { font-family: var(--font-display); font-size: var(--fs-xs); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); margin-bottom: .25rem; }
+.budget-card__grid dd { margin: 0; color: var(--ink); font-size: var(--fs-sm); }
+.budget-card__sub { color: var(--ink-3); }
+.budget-card__total { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-top: var(--s3); padding-top: var(--s2); border-top: 2px solid var(--aubergine); font-family: var(--font-display); font-weight: 700; color: var(--aubergine); font-size: 1.2rem; }
+
+.inv-trust { margin-top: var(--s5); display: grid; gap: .55rem; max-width: 60ch; }
+.inv-trust p { margin: 0; font-size: var(--fs-sm); color: var(--ink-3); }
+
+/* =========================================================
+   ONDERBOUWING (bewijs-expander)
+   ========================================================= */
+.onderbouwing { padding-top: var(--s2); }
+.ob-sec { margin-bottom: var(--s4); }
+.ob-sec:last-child { margin-bottom: 0; }
+.ob-h { font-family: var(--font-display); font-weight: 600; font-size: 1.1rem; color: var(--ink); margin: 0 0 .6rem; display: flex; gap: .6rem; align-items: baseline; }
+.ob-num { font-family: var(--font-display); font-weight: 700; color: var(--aubergine); font-size: .95rem; font-variant-numeric: tabular-nums; flex: 0 0 auto; }
+.onderbouwing p { font-size: var(--fs-sm); color: var(--ink-2); line-height: 1.65; max-width: 70ch; margin: 0 0 .8rem; }
+.onderbouwing p:last-child { margin-bottom: 0; }
+.ob-cite { font-size: .7em; line-height: 0; white-space: nowrap; }
+.ob-cite a { color: var(--aubergine); text-decoration: none; font-weight: 700; padding: 0 .08em; }
+.ob-cite a:hover { text-decoration: underline; }
+.ob-refs { margin: .4rem 0 0; padding-left: 1.5rem; display: grid; gap: .5rem; }
+.ob-refs li { font-size: var(--fs-xs); color: var(--ink-3); line-height: 1.5; scroll-margin-top: calc(var(--bar-h) + 16px); }
+.ob-refs li::marker { color: var(--ink-3); }
+.ob-refs li:target { color: var(--ink); }
 
 /* =========================================================
    MOTION — safe (visible by default; enhanced under no-preference)
@@ -423,6 +491,7 @@ details[open] > summary .twist::after { opacity: 0; }
 }
 @media (max-width: 720px) {
   .two-col { grid-template-columns: 1fr; }
+  .proof-layout { grid-template-columns: 1fr; }
   .chain { grid-template-columns: 1fr; }
   .calc__grid { grid-template-columns: 1fr; }
   .calc__inputs { border-right: 0; border-bottom: 1px solid var(--line); }
@@ -434,41 +503,146 @@ details[open] > summary .twist::after { opacity: 0; }
 /* =========================================================
    PRINT
    ========================================================= */
+/* =========================================================
+   PRINT — flowing document, deliberate cover, no empty pages
+   ========================================================= */
+@page { margin: 1.8cm 1.7cm; }
+
 @media print {
   html { scroll-behavior: auto; }
-  body { background: #fff; color: #000; font-size: 11pt; }
-  .topbar, .progress, .hero__cta, .btn { display: none !important; }
-  .band--dark, .band--deep, .hero, .rail--dark, #sec-vervolg { background: #fff !important; color: #000 !important; }
-  .hero h1, .hero__oneliner, .hero__stat .k, .hero__stat .v, .hero__stat .sub,
-  .cta h3, .cta p, .contact__card .name, .contact__card .role, .contact__card p,
-  .sidepath__k, .rail--dark p, .rail--dark .rail__flag, .band--dark a { color: #000 !important; }
-  .hero h1 .hl, .hero__stat .v.is-orange { color: #000 !important; }
-  .section { padding: 1.1cm 0; break-before: page; }
-  .hero, #sec-hero, .trust { break-before: avoid; }
+  body {
+    background: #fff; color: #241d33;
+    font-size: 10.5pt; line-height: 1.5;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+
+  /* hide interactive chrome */
+  .topbar, .progress, .hero__cta, .btn, .topbar__print, .topbar__toggle { display: none !important; }
+
+  /* flatten every band/tone to white, ink text */
+  .band--dark, .band--deep, .hero, .rail--dark, .tone-a, .tone-b, .trust, .band { background: #fff !important; }
+  .band--dark, .band--dark *, .band--deep, .band--deep *, .rail--dark, .rail--dark * { color: #241d33 !important; }
+
+  /* structure: flow naturally, NO per-section page breaks */
+  .section, .hero, .trust { padding: 0 !important; margin: 0 0 14pt !important; max-width: none !important; }
+  .section__inner, .hero__inner, .trust__inner { max-width: none !important; margin: 0 !important; padding: 0 !important; }
+  main { display: block; }
+
+  /* --- cover page: hero + trust, then a deliberate break --- */
+  .print-kicker { display: block !important; font-family: var(--font-display); font-size: 8.5pt; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #6a6480; margin: 0 0 12pt; }
+  .hero { margin-bottom: 20pt !important; }
+  .hero h1 { font-size: 26pt !important; line-height: 1.08; letter-spacing: -0.01em; margin: 0 0 10pt; color: #2c1249 !important; }
+  .hero h1 .hl { color: #2c1249 !important; }
+  .hero__oneliner { font-size: 12pt !important; color: #3a3350 !important; max-width: 46em; margin: 0 0 18pt; }
+  .hero__figure { display: flex !important; gap: 34pt; margin: 0 0 16pt; }
+  .hero__stat .k { font-size: 9pt !important; color: #6a6480 !important; }
+  .hero__stat .v, .hero__stat .v.is-orange { font-size: 23pt !important; color: #2c1249 !important; text-decoration: none !important; }
+  .hero__stat .sub { font-size: 9pt !important; color: #6a6480 !important; }
+  .trust { break-after: page; margin-bottom: 0 !important; border-top: 0.75pt solid #dcd7e6; padding-top: 14pt !important; }
+  .trust__label { color: #6a6480 !important; }
+
+  /* --- content sections: hairline + heading, kept-together blocks --- */
+  .section { border-top: 0.75pt solid #dcd7e6; padding-top: 13pt !important; }
+  #sec-situatie { border-top: none; }
+  h1, h2, h3, h4 { break-after: avoid; color: #2c1249 !important; }
+  .section .section__inner > h2 { font-size: 15pt !important; margin: 0 0 7pt !important; }
+  .section .section__inner > h2::before { display: none !important; }
+  .lead { font-size: 11pt !important; color: #3a3350 !important; margin: 0 0 10pt !important; max-width: none !important; }
+  .sub-h { font-size: 11.5pt !important; margin: 12pt 0 5pt !important; }
+  .ob-h { font-size: 10.5pt !important; }
+  p, li, dd, dt { orphans: 3; widows: 3; }
+  p { margin: 0 0 6pt !important; max-width: none !important; }
+  a { color: #2c1249 !important; text-decoration: none; }
+  strong { color: #1b1523 !important; }
+
+  /* motion off */
   .reveal, .section .section__inner { opacity: 1 !important; transform: none !important; animation: none !important; }
+
+  /* expanders + faq open, styled as headings */
   details { display: block !important; }
-  details > summary { list-style: none; }
+  details > summary { list-style: none; font-family: var(--font-display); font-weight: 600; color: #2c1249 !important; padding: 6pt 0 3pt !important; }
   details > summary .twist, .calc__adv > summary .pm { display: none !important; }
   .expander__body, .faq__a, .calc__adv-body { display: block !important; }
-  .calc, .chain, .timeline, .matchviz, .qa, .rail { break-inside: avoid; }
-  h2, h3 { break-after: avoid; }
-  a { color: #000 !important; text-decoration: none; }
-  #sec-or { break-before: page; break-after: page; }
+  .expander, .faq { border-color: #dcd7e6 !important; }
+  .faq__item > summary { font-size: 11.5pt !important; }
+  .faq__item { border-color: #dcd7e6 !important; }
+
+  /* keep cohesive units intact across pages */
+  .hero__figure, .hero__stat, .mini-stat, .flow-row, .link, .qa__item, .faq__item,
+  .rail, .budget-card, .credit, .price, .incl-list li, .ob-refs li, .contact__card,
+  .sidepath, .tl-row, .matchviz, .calc, .pricetable, .measure-row, .ob-h, img, svg {
+    break-inside: avoid;
+  }
+
+  /* evidence chain -> stacked, ruled */
+  .chain { display: block !important; }
+  .chain__arrow { display: none !important; }
+  .link { border-top: 0.75pt solid #dcd7e6; padding: 7pt 0 !important; margin: 0 0 5pt !important; }
+  .link__badge, .link__n { color: #6a6480 !important; }
+  .link__title { color: #2c1249 !important; }
+
+  /* keep two-up layouts as two columns */
+  .two-col { display: grid !important; grid-template-columns: 1fr 1fr; gap: 8pt 28pt; }
+
+  /* panels: white with hairline */
+  .rail, .budget-card { background: #fff !important; border: 0.75pt solid #dcd7e6 !important; padding: 9pt 11pt !important; margin: 8pt 0 !important; }
+  .rail__flag, .budget-card__line { color: #2c1249 !important; }
+
+  /* calculator ledger */
+  .calc { border: 0.75pt solid #dcd7e6 !important; box-shadow: none !important; border-radius: 0 !important; }
+  .calc__grid { display: grid !important; grid-template-columns: 1fr 1.1fr; }
+  .calc__inputs { background: #faf9fc !important; border-right: 0.75pt solid #dcd7e6 !important; }
+  .calc__inputs input { border: 0.5pt solid #b9b3c8 !important; background: #fff !important; color: #1b1523 !important; }
+  .out { border-bottom: 0.5pt dotted #cfc9dc !important; }
+  .out--pilot, .budget-card__total { border-top: 1pt solid #2c1249 !important; }
+  .out--pilot .out__k, .out--pilot .out__v, .budget-card__total,
+  .credit__row--pay .credit__v, .price__amount { color: #2c1249 !important; }
+  .price__amount { font-size: 22pt !important; }
+
+  /* citations + references */
+  .ob-cite a { color: #2c1249 !important; }
+  .ob-refs li { color: #3a3350 !important; }
+
+  /* indicatief badge */
+  .badge-indic { border: 0.5pt solid #777 !important; color: #444 !important; background: #fff !important; }
+
+  /* trust logos monochrome */
+  .brandlogo { color: #333 !important; }
+  .brandlogo--img { filter: grayscale(1) !important; opacity: .85 !important; }
+
+  /* matching diagram */
+  .mv-cand line { stroke: #c7c1d6 !important; }
+  .mv-match { stroke: #2c1249 !important; }
+  .mv-node circle { fill: #c7c1d6 !important; }
+  .mv-node circle.is-active { fill: #2c1249 !important; }
+  .mv-h { fill: #6a6480 !important; }
+
+  /* timeline */
+  .tl-track { background: #eeeef2 !important; }
+  .tl-fill--baseline { background: #c7c1d6 !important; }
+  .tl-fill--active { background: #2c1249 !important; }
+  .tl-phase, .flow-label { color: #2c1249 !important; }
+  .tl-legend { color: #6a6480 !important; }
+
+  /* running footer on every page */
+  .print-foot { display: block !important; position: fixed; bottom: 0.55cm; left: 0; right: 0;
+    font-family: var(--font-display); font-size: 8pt; letter-spacing: .05em; color: #8a84a0; text-align: center; }
+
+  /* one-time header/footer elements hidden; hero is the title */
+  .print-only:not(.print-kicker):not(.print-foot) { display: none !important; }
+
+  /* OR-only print mode (printOR) */
   body.print-or-only .hero, body.print-or-only .trust, body.print-or-only .section:not(#sec-or) { display: none !important; }
-  body.print-or-only #sec-or { break-before: avoid; break-after: avoid; }
-  .badge-indic { border: 1px solid #000 !important; color: #000 !important; background: #fff !important; }
-  .print-only { display: block !important; }
-  .print-header { display: flex !important; justify-content: space-between; }
-  @page { margin: 1.6cm 1.4cm; }
+  body.print-or-only #sec-or { border-top: none; }
 }
 .print-only { display: none; }
-.print-header { border-bottom: 1px solid #000; padding-bottom: .4cm; margin-bottom: .6cm; font-size: 10pt; }
+.print-foot { display: none; }
 </style>
 </head>
 
 <body>
 <div class="print-only print-header">
-  <span><strong data-prospect="company"></strong> — Pilotvoorstel</span>
+  <span><strong data-prospect="company"></strong> - Pilotvoorstel</span>
   <span>Vertrouwelijk</span>
 </div>
 
@@ -501,8 +675,9 @@ details[open] > summary .twist::after { opacity: 0; }
       <li><a class="nav__link" href="#sec-oplossing">Oplossing</a></li>
       <li><a class="nav__link" href="#sec-medewerker">Medewerker</a></li>
       <li><a class="nav__link" href="#sec-bewijs">Bewijs</a></li>
-      <li><a class="nav__link" href="#sec-businesscase">Business case</a></li>
       <li><a class="nav__link" href="#sec-pilot">Pilot</a></li>
+      <li><a class="nav__link" href="#sec-businesscase">Business case</a></li>
+      <li><a class="nav__link" href="#sec-investering">Investering</a></li>
       <li><a class="nav__link" href="#sec-or">OR</a></li>
       <li><a class="nav__link" href="#sec-privacy">Privacy</a></li>
       <li><a class="nav__link" href="#sec-faq">FAQ</a></li>
@@ -518,6 +693,7 @@ details[open] > summary .twist::after { opacity: 0; }
   <!-- ============ HERO (dark band) ============ -->
   <header class="hero band band--dark" id="sec-hero">
     <div class="hero__inner">
+      <p class="print-only print-kicker">Vertrouwelijk pilotvoorstel</p>
       <h1 class="reveal" style="--d:.06s">Pilotvoorstel voor <span class="hl" data-prospect="company"></span></h1>
 
       <p class="hero__oneliner reveal" style="--d:.12s">
@@ -528,23 +704,23 @@ details[open] > summary .twist::after { opacity: 0; }
         <div class="hero__stat">
           <div class="k">Jullie verzuim kost ±</div>
           <div class="v is-orange" data-out="heroBurden">—</div>
-          <div class="sub">per jaar — afgeleid van <span data-prospect="headcount"></span> medewerkers &amp; <span data-prospect="verzuimPct"></span>% verzuim</div>
+          <div class="sub">per jaar: afgeleid van <span data-prospect="headcount"></span> medewerkers &amp; <span data-prospect="verzuimPct"></span>% verzuim</div>
         </div>
         <div class="hero__stat hero__stat--pilot">
-          <div class="k">Totale pilotkosten <span class="badge-indic" data-price-badge>indicatief</span></div>
+          <div class="k">Totale pilotkosten <span class="badge-indic" data-price-badge>pilotbandbreedte</span></div>
           <div class="v" data-out="heroTco">—</div>
-          <div class="sub">abonnement + verwachte trajecten — <span data-out="pilotMonths"></span>-maands pilot</div>
+          <div class="sub">abonnement + verwachte trajecten; <span data-out="pilotMonths"></span>-maands pilot</div>
         </div>
       </div>
 
       <div class="hero__cta reveal" style="--d:.24s">
-        <a class="btn btn--primary" href="#sec-businesscase">Bekijk het voorstel</a>
+        <a class="btn btn--primary" href="#sec-pilot">Bekijk de pilotopzet</a>
       </div>
     </div>
   </header>
 
   <!-- ============ TRUST band ============ -->
-  <section class="trust band" aria-label="Klanten">
+  <section class="trust band tone-a" aria-label="Klanten">
     <div class="trust__inner">
       <div class="trust__label">Vertrouwd door teams bij</div>
       <div class="trust__row">
@@ -563,25 +739,25 @@ details[open] > summary .twist::after { opacity: 0; }
   </section>
 
   <!-- ============ 1 · DE SITUATIE ============ -->
-  <section class="section band" id="sec-situatie">
+  <section class="section band tone-b" id="sec-situatie">
     <div class="section__inner">
       <h2>Jullie verzuim, in euro&rsquo;s</h2>
-      <p class="lead">Verzuim is bij jullie geen abstract cijfer. Op basis van jullie omvang en verzuimpercentage laten we hieronder zien wat het concreet kost — geschaald op <span data-prospect="company"></span>, niet generiek.</p>
+      <p class="lead">Verzuim is bij jullie geen abstract cijfer. Op basis van jullie omvang en verzuimpercentage laten we hieronder zien wat het concreet kost: geschaald op <span data-prospect="company"></span>, niet generiek.</p>
 
       <div class="two-col">
         <div class="mini-stat"><div class="v" data-out="situatieDagen">—</div><div class="k">verzuimdagen per jaar</div></div>
         <div class="mini-stat"><div class="v" data-out="situatieBurden">—</div><div class="k">verzuimlast per jaar</div></div>
       </div>
 
-      <p style="margin-top:var(--s4)">Elke verzuimdag kost loondoorbetaling, vervanging en productiviteitsverlies. Vermenigvuldigd met het aantal dagen per jaar wordt de werkelijke omvang zichtbaar — de basis onder de rest van dit voorstel.</p>
+      <p style="margin-top:var(--s4)">Elke verzuimdag kost loondoorbetaling, vervanging en productiviteitsverlies. Vermenigvuldigd met het aantal dagen per jaar wordt de werkelijke omvang zichtbaar: de basis onder de rest van dit voorstel.</p>
     </div>
   </section>
 
   <!-- ============ 2 · DE OPLOSSING ============ -->
-  <section class="section band" id="sec-oplossing">
+  <section class="section band tone-a" id="sec-oplossing">
     <div class="section__inner">
       <h2>Drempelloze, gematchte coaching</h2>
-      <p class="lead">Het begint bij <strong>drempelloos</strong>: hulp die er is voordat klachten uitgroeien tot verzuim. Eén samenhangend product — geen wachtlijst, geen drempel.</p>
+      <p class="lead">Het begint bij <strong>drempelloos</strong>: hulp die er is voordat klachten uitgroeien tot verzuim. Eén samenhangend product: geen wachtlijst, geen drempel.</p>
       <p>De medewerker vertelt kort wat er speelt, wij matchen op de werkelijke behoefte, en een mens bevestigt de keuze.</p>
 
       <div class="two-col" style="margin-top:var(--s3)">
@@ -592,32 +768,34 @@ details[open] > summary .twist::after { opacity: 0; }
   </section>
 
   <!-- ============ 3 · VOOR JE MEDEWERKER ============ -->
-  <section class="section band" id="sec-medewerker">
+  <section class="section band tone-b" id="sec-medewerker">
     <div class="section__inner">
       <h2>Hoe het werkt voor je medewerker</h2>
       <p class="lead">Van herkenning tot coaching: een ervaring die begint bij de medewerker, met privacy als uitgangspunt en zonder betrokkenheid van de werkgever.</p>
 
       <div class="flow">
-        <div class="flow-row"><div class="flow-label">Herkenning</div><p style="margin:0">De medewerker vertelt in eigen woorden wat er speelt — herkenning eerst, geen vragenlijst-gevoel.</p></div>
+        <div class="flow-row"><div class="flow-label">Herkenning</div><p style="margin:0">De medewerker vertelt in eigen woorden wat er speelt; herkenning eerst, geen vragenlijst-gevoel.</p></div>
         <div class="flow-row"><div class="flow-label">Matchen</div><p style="margin:0">Op basis daarvan matchen we op de werkelijke behoefte. De medewerker kiest zelf, zonder dat de werkgever meekijkt.</p></div>
-        <div class="flow-row"><div class="flow-label">Coaching</div><p style="margin:0">Drempelloze toegang tot de gematchte coach — lage drempel, geen ongelimiteerd aantal sessies.</p></div>
+        <div class="flow-row"><div class="flow-label">Coaching</div><p style="margin:0">Drempelloze toegang tot de gematchte coach: lage drempel, geen ongelimiteerd aantal sessies.</p></div>
       </div>
 
       <h3 class="sub-h">Anonimiteit als productkenmerk</h3>
-      <p>De werkgever ziet nooit individuen — dat is <strong>technisch afgedwongen, niet beleidsmatig beloofd</strong>. Rapportage bestaat alleen op groepsniveau, met k-anonimiteitsdrempels (zie <a href="#sec-privacy">Privacy &amp; AVG</a>). Zo verdwijnt de sociale wenselijkheid: niemand hoeft bang te zijn dat deelname zichtbaar is.</p>
+      <p>De werkgever ziet nooit individuen: dat is <strong>technisch afgedwongen, niet beleidsmatig beloofd</strong>. Rapportage bestaat alleen op groepsniveau, met k-anonimiteitsdrempels (zie <a href="#sec-privacy">Privacy &amp; AVG</a>). Zo verdwijnt de sociale wenselijkheid: niemand hoeft bang te zijn dat deelname zichtbaar is.</p>
 
       <h3 class="sub-h">Als het meer is dan coaching</h3>
-      <p>Soms is een situatie niet coachbaar maar klinisch. Dan routeert Gingermood richting huisarts of GGZ, met een <strong>warme overdracht</strong> in plaats van een doodlopend pad. Zorgplicht is geen bijzaak — het is onderdeel van het ontwerp.</p>
+      <p>Soms is een situatie niet coachbaar maar klinisch. Dan routeert Gingermood richting huisarts of GGZ, met een <strong>warme overdracht</strong> in plaats van een doodlopend pad. Zorgplicht is geen bijzaak; het is onderdeel van het ontwerp.</p>
     </div>
   </section>
 
   <!-- ============ 4 · HET BEWIJS ============ -->
-  <section class="section band" id="sec-bewijs">
+  <section class="section band tone-a" id="sec-bewijs">
     <div class="section__inner">
       <h2>Waarom matching béter werkt</h2>
-      <p class="lead">Coaching werkt beter wanneer de match klopt. Ons bewijs draait daarom niet om sessievolume, maar om de juiste coach bij de juiste behoefte — en om wat dat meetbaar oplevert.</p>
+      <p class="lead">Coaching werkt beter wanneer de match klopt. Ons bewijs draait daarom niet om sessievolume, maar om de juiste coach bij de juiste behoefte - en om wat dat meetbaar oplevert.</p>
 
-      <svg class="matchviz" viewBox="0 0 520 240" role="img" aria-label="Matching-diagram: uit meerdere kandidaten wordt de coach gekozen die het best bij de behoefte past">
+      <div class="proof-layout">
+        <div>
+          <svg class="matchviz" viewBox="0 0 520 240" role="img" aria-label="Matching-diagram: uit meerdere kandidaten wordt de coach gekozen die het best bij de behoefte past">
           <text class="mv-h" x="70" y="24">Behoefte</text>
           <text class="mv-h" x="450" y="24" text-anchor="end">Coach</text>
           <g class="mv-cand">
@@ -639,132 +817,72 @@ details[open] > summary .twist::after { opacity: 0; }
             <circle cx="450" cy="178" r="9" class="is-active" />
             <circle cx="450" cy="218" r="7" />
           </g>
-        </svg>
-      <p class="viz-cap">Niet de eerste beschikbare coach — de best passende, gekozen uit meerdere kandidaten.</p>
+          </svg>
+          <p class="viz-cap">Niet de eerste beschikbare coach: de best passende, gekozen uit meerdere kandidaten.</p>
+        </div>
 
-      <div class="chain">
-        <div class="link link--proven">
-          <span class="link__n">Link 1</span>
-          <span class="link__badge">Bewezen</span>
-          <span class="link__title">Causaal bewezen</span>
-          <p class="link__body">De basis: onze eigen metingen die matchkwaliteit koppelen aan uitkomsten.</p>
-        </div>
-        <div class="link link--science">
-          <span class="link__n">Link 2</span>
-          <span class="link__badge">Externe wetenschap</span>
-          <span class="link__title">Onafhankelijk onderbouwd</span>
-          <p class="link__body">Ondersteund door onafhankelijke wetenschappelijke literatuur over het belang van een goede coach-cliënt-match.</p>
-        </div>
-        <div class="link link--growing">
-          <span class="link__n">Link 3</span>
-          <span class="link__badge">Groeit</span>
-          <span class="link__title">Nog niet geclaimd</span>
-          <p class="link__body">Het langetermijneffect op verzuim groeit met elke pilot — dat claimen we nog niet, dat bewijzen we samen.</p>
+        <div>
+          <ul class="proof-points">
+            <li class="proof-point"><strong>Meetbaar vanaf intake</strong><span>Elke match start met een expliciete behoefte, gekozen coach en latere uitkomstmeting. Daardoor is matchkwaliteit geen gevoel, maar een variabele.</span></li>
+            <li class="proof-point"><strong>Onderbouwd door literatuur</strong><span>De coach-client-fit is een bekende voorspeller van therapie- en coachinguitkomsten; Gingermood operationaliseert die fit in de matching.</span></li>
+            <li class="proof-point"><strong>Verzuimclaim bewust later</strong><span>Korte-termijnsignalen tonen uptake, welbevinden en productiviteit. Verzuim wordt pas gelezen tegen baseline en aggregaten, niet beloofd op voorhand.</span></li>
+          </ul>
+          <p class="proof-note">De volledige bronset en methodologie horen bij het pilotdossier, maar de kern van het bewijs staat hier al in de pagina.</p>
         </div>
       </div>
 
       <details class="expander">
         <summary>Toon de onderbouwing <span class="twist" aria-hidden="true"></span></summary>
-        <div class="expander__body"><p>Op aanvraag delen we de volledige onderbouwing: bronnen, methodologie en de opzet van onze effectmeting.</p></div>
-      </details>
-    </div>
-  </section>
-
-  <!-- ============ 5 · BUSINESS CASE ============ -->
-  <section class="section band" id="sec-businesscase">
-    <div class="section__inner">
-      <h2>Wat het oplevert</h2>
-      <p class="lead">Pas de aannames aan en reken mee. De cijfers tonen de <strong>omvang van het probleem</strong> — geen toezegging over verzuimdaling.</p>
-
-      <div class="calc" id="calc">
-        <div class="calc__grid">
-          <div class="calc__inputs">
-            <div class="calc__h">Jullie cijfers</div>
-            <div class="field">
-              <label for="in-headcount">Aantal medewerkers</label>
-              <div class="field__wrap"><input type="number" id="in-headcount" min="1" step="1" inputmode="numeric" /></div>
-            </div>
-            <div class="field">
-              <label for="in-verzuim">Verzuimpercentage <span class="hint">(1 decimaal)</span></label>
-              <div class="field__wrap"><input type="number" id="in-verzuim" min="0" max="100" step="0.1" inputmode="decimal" /><span class="unit">%</span></div>
-            </div>
-            <details class="calc__adv">
-              <summary><span class="pm" aria-hidden="true"></span> Geavanceerde aannames</summary>
-              <div class="calc__adv-body">
-                <div class="field">
-                  <label for="in-cost">Kosten per verzuimdag <span class="hint">(loaded, €)</span></label>
-                  <div class="field__wrap"><input type="number" id="in-cost" min="0" step="10" inputmode="numeric" /><span class="unit">€</span></div>
-                </div>
-                <div class="field">
-                  <label for="in-workdays">FTE-werkdagen per jaar</label>
-                  <div class="field__wrap"><input type="number" id="in-workdays" min="1" max="366" step="1" inputmode="numeric" /></div>
-                </div>
-                <div class="field" style="margin-bottom:.2rem">
-                  <label for="in-trajectories">Verwachte trajecten <span class="hint">per 1.000 mdw / jaar</span></label>
-                  <div class="field__wrap"><input type="number" id="in-trajectories" min="0" step="1" inputmode="numeric" /></div>
-                </div>
-                <p style="font-size:var(--fs-xs);color:var(--ink-3);margin:.6rem 0 0">Pas deze aan met jullie eigen aannames — de uitkomst rekent live mee.</p>
-              </div>
-            </details>
-          </div>
-
-          <div class="calc__outputs">
-            <div class="calc__h">Wat dat betekent</div>
-            <div class="out"><span class="out__k">Verzuimdagen per jaar</span><span class="out__v" data-out="calcDagen">—</span></div>
-            <div class="out out--total"><span class="out__k">Totale verzuimlast per jaar</span><span class="out__v" data-out="calcBurden">—</span></div>
-
-            <div class="out out--group"><span class="out__k">Abonnement per jaar</span><span class="out__v" data-out="calcAbonnement">—</span></div>
-            <div class="out"><span class="out__k">Verwachte trajecten <span class="hint">(<span data-out="calcExtraTraj">—</span> declarabel)</span></span><span class="out__v" data-out="calcVerwachteTraj">—</span></div>
-            <div class="out"><span class="out__k">Trajectkosten per jaar</span><span class="out__v" data-out="calcTrajectkosten">—</span></div>
-            <div class="out out--total out--pilot"><span class="out__k">Totale pilotkosten <span class="badge-indic" data-price-badge>indicatief</span></span><span class="out__v" data-out="calcTco">—</span></div>
-
-            <div class="scenario">
-              <div class="scenario__top">
-                <span class="scenario__lbl">Illustratief scenario</span>
-                <span class="scenario__pct" data-out="scenarioPct">5%</span>
-              </div>
-              <input type="range" id="in-scenario" min="0" max="15" step="1" value="5" aria-label="Illustratief scenariopercentage" />
-              <div class="scenario__out"><span class="k">Waarde op het spel bij dit scenario</span><span class="v" data-out="scenarioValue">—</span></div>
-              <p class="caveat">
-                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="11" r=".8" fill="currentColor"/></svg>
-                <span>Illustratief scenario — <strong>geen toezegging</strong>. Dit toont wat er op het spel staat bij een bescheiden verbetering, niet een gegarandeerde verzuimdaling.</span>
-              </p>
-            </div>
-          </div>
+        <div class="expander__body onderbouwing">
+        <div class="ob-sec">
+          <h4 class="ob-h"><span class="ob-num">1</span><span>De omvang van het probleem is gedocumenteerd, ook voor Nederland</span></h4>
+          <p>Mentale belasting is in Nederland een van de grootste beheersbare kostenposten voor werkgevers. Volgens de TNO/CBS-cijfers (Nationale Enquête Arbeidsomstandigheden) verzuimden Nederlandse werknemers in 2022 samen 13,8 miljoen dagen als gevolg van psychosociale arbeidsbelasting (werkdruk, conflicten en emotioneel zwaar werk), goed voor circa € 4,4 miljard aan verzuimkosten voor werkgevers, tegen € 3,3 miljard een jaar eerder. De gemiddelde verzuimkosten per verzuimende werknemer wegens mentale belasting stegen daarbij naar circa € 14.000<sup class="ob-cite"><a href="#ob-ref-1">1</a>,<a href="#ob-ref-2">2</a></sup>. Ongeveer één op de zes werknemers rapporteert burn-outklachten<sup class="ob-cite"><a href="#ob-ref-2">2</a></sup>.</p>
+          <p>Daar komt een minder zichtbare post bij: presenteïsme. Aanwezig zijn maar verminderd functioneren. Onderzoek in JAMA becijferde al in 2003 dat het overgrote deel van de productiviteitskosten van depressieve klachten niet uit verzuim bestaat, maar uit verminderd presteren tijdens het werk<sup class="ob-cite"><a href="#ob-ref-3">3</a></sup>. Deloitte's meest recente werkgevers analyse (2024) bevestigt dit beeld: presenteïsme is de grootste kostenpost binnen de totale mentale-gezondheid last voor werkgevers<sup class="ob-cite"><a href="#ob-ref-4">4</a></sup>.</p>
+          <p>Wat dit betekent: het verzuimcijfer dat u kent, is de zichtbare helft van het probleem. De onzichtbare helft, verminderd functioneren vóór en naast het verzuim, is minstens zo groot, en juist daar grijpt vroege, laagdrempelige begeleiding aan.</p>
         </div>
-      </div>
-
-      <div class="rail">
-        <span class="rail__flag">Eerlijk gehouden</span>
-        <p>Dit cijfer toont de omvang van de prijs die verzuim nu al kost — het is géén belofte van een verzuimdaling. Wat de pilot wél bewijst, staat in <a href="#sec-pilot">de pilot-opzet</a>.</p>
-      </div>
-
-      <h3 class="sub-h">Prijsopbouw <span class="badge-indic" data-price-badge>indicatieve prijsstelling</span></h3>
-      <table class="pricetable">
-        <tbody>
-          <tr><th scope="row">Abonnement</th><td><span data-out="priceSub">—</span> per medewerker / jaar</td></tr>
-          <tr><th scope="row">Inbegrepen trajecten</th><td><span data-out="priceIncluded">—</span> trajecten per jaar</td></tr>
-          <tr><th scope="row">Prijs per extra traject</th><td><span data-out="priceExtra">—</span></td></tr>
-          <tr><th scope="row">Verwacht volume</th><td><span data-out="priceVolume">—</span> trajecten per 1.000 medewerkers / jaar</td></tr>
-        </tbody>
-      </table>
-      <p style="font-size:var(--fs-sm);color:var(--ink-3)">Coachtrajecten boven het inbegrepen aantal worden apart gedeclareerd — daarom rekent de calculator met de <strong>totale kosten van eigenaarschap</strong>, niet alleen het abonnement. De bedragen hier zijn indicatief; de definitieve structuur bevestigen we bij akkoord.</p>
-
-      <h3 class="sub-h">Waarom deze pilotprijs</h3>
-      <div class="rail rail--dark">
-        <span class="rail__flag">Founding partner</span>
-        <p>Deze prijs geldt omdat u meebouwt aan het bewijs: door <a href="#sec-pilot">geanonimiseerde verzuimdata te delen</a> maakt u de effectmeting mogelijk. Als deliverable ontvangt u de volledige meetrapportage over uw eigen organisatie — het bewijs blijft van u.</p>
-      </div>
-
-      <details class="expander">
-        <summary>Toon het volledige waardemodel <span class="twist" aria-hidden="true"></span></summary>
-        <div class="expander__body"><p>Het volledige waardemodel — met de aannames achter kosten per verzuimdag, werkdagen en trajectvolume — lichten we op aanvraag toe.</p></div>
+        <div class="ob-sec">
+          <h4 class="ob-h"><span class="ob-num">2</span><span>Vroeg investeren rendeert, en preventief rendeert het meest</span></h4>
+          <p>Deloitte analyseerde 26 studies naar het financiële rendement van interventies op mentale gezondheid en vond een gemiddeld rendement van £ 4,70 per geïnvesteerde £ 1, met de belangrijke nuance dat vroege en breed toegankelijke interventies het hoogste rendement laten zien; hoger dan zware ondersteuning die pas start als iemand al is uitgevallen<sup class="ob-cite"><a href="#ob-ref-4">4</a></sup>.</p>
+          <p>Eerlijkheidshalve: dit is een gemiddelde over uiteenlopende interventies en organisaties. Het is een onderbouwing van de investeringscategorie, geen garantie voor een individueel resultaat. Precies daarom bevat dit voorstel een eigen meetopzet (§5) in plaats van een geleende ROI-belofte.</p>
+        </div>
+        <div class="ob-sec">
+          <h4 class="ob-h"><span class="ob-num">3</span><span>Coaching werkt, maar de match bepaalt hoe goed</span></h4>
+          <p>Meta-analyses van coaching in organisaties laten consistente, betekenisvolle effecten zien op functioneren, welzijn, coping en doelrealisatie<sup class="ob-cite"><a href="#ob-ref-5">5</a></sup>. Tegelijk is uit decennia psychotherapie- en begeleiding onderzoek bekend dat de werkrelatie tussen cliënt en begeleider een van de sterkste en meest stabiele voorspellers van de uitkomst is, robuuster dan de specifieke methode die wordt gebruikt<sup class="ob-cite"><a href="#ob-ref-6">6</a></sup>.</p>
+          <p>De vraag is dus niet alleen óf begeleiding werkt, maar bij wie iemand terechtkomt. Lange tijd was dat een aanname; inmiddels is het causaal aangetoond. In een dubbelblind gerandomiseerd onderzoek, gepubliceerd in JAMA Psychiatry, werden cliënten ofwel op de gebruikelijke, pragmatische wijze aan een behandelaar toegewezen, ofwel gematcht aan een behandelaar met aantoonbare sterktes op precies hún problematiek. De gematchte groep verbeterde significant meer, terwijl de behandelaren niets anders déden dan anders. Het verschil kwam niet uit een andere methode, maar uitsluitend uit wie welke cliënt zag<sup class="ob-cite"><a href="#ob-ref-7">7</a></sup>. Dit is de kern van ons model: competentie-gebaseerde matching in plaats van toewijzing op beschikbaarheid.</p>
+          <p>Matching raakt ook een tweede, zelden benoemd lek: vroegtijdige uitval. Meta-analytisch stopt circa één op de vijf trajecten voortijdig<sup class="ob-cite"><a href="#ob-ref-8">8</a></sup>. Een deel daarvan is onvermijdelijk of zelfs positief (het doel was sneller bereikt), maar een substantieel deel weerspiegelt een mismatch die met betere toewijzing voorkomen had kunnen worden; verspilde instap, verspild budget, en een medewerker die de drempel een tweede keer moet nemen.</p>
+        </div>
+        <div class="ob-sec">
+          <h4 class="ob-h"><span class="ob-num">4</span><span>Van welzijn naar euro's: gevalideerde meetinstrumenten</span></h4>
+          <p>Om effect geloofwaardig te maken, meten wij niet met eigen tevredenheidsvragen maar met internationaal gevalideerde instrumenten. De WHO-5 is een breed gevalideerde welzijnsindex met aangetoonde gevoeligheid voor verandering<sup class="ob-cite"><a href="#ob-ref-9">9</a></sup>. De WPAI kwantificeert productiviteitsverlies door absenteïsme én presenteïsme en wordt standaard gebruikt om gezondheidsuitkomsten naar economische termen te vertalen<sup class="ob-cite"><a href="#ob-ref-10">10</a></sup>. Zo ontstaat een keten die elke schakel controleerbaar houdt: begeleiding &rarr; gevalideerde welzijns- en productiviteitsscores &rarr; economische waarde volgens de bestaande wetenschappelijke literatuur.</p>
+        </div>
+        <div class="ob-sec">
+          <h4 class="ob-h"><span class="ob-num">5</span><span>Wat wij zelf meten, en wat we bewust níet claimen</span></h4>
+          <p>Volledigheid vraagt om het benoemen van de sterkste kritiek. Een grootschalige studie onder ruim 46.000 Britse werknemers (2024) vond geen aantoonbaar effect van losse, individuele welzijnsinterventies: apps, mindfulness-programma's, welzijnstrainingen, op het gemeten welbevinden<sup class="ob-cite"><a href="#ob-ref-11">11</a></sup>. Wij lezen die studie niet weg; twee dingen zijn erover te zeggen. Ten eerste onderzocht zij lichte, ongerichte interventies. Geen gematchte, meersessies-begeleidingstrajecten; over ons model doet zij dus geen uitspraak. Ten tweede wijst de auteur zelf op werkkenmerken en de pasvorm tussen persoon en hulpbron als verklaring. Een argument dat de matching-these eerder ondersteunt dan ontkracht. En gedeeltelijk is de kritiek terecht: ook onze interventie grijpt aan bij het individu, niet bij de organisatie van het werk zelf. Daarom presenteren wij coaching als onderdeel van goed werkgeverschap, niet als vervanging ervan.</p>
+          <p>Daarom is de pilot een meting, geen belofte. Wij rapporteren op gevalideerde instrumenten (WHO-5, WPAI), met een gefaseerde uitrol die een eerlijke vergelijking mogelijk maakt, en met vooraf vastgelegde uitkomstmaten. Verzuimcijfers zijn statistisch traag en vragen doorgaans 12&ndash;24 maanden voor een betrouwbare lezing; wij meten ze vanaf dag één, maar claimen ze pas wanneer de data het dragen. Wat u na twaalf maanden heeft, is geen brochure maar een meetrapportage over uw eigen organisatie, inclusief de uitkomsten die ons niet uitkomen.</p>
+        </div>
+        <div class="ob-sec">
+          <h4 class="ob-h"><span class="ob-num" aria-hidden="true">&sect;</span><span>Referenties</span></h4>
+          <ol class="ob-refs">
+            <li id="ob-ref-1">TNO. Factsheet Week van de Werkstress 2024; TNO/CBS, Nationale Enquête Arbeidsomstandigheden (NEA). monitorarbeid.tno.nl.</li>
+            <li id="ob-ref-2">TNO/CBS. NEA-trendcijfers burn-outklachten en verzuimkosten psychosociale arbeidsbelasting, 2021&ndash;2022.</li>
+            <li id="ob-ref-3">Stewart, W.F., et al. (2003). Cost of Lost Productive Work Time Among US Workers With Depression. JAMA, 289(23), 3135&ndash;3144. doi:10.1001/jama.289.23.3135.</li>
+            <li id="ob-ref-4">Deloitte (2024). Mental Health and Employers: The Case for Investment. Vierde editie. ROI-analyse op basis van 26 studies sinds 2011.</li>
+            <li id="ob-ref-5">Theeboom, T., Beersma, B., &amp; Van Vianen, A.E.M. (2014). Does coaching work? A meta-analysis on the effects of coaching on individual level outcomes in an organizational context. The Journal of Positive Psychology, 9(1), 1&ndash;18.</li>
+            <li id="ob-ref-6">Flückiger, C., Del Re, A.C., Wampold, B.E., &amp; Horvath, A.O. (2018). The alliance in adult psychotherapy: A meta-analytic synthesis. Psychotherapy, 55(4), 316&ndash;340.</li>
+            <li id="ob-ref-7">Constantino, M.J., Boswell, J.F., Coyne, A.E., Swales, T.P., &amp; Kraus, D.R. (2021). Effect of Matching Therapists to Patients vs Assignment as Usual on Adult Psychotherapy Outcomes: A Randomized Clinical Trial. JAMA Psychiatry, 78(9), 960&ndash;969. doi:10.1001/jamapsychiatry.2021.1221.</li>
+            <li id="ob-ref-8">Swift, J.K., &amp; Greenberg, R.P. (2012). Premature discontinuation in adult psychotherapy: A meta-analysis. Journal of Consulting and Clinical Psychology, 80(4), 547&ndash;559.</li>
+            <li id="ob-ref-9">Topp, C.W., Østergaard, S.D., Søndergaard, S., &amp; Bech, P. (2015). The WHO-5 Well-Being Index: A Systematic Review of the Literature. Psychotherapy and Psychosomatics, 84(3), 167&ndash;176.</li>
+            <li id="ob-ref-10">Reilly, M.C., Zbrozek, A.S., &amp; Dukes, E.M. (1993). The validity and reproducibility of a work productivity and activity impairment instrument. PharmacoEconomics, 4(5), 353&ndash;365.</li>
+            <li id="ob-ref-11">Fleming, W.J. (2024). Employee well-being outcomes from individual-level mental health interventions: Cross-sectional evidence from the United Kingdom. Industrial Relations Journal, 55(2), 162&ndash;182. doi:10.1111/irj.12418.</li>
+          </ol>
+        </div>
+        </div>
       </details>
     </div>
   </section>
 
-  <!-- ============ 6 · DE PILOT ============ -->
-  <section class="section band" id="sec-pilot">
+  <!-- ============ 5 · DE PILOT ============ -->
+  <section class="section band tone-a" id="sec-pilot">
     <div class="section__inner">
       <h2>Hoe we het bewijzen</h2>
       <p class="lead">De pilot duurt <strong><span data-out="pilotMonths"></span> maanden</strong>. Staggered difference-in-differences: groepen starten gefaseerd, zodat elke groep zijn eigen controle is. De opzet is bewust OR-proof.</p>
@@ -802,16 +920,16 @@ details[open] > summary .twist::after { opacity: 0; }
       <h3 class="sub-h">Wat ziet u wanneer</h3>
       <div class="flow">
         <div class="flow-row"><div class="flow-label">Week 1–6</div><p style="margin:0">Uptake- en intake-metrics: hoeveel medewerkers vinden de weg naar coaching, en hoe snel.</p></div>
-        <div class="flow-row"><div class="flow-label">Maand 3–6</div><p style="margin:0">Eerste beweging op WHO-5 (welbevinden) en WPAI (productiviteit) — de leidende indicatoren.</p></div>
+        <div class="flow-row"><div class="flow-label">Maand 3–6</div><p style="margin:0">Eerste beweging op WHO-5 (welbevinden) en WPAI (productiviteit): de leidende indicatoren.</p></div>
         <div class="flow-row"><div class="flow-label">Maand 12</div><p style="margin:0">De eerste verzuimlezing tegen de baseline, plus de bewezen meetinfrastructuur.</p></div>
       </div>
       <div class="rail">
         <span class="rail__flag">Eerlijk over de tijdlijn</span>
-        <p>Een causale verzuimclaim vergt doorgaans 12–24 maanden. De pilot van <span data-out="pilotMonths"></span> maanden levert de eerste lezing én de bewezen meetinfrastructuur — geen gegarandeerde daling binnen het jaar.</p>
+        <p>Een causale verzuimclaim vergt doorgaans 12–24 maanden. De pilot van <span data-out="pilotMonths"></span> maanden levert de eerste lezing én de bewezen meetinfrastructuur; geen gegarandeerde daling binnen het jaar.</p>
       </div>
 
-      <h3 class="sub-h">Datadeling — zo werkt het meten</h3>
-      <p>Om effect te kunnen meten deelt u <strong>geanonimiseerde verzuimaggregaten</strong>: de baseline (bij voorkeur twee jaar historie) plus de pilotperiode. Dit is een voorwaarde van de pilot én de kern van de samenwerking — u bouwt mee aan het bewijs, geen kleine lettertjes.</p>
+      <h3 class="sub-h">Datadeling: zo werkt het meten</h3>
+      <p>Om effect te kunnen meten deelt u <strong>geanonimiseerde verzuimaggregaten</strong>: de baseline (bij voorkeur twee jaar historie) plus de pilotperiode. Dit is een voorwaarde van de pilot én de kern van de samenwerking: u bouwt mee aan het bewijs.</p>
       <div class="measure-row">
         <span class="chip">Alleen aggregaten</span>
         <span class="chip">Nooit individuen</span>
@@ -824,12 +942,158 @@ details[open] > summary .twist::after { opacity: 0; }
         <li>Eén aanspreekpunt binnen de organisatie.</li>
         <li>De geanonimiseerde verzuimaggregaten voor de meting.</li>
       </ul>
-      <p style="font-size:var(--fs-sm);color:var(--ink-2)"><strong>Géén IT-integratie nodig:</strong> de pilot draait op een eigen URL — geen SSO, geen koppeling met jullie systemen.</p>
+      <p style="font-size:var(--fs-sm);color:var(--ink-2)"><strong>Géén IT-integratie nodig:</strong> de pilot draait op een eigen URL: geen SSO, geen koppeling met jullie systemen.</p>
+    </div>
+  </section>
+
+  <!-- ============ 6 · BUSINESS CASE ============ -->
+  <section class="section band tone-b" id="sec-businesscase">
+    <div class="section__inner">
+      <h2>Wat het oplevert</h2>
+      <p class="lead">Pas de aannames aan en reken mee. De cijfers tonen de <strong>omvang van het probleem</strong>: geen toezegging over verzuimdaling.</p>
+
+      <div class="calc" id="calc">
+        <div class="calc__grid">
+          <div class="calc__inputs">
+            <div class="calc__h">Jullie cijfers</div>
+            <div class="field">
+              <label for="in-headcount">Aantal medewerkers</label>
+              <div class="field__wrap"><input type="number" id="in-headcount" min="1" step="1" inputmode="numeric" /></div>
+            </div>
+            <div class="field">
+              <label for="in-verzuim">Verzuimpercentage <span class="hint">(1 decimaal)</span></label>
+              <div class="field__wrap"><input type="number" id="in-verzuim" min="0" max="100" step="0.1" inputmode="decimal" /><span class="unit">%</span></div>
+            </div>
+            <details class="calc__adv">
+              <summary><span class="pm" aria-hidden="true"></span> Geavanceerde aannames</summary>
+              <div class="calc__adv-body">
+                <div class="field">
+                  <label for="in-cost">Kosten per verzuimdag <span class="hint">(loaded, €)</span></label>
+                  <div class="field__wrap"><input type="number" id="in-cost" min="0" step="10" inputmode="numeric" /><span class="unit">€</span></div>
+                </div>
+                <div class="field">
+                  <label for="in-workdays">FTE-werkdagen per jaar</label>
+                  <div class="field__wrap"><input type="number" id="in-workdays" min="1" max="366" step="1" inputmode="numeric" /></div>
+                </div>
+                <div class="field" style="margin-bottom:.2rem">
+                  <label for="in-trajectories">Verwachte trajecten <span class="hint">per 1.000 mdw / jaar</span></label>
+                  <div class="field__wrap"><input type="number" id="in-trajectories" min="0" step="1" inputmode="numeric" /></div>
+                </div>
+                <p style="font-size:var(--fs-xs);color:var(--ink-3);margin:.6rem 0 0">Pas deze aan met jullie eigen aannames; de uitkomst rekent live mee.</p>
+              </div>
+            </details>
+          </div>
+
+          <div class="calc__outputs">
+            <div class="calc__h">Wat dat betekent</div>
+            <div class="out"><span class="out__k">Verzuimdagen per jaar</span><span class="out__v" data-out="calcDagen">—</span></div>
+            <div class="out out--total"><span class="out__k">Totale verzuimlast per jaar</span><span class="out__v" data-out="calcBurden">—</span></div>
+
+            <div class="out out--group"><span class="out__k">Abonnement per jaar</span><span class="out__v" data-out="calcAbonnement">—</span></div>
+            <div class="out"><span class="out__k">Verwachte trajecten <span class="hint">(<span data-out="calcExtraTraj">—</span> declarabel)</span></span><span class="out__v" data-out="calcVerwachteTraj">—</span></div>
+            <div class="out"><span class="out__k">Trajectkosten per jaar</span><span class="out__v" data-out="calcTrajectkosten">—</span></div>
+            <div class="out out--total out--pilot"><span class="out__k">Totale pilotkosten <span class="badge-indic" data-price-badge>pilotbandbreedte</span></span><span class="out__v" data-out="calcTco">—</span></div>
+
+            <div class="scenario">
+              <div class="scenario__top">
+                <span class="scenario__lbl">Illustratief scenario</span>
+                <span class="scenario__pct" data-out="scenarioPct">5%</span>
+              </div>
+              <input type="range" id="in-scenario" min="0" max="15" step="1" value="5" aria-label="Illustratief scenariopercentage" />
+              <div class="scenario__out"><span class="k">Waarde op het spel bij dit scenario</span><span class="v" data-out="scenarioValue">—</span></div>
+              <p class="caveat">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v3.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="11" r=".8" fill="currentColor"/></svg>
+                <span>Illustratief scenario: <strong>geen toezegging</strong>. Dit toont wat er op het spel staat bij een bescheiden verbetering, niet een gegarandeerde verzuimdaling.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail">
+        <span class="rail__flag">Eerlijk gehouden</span>
+        <p>Dit cijfer toont de omvang van de prijs die verzuim nu al kost; het is géén belofte van een verzuimdaling. Wat de pilot wél bewijst, staat in <a href="#sec-pilot">de pilot-opzet</a>.</p>
+      </div>
+
+      <h3 class="sub-h">Prijsopbouw <span class="badge-indic" data-price-badge>pilotbandbreedte</span></h3>
+      <table class="pricetable">
+        <tbody>
+          <tr><th scope="row">Abonnement</th><td><span data-out="priceSub">—</span> per medewerker / jaar</td></tr>
+          <tr><th scope="row">Inbegrepen trajecten</th><td><span data-out="priceIncluded">—</span> trajecten per jaar</td></tr>
+          <tr><th scope="row">Prijs per extra traject</th><td><span data-out="priceExtra">—</span></td></tr>
+          <tr><th scope="row">Verwacht volume</th><td><span data-out="priceVolume">—</span> trajecten per 1.000 medewerkers / jaar</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:var(--fs-sm);color:var(--ink-3)">Coachtrajecten boven het inbegrepen aantal worden apart gedeclareerd; daarom rekent de calculator met de <strong>totale kosten van eigenaarschap</strong>, niet alleen het abonnement. De bedragen zijn een pilotbandbreedte op basis van de aannames hierboven; de definitieve structuur bevestigen we bij akkoord.</p>
+
+      <h3 class="sub-h">Waarom deze pilotprijs</h3>
+      <div class="rail rail--dark">
+        <span class="rail__flag">Founding partner</span>
+        <p>Deze prijs geldt omdat u meebouwt aan het bewijs: door <a href="#sec-pilot">geanonimiseerde verzuimdata te delen</a> maakt u de effectmeting mogelijk. Als deliverable ontvangt u de volledige meetrapportage over uw eigen organisatie; het bewijs blijft van u.</p>
+      </div>
+
+      <details class="expander">
+        <summary>Toon het volledige waardemodel <span class="twist" aria-hidden="true"></span></summary>
+        <div class="expander__body"><p>Het volledige waardemodel - met de aannames achter kosten per verzuimdag, werkdagen en trajectvolume - lichten we op aanvraag toe.</p></div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ INVESTERING ============ -->
+  <section class="section band tone-a" id="sec-investering">
+    <div class="section__inner">
+      <h2>Investering</h2>
+      <p class="lead">Eén voorstel, één helder pad. Hieronder ziet u wat inbegrepen is, hoe de trajecten werken, en welk bedrag daarbij hoort.</p>
+
+      <h3 class="sub-h">Alles inbegrepen</h3>
+      <p>Het abonnement omvat het volledige platform, als één geheel:</p>
+      <ul class="incl-list">
+        <li><svg class="tick" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="currentColor" opacity=".12"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Platform-toegang voor alle medewerkers</span></li>
+        <li><svg class="tick" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="currentColor" opacity=".12"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>De volledige content library</span></li>
+        <li><svg class="tick" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="currentColor" opacity=".12"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Kwartaal check-in en triage</span></li>
+        <li><svg class="tick" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="currentColor" opacity=".12"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Intakegesprek met een coachadviseur</span></li>
+        <li><svg class="tick" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="currentColor" opacity=".12"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>De wetenschappelijk onderbouwde matching</span></li>
+      </ul>
+      <p class="incl-close">Het volledige pad, van het eerste signaal tot de gematchte coach, is inbegrepen. Voor elke medewerker, zonder limiet.</p>
+
+      <h3 class="sub-h">Jullie betalen alleen voor wat er gebeurt</h3>
+      <p>Coachtrajecten worden per traject gefactureerd, tegen een vast tarief voor abonnees. Zo houden jullie de regie: geen stoelbelasting voor medewerkers die het platform nooit gebruiken, geen bundels die verlopen, volledige voorspelbaarheid.</p>
+      <p>Waar all-in abonnementen jullie laten betalen voor gebruik dat er niet is, betalen jullie hier alleen voor trajecten die daadwerkelijk plaatsvinden.</p>
+      <p class="inv-fineline">Vast tarief per traject, vooraf bekend. Geen verrassingen.</p>
+
+      <h3 class="sub-h">Onze pilotinvestering</h3>
+      <p>De pilot bevat een tegoed van <strong><span data-out="invCreditCount">—</span> trajecten</strong>.</p>
+      <div class="credit">
+        <div class="credit__row"><span class="credit__k">Waarde van het tegoed</span><span class="credit__v"><s data-out="invCreditValue">—</s></span></div>
+        <div class="credit__row credit__row--pay"><span class="credit__k">Wat jullie betalen</span><span class="credit__v" data-out="invCreditPay">—</span></div>
+      </div>
+      <p>Dit is de investering van Gingermood in het meetpartnerschap: wij investeren trajecten, jullie delen geanonimiseerde uitkomstdata. Wederkerig, en gericht op het bewijs dat we samen opbouwen.</p>
+      <p class="inv-fineline">Het tegoed is begrensd en gebonden aan de pilotperiode van <span data-out="pilotMonths">—</span> maanden.</p>
+
+      <h3 class="sub-h">Het abonnement</h3>
+      <div class="price">
+        <div class="price__amount"><span data-out="invSubYear">—</span> <span class="badge-indic" data-price-badge>indicatief</span></div>
+        <div class="price__unit">per medewerker per jaar</div>
+        <div class="price__month"><span data-out="invPerMonth">—</span> per maand</div>
+      </div>
+      <div class="budget-card">
+        <div class="budget-card__line">Eén vast bedrag, plus één begrensde variabele: samen volledige budgetzekerheid voor het pilotjaar.</div>
+        <dl class="budget-card__grid">
+          <div><dt>Vast: abonnement</dt><dd><span data-out="invMaxYear">—</span> per jaar <span class="budget-card__sub">(<span data-out="invSubYear">—</span> × <span data-prospect="headcount">—</span> medewerkers)</span></dd></div>
+          <div><dt>Variabel: coachtrajecten</dt><dd>vast tarief van <span data-out="invSubRate">—</span> per traject, tijdens de pilot gedekt door het tegoed</dd></div>
+        </dl>
+        <div class="budget-card__total"><span>Vaste investering pilotjaar</span><span data-out="invMaxYear">—</span></div>
+      </div>
+
+      <div class="inv-trust">
+        <p>Medewerkers zien nooit een prijs. Coaching voelt als een cadeau van de werkgever, niet als een uitgavenpost.</p>
+        <p>Facturen tonen alleen aantallen, nooit namen. Anonimiteit is contractueel.</p>
+      </div>
     </div>
   </section>
 
   <!-- ============ 7 · VOOR DE ONDERNEMINGSRAAD ============ -->
-  <section class="section band" id="sec-or">
+  <section class="section band tone-b" id="sec-or">
     <div class="section__inner">
       <h2>Wat de OR moet weten</h2>
       <p class="lead">Instemming van de OR (WOR art.&nbsp;27) is waarschijnlijk nodig en is het grootste tijdlijnrisico. Daarom beantwoorden we de voorspelbare vragen hier vooraf.</p>
@@ -838,7 +1102,7 @@ details[open] > summary .twist::after { opacity: 0; }
         <div class="qa__item"><dt>Kan de werkgever mijn antwoorden zien?</dt><dd>Nee. K-anonimiteit is technisch afgedwongen: geen dashboardcel toont een groep kleiner dan N&nbsp;personen. De werkgever ziet nooit individuen.</dd></div>
         <div class="qa__item"><dt>Is deelname vrijwillig?</dt><dd>Ja, altijd. Medewerkers kiezen zelf of en wanneer ze coaching gebruiken.</dd></div>
         <div class="qa__item"><dt>Wat gebeurt er met de data?</dt><dd>Gepseudonimiseerd bij binnenkomst, gehost in de EU/NL, met verwijderrecht. Zie <a href="#sec-privacy">Privacy &amp; AVG</a>.</dd></div>
-        <div class="qa__item"><dt>Wat als iemand in crisis is?</dt><dd>Dan treedt het klinisch escalatieprotocol in werking — een <a href="#sec-medewerker">warme overdracht richting huisarts of GGZ</a>.</dd></div>
+        <div class="qa__item"><dt>Wat als iemand in crisis is?</dt><dd>Dan treedt het klinisch escalatieprotocol in werking: een <a href="#sec-medewerker">warme overdracht richting huisarts of GGZ</a>.</dd></div>
         <div class="qa__item"><dt>Is Gingermood onafhankelijk van de werkgever?</dt><dd>Ja. Rapportage aan de werkgever bestaat uitsluitend op groepsniveau.</dd></div>
       </dl>
 
@@ -850,12 +1114,12 @@ details[open] > summary .twist::after { opacity: 0; }
   </section>
 
   <!-- ============ 8 · PRIVACY & AVG ============ -->
-  <section class="section band" id="sec-privacy">
+  <section class="section band tone-a" id="sec-privacy">
     <div class="section__inner">
       <h2>Privacy is productarchitectuur</h2>
-      <p class="lead">Geen juridische boilerplate — privacy zit in de bouw. Dit is wat procurement en legal nodig hebben.</p>
+      <p class="lead">Geen juridische boilerplate: privacy zit in de bouw. Dit is wat procurement en legal nodig hebben.</p>
       <div class="two-col">
-        <div class="mini-stat"><div class="cap">K-anonimiteit</div><p style="margin:.4rem 0 0">Geen dashboardcel onder de N-drempel — individuen zijn niet herleidbaar.</p></div>
+        <div class="mini-stat"><div class="cap">K-anonimiteit</div><p style="margin:.4rem 0 0">Geen dashboardcel onder de N-drempel: individuen zijn niet herleidbaar.</p></div>
         <div class="mini-stat"><div class="cap">Pseudonimisering</div><p style="margin:.4rem 0 0">Direct bij ingest; herleidbare identifiers worden niet opgeslagen.</p></div>
         <div class="mini-stat"><div class="cap">EU/NL-hosting</div><p style="margin:.4rem 0 0">Data blijft binnen de EU, gehost in Nederland.</p></div>
         <div class="mini-stat"><div class="cap">Verwijderrecht &amp; verwerkersovereenkomst</div><p style="margin:.4rem 0 0">Recht op verwijdering; verwerkersafspraken vastgelegd.</p></div>
@@ -863,23 +1127,22 @@ details[open] > summary .twist::after { opacity: 0; }
 
       <div class="rail">
         <span class="rail__flag">DPIA-ondersteuning</span>
-        <p>Wij leveren de input voor uw DPIA aan — dataflows, verwerkingsgronden en beveiligingsmaatregelen — zodat uw procurement- en privacytraject sneller loopt.</p>
+        <p>Wij leveren de input voor uw DPIA aan - dataflows, verwerkingsgronden en beveiligingsmaatregelen - zodat uw procurement- en privacytraject sneller loopt.</p>
       </div>
       <p class="note-owner">De volledige verwerkersovereenkomst en DPIA-input leveren wij op aanvraag aan.</p>
     </div>
   </section>
 
   <!-- ============ 9 · RISICO'S & FAQ ============ -->
-  <section class="section band" id="sec-faq">
+  <section class="section band tone-b" id="sec-faq">
     <div class="section__inner">
       <h2>De harde vragen, vooraf beantwoord</h2>
-      <p class="lead">Wij stellen de moeilijke vragen zelf — en beantwoorden ze op onze voorwaarden.</p>
+      <p class="lead">Wij stellen de moeilijke vragen zelf - en beantwoorden ze op onze voorwaarden.</p>
       <div class="faq" id="faq">
-        <details class="faq__item"><summary>Wij hebben al OpenUp — waarom Gingermood? <span class="twist" aria-hidden="true"></span></summary><div class="faq__a"><p>Breedte en een bibliotheek zijn waardevol, maar dat is een ander product dan gematchte diepgang met gemeten uitkomsten. Gingermood matcht de juiste coach op de behoefte en bewijst het effect.</p></div></details>
-        <details class="faq__item"><summary>Wat kost het echt? <span class="twist" aria-hidden="true"></span></summary><div class="faq__a"><p>De <a href="#sec-businesscase">TCO-calculator</a> toont het totaal: abonnement plus declarabele trajecten boven het inbegrepen aantal. Zie de prijsopbouw daar — nu nog <span class="badge-indic" data-price-badge>indicatief</span>.</p></div></details>
+        <details class="faq__item"><summary>We hebben al iets voor verzuim: waarom dan nog Gingermood? <span class="twist" aria-hidden="true"></span></summary><div class="faq__a"><p>Breedte en een bibliotheek zijn waardevol, maar dat is een ander product dan gematchte diepgang met gemeten uitkomsten. Gingermood matcht de juiste coach op de behoefte en bewijst het effect.</p></div></details>
+        <details class="faq__item"><summary>Wat kost het echt? <span class="twist" aria-hidden="true"></span></summary><div class="faq__a"><p>De <a href="#sec-businesscase">TCO-calculator</a> toont het totaal: abonnement plus declarabele trajecten boven het inbegrepen aantal. Zie de prijsopbouw daar; de bedragen zijn als pilotbandbreedte opgezet.</p></div></details>
         <details class="faq__item"><summary>Moet onze OR hiermee instemmen? <span class="twist" aria-hidden="true"></span></summary><div class="faq__a"><p>Waarschijnlijk wel (WOR art.&nbsp;27). We hebben de OR-vragen vooraf beantwoord in <a href="#sec-or">Voor de ondernemingsraad</a> en ondersteunen het instemmingstraject actief.</p></div></details>
         <details class="faq__item"><summary>Is dit niet zomaar weer een wellbeing-app? <span class="twist" aria-hidden="true"></span></summary><div class="faq__a"><p>Nee. Een app biedt breedte; wij bieden een gematchte coach, drempelloze toegang en uitkomsten die we meten. Het verschil zit in de match en het bewijs.</p></div></details>
-        <details class="faq__item"><summary>Hoe zit het met de Fleming-kritiek? <span class="twist" aria-hidden="true"></span></summary><div class="faq__a"><p>Terecht punt. Veel losse wellbeing-interventies laten geen effect zien — precies daarom meten wij uitkomsten in plaats van deelname, en tonen we effect met een gecontroleerde opzet in plaats van het aan te nemen.</p></div></details>
         <details class="faq__item"><summary>Garanderen jullie een verzuimdaling? <span class="twist" aria-hidden="true"></span></summary><div class="faq__a"><p>Nee, geen garantie. We tonen de omvang van het probleem en bewijzen het effect met de pilot. Een causale verzuimclaim vergt doorgaans 12–24 maanden; de pilot levert de eerste lezing en de meetinfrastructuur.</p></div></details>
       </div>
     </div>
@@ -890,7 +1153,11 @@ details[open] > summary .twist::after { opacity: 0; }
     <div class="section__inner">
       <div class="cta">
         <h3>Zo zetten we de volgende stap</h3>
-        <p>Lees dit voorstel rustig door en bel ons om de pilot bij <span data-prospect="company"></span> te bevestigen — jullie weten waar je ons kunt vinden.</p>
+        <p>Akkoord op de pilot bij <span data-prospect="company"></span>? Dan plannen we de kick-off, leggen we de datadeling vast en maken we het OR-pakket klaar.</p>
+        <div class="cta__actions">
+          <a class="btn btn--primary" href="mailto:hello@gingermood.nl?subject=Akkoord%20pilotvoorstel%20Gingermood">Bevestig de pilot</a>
+          <a class="btn btn--ghost" href="#sec-businesscase">Bekijk de kosten</a>
+        </div>
       </div>
 
       <div class="sidepaths">
@@ -914,7 +1181,7 @@ details[open] > summary .twist::after { opacity: 0; }
 </main>
 
 <div class="print-only" style="text-align:center;font-size:9pt;color:#000;margin-top:.6cm;border-top:1px solid #000;padding-top:.3cm">
-  <span data-prospect="company"></span> — Vertrouwelijk — pilotvoorstel
+  <span data-prospect="company"></span> - Vertrouwelijk - pilotvoorstel
 </div>
 
 <script>
@@ -930,6 +1197,7 @@ const PROSPECT = {
   aanleiding: "Opgesteld naar aanleiding van onze eerdere gesprekken over de verzuimopgave binnen jullie organisatie.", // [DUMMY]
   // --- Kerncijfers ---
   headcount:  840,    // [DUMMY]
+  pilotCredits: 10,   // [PLACEHOLDER] pilot-tegoed: aantal inbegrepen trajecten
   verzuimPct: 11.2,   // [DUMMY] -> tier "10-12"
   tier:       "10-12",
   // --- Waardemodel-aannames ([PLACEHOLDER] — bronnen volgen in Fase 2) ---
@@ -942,6 +1210,8 @@ const PROSPECT = {
     includedTrajectories: 12,          // [PLACEHOLDER] inbegrepen trajecten/jaar
     extraTrajectoryPrice: 2000,        // [PLACEHOLDER] EUR per extra traject
     expectedTrajectoriesPer1000: 60,   // [PLACEHOLDER] verwacht volume per 1.000 mdw/jaar
+    trajectoryListPrice:      2000,    // [PLACEHOLDER] EUR lijstwaarde per traject
+    trajectorySubscriberRate: 1500,    // [PLACEHOLDER] EUR vast abonnee-tarief per traject
   },
   // --- Pilotvoorwaarden ---
   pilot: {
@@ -954,6 +1224,7 @@ const PROSPECT = {
 const nl = (n, opts) => new Intl.NumberFormat('nl-NL', opts).format(n);
 const fmtInt  = (n) => nl(Math.round(n));
 const fmtEuro = (n) => '€ ' + nl(Math.round(n));
+const fmtEuro2 = (n) => '€ ' + nl(n, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 function fmtEuroSmart(n) {
   if (Math.abs(n) >= 1e6) return '€ ' + nl(n / 1e6, { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' mln';
   if (Math.abs(n) >= 1e5) return '€ ' + nl(Math.round(n / 1e3)) + 'k';
@@ -967,17 +1238,18 @@ function bindProspect() {
       el.textContent = (typeof PROSPECT[key] === 'number') ? nl(PROSPECT[key]) : PROSPECT[key];
     }
   });
-  document.title = 'Pilotvoorstel — ' + PROSPECT.company;
+  document.title = 'Pilotvoorstel - ' + PROSPECT.company;
   const slot = document.getElementById('heroLogo');
   if (PROSPECT.logoUrl && slot) {
     const img = document.createElement('img');
     img.src = PROSPECT.logoUrl; img.alt = PROSPECT.company; img.className = 'hero__logo';
     slot.replaceWith(img);
   }
-  // "indicatieve prijsstelling"-badges verdwijnen zodra de echte prijsstructuur erin staat
+  // Pilotbandbreedte-badges verdwijnen zodra de definitieve prijsstructuur erin staat.
   if (!PROSPECT.pricing.isPlaceholder) {
     document.querySelectorAll('[data-price-badge]').forEach((el) => el.remove());
   }
+  document.querySelectorAll('.trust__row a[href="#"]').forEach((el) => el.removeAttribute('href'));
 }
 
 /* CALCULATOR */
@@ -1059,8 +1331,9 @@ function initNav() {
   const setActive = (id) => {
     if (id === activeId || !byId[id]) return;
     activeId = id;
-    links.forEach((l) => l.classList.remove('is-active'));
+    links.forEach((l) => { l.classList.remove('is-active'); l.removeAttribute('aria-current'); });
     byId[id].classList.add('is-active');
+    byId[id].setAttribute('aria-current', 'true');
   };
   const obs = new IntersectionObserver((entries) => {
     const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
@@ -1091,10 +1364,24 @@ function initFaq() {
   items.forEach((d) => d.addEventListener('toggle', () => { if (d.open) items.forEach((o) => { if (o !== d) o.open = false; }); }));
 }
 
+/* Investering-sectie: alle bedragen uit PROSPECT (geen hardcoding) */
+function renderInvestering() {
+  const p = PROSPECT.pricing;
+  const credits = PROSPECT.pilotCredits;
+  setOut('invCreditCount', fmtInt(credits));
+  setOut('invCreditValue', fmtEuro(credits * p.trajectoryListPrice));
+  setOut('invCreditPay',   fmtEuro(0));
+  setOut('invSubYear',     fmtEuro(p.subscriptionPerEmployeeYear));
+  setOut('invPerMonth',    fmtEuro2(p.subscriptionPerEmployeeYear / 12));
+  setOut('invSubRate',     fmtEuro(p.trajectorySubscriberRate));
+  setOut('invMaxYear',     fmtEuro(PROSPECT.headcount * p.subscriptionPerEmployeeYear));
+}
+
 bindProspect();
 initCalc();
 initNav();
 initFaq();
+renderInvestering();
 
 /* scroll-progress line in de topbar */
 (function(){
@@ -1111,5 +1398,6 @@ initFaq();
   upd();
 })();
 </script>
+<div class="print-foot" aria-hidden="true"><span data-prospect="company"></span> &middot; Vertrouwelijk &middot; pilotvoorstel</div>
 </body>
 </html>
