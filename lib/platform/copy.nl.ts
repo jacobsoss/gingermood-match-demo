@@ -350,4 +350,166 @@ export const nl: Copy = {
     en: "English",
     nl: "Nederlands",
   },
+
+  // ── Batch 1: marketing pages, metadata, chrome, forms, a11y. ──
+  a11y: {
+    heroImageAlt: "Een psycholoog of coach in gesprek met een cliënt aan tafel",
+    mainNav: "Hoofdnavigatie",
+    openMenu: "Menu openen",
+    closeMenu: "Menu sluiten",
+    footer: "Voettekst",
+    logoHome: "Gingermood — startpagina",
+  },
+
+  about: {
+    eyebrow: "Over Gingermood",
+    h1: "Al meer dan tien jaar mensen matchen met coaches",
+    story: {
+      p1: "Gingermood begon ruim tien jaar geleden in Nederland, uit een simpele ergernis: er waren overal coachingsgidsen, maar een gids is geen match. Mensen kozen een coach op basis van een foto en een lijst met certificaten — en te vaak klikte het gewoon niet.",
+      p2: "Dus deden we het anders. We luisterden naar de verhalen van mensen — lange telefoongesprekken, zorgvuldige aantekeningen — en stelden hen voor aan die ene coach van wie we echt geloofden dat die zou passen. Het werkte. Het werkt nog steeds.",
+      p3: "Vandaag helpt software ons op grote schaal te luisteren: de intake past zich aan op jouw antwoorden en stelt coaches uit ons netwerk voor. Maar het principe is geen millimeter opgeschoven — software stelt voor, mensen bevestigen. Een matching-adviseur uit ons team beoordeelt elke match voordat die bij jou terechtkomt.",
+    },
+    mission: {
+      label: "Onze missie",
+      body: "De juiste coach voor ieder mens. Niet de beschikbare, niet de dichtstbijzijnde — de juiste.",
+    },
+    values: {
+      label: "Waar we onszelf aan houden",
+      listen: {
+        title: "Goed luisteren",
+        body: "Jouw verhaal komt eerst, in je eigen woorden. We stellen liever nog één vraag dan dat we gokken.",
+      },
+      match: {
+        title: "Zorgvuldig matchen",
+        body: "Fit gaat boven beschikbaarheid. We stellen de coach voor in wie we geloven — en een mens controleert ons werk.",
+      },
+      measure: {
+        title: "Eerlijk meten",
+        body: "We vragen na of de coaching echt heeft geholpen. Als een match niet werkt, zeggen we dat en lossen we het op.",
+      },
+    },
+    team: {
+      label: "Het team achter jouw match",
+      role1: "Oprichter & hoofd matching-adviseur",
+      line1: "Matchte onze eerste honderd cliënten telefonisch, met een notitieboekje in de hand.",
+      role2: "Lead coachnetwerk",
+      line2: "Interviewt elke coach die bij ons komt — en wijst de meeste aanmeldingen af.",
+      role3: "Matching-adviseur",
+      line3: "Beoordeelt elke dag voorgestelde matches. Bekend om het overrulen van de software.",
+      role4: "Product & onderzoek",
+      line4: "Bouwt de matching-engine en controleert daarna of die echt heeft geholpen.",
+      disclaimer: "De getoonde teamleden zijn illustratief voor deze demo.",
+    },
+    cta: {
+      title: "Benieuwd met wie we jou zouden matchen?",
+      body: "Vertel ons jouw verhaal — het duurt ongeveer vijf minuten — en kom erachter.",
+      button: "Aan de slag",
+    },
+  },
+
+  components: {
+    confirmedBadge: "Gecontroleerd en bevestigd door het Gingermood-team",
+    illustrativeTag: "Illustratieve data",
+  },
+
+  forms: {
+    emailPlaceholder: "jij@bedrijf.nl",
+    passwordPlaceholder: "Je wachtwoord",
+    namePlaceholder: "Sanne de Vries",
+    passwordHint: "Minimaal 6 tekens",
+    orgPlaceholder: "Nova Health Group",
+    sizePlaceholder: "bijv. 250",
+  },
+
+  howItWorks: {
+    eyebrow: "Hoe het werkt",
+    h1: "Van jouw verhaal naar de juiste coach, in drie stappen",
+    subtitle: "Geen lijsten om doorheen te scrollen, geen coach die je krijgt toegewezen omdat er toevallig een plekje vrij was. Dit is wat er echt gebeurt.",
+    step1: {
+      title: "Vertel ons jouw verhaal",
+      body: "Het begint met een korte intake — zo'n vijf minuten. Je vertelt in je eigen woorden wat er speelt, en de volgende vraag past zich aan op wat je net zei. Liever praten dan typen? Spreek gewoon in; de intake ondersteunt spraak.",
+      b1: "Past zich aan op jouw antwoorden — geen twee intakes zijn hetzelfde",
+      b2: "Typen of praten, wat voor jou natuurlijk voelt",
+      b3: "Je eigen woorden, geen formulier vol vinkjes",
+    },
+    step2: {
+      title: "Wij matchen — een mens bevestigt",
+      body: "Onze software vergelijkt jouw verhaal met ons netwerk van professionele coaches: waar je hulp bij nodig hebt, hoe je graag werkt, en de praktische zaken — taal, regio, online of in persoon. Het stelt de beste match voor. Daarna leest een matching-adviseur van Gingermood dat voorstel en bevestigt het, of gaat er tegenin. Geen match bereikt jou ongecontroleerd.",
+      b1: "Gematcht op behoeften en werkstijl, niet op beschikbaarheid",
+      b2: "Inclusief de praktische fit: taal, regio, online of in persoon",
+      b3: "Elke match wordt door een mens gecontroleerd voordat jij hem ziet",
+    },
+    step3: {
+      title: "Groei met jouw coach",
+      body: "Je ontmoet elkaar, je praat, je gaat aan de slag. Boek gesprekken zoals ze in jouw week passen — via video, in persoon of telefonisch. Tussen de gesprekken door is er een bibliotheek met korte, praktische artikelen, en een check-in per kwartaal houdt bij hoe het écht met je gaat. En als het eerste gesprek je laat merken dat de match toch niet klopt? Zeg het gerust — dan matchen we je opnieuw, zonder gedoe.",
+      b1: "Gesprekken via video, in persoon of telefonisch",
+      b2: "Een bibliotheek met korte, praktische artikelen tussen de gesprekken door",
+      b3: "Check-ins per kwartaal, zodat vooruitgang wordt gemeten — niet aangenomen",
+    },
+    why: {
+      label: "Waarom matchen ertoe doet",
+      p1: "Onderzoek laat zien dat de klik tussen jou en jouw psycholoog of coach een van de sterkste voorspellers van succes is — daarom behandelen we matchen als het product, niet als bijzaak.",
+      p2: "Sterker dan de methode, sterker dan de techniek: of je klikt met de persoon tegenover je. Het is het onderdeel waar we ruim tien jaar aan hebben gesleuteld — eerst met de hand, nu met software die een mens nog steeds dubbelcheckt.",
+    },
+    cta: {
+      title: "Ontdek wie bij je past",
+      body: "Vijf minuten, je eigen woorden, en een mens controleert de match voordat je elkaar ontmoet.",
+      getStartedLink: "Aan de slag",
+      privacyLink: "Lees onze privacybeloftes",
+    },
+  },
+
+  meta: {
+    about: {
+      title: "Over ons — Gingermood",
+      description: "Gingermood matcht al meer dan tien jaar mensen met coaches. Software stelt voor, mensen bevestigen — dat principe is geen millimeter opgeschoven.",
+    },
+    howItWorks: {
+      title: "Hoe het werkt — Gingermood",
+      description: "Van jouw verhaal naar de juiste coach in drie stappen: een intake die zich aan jou aanpast, een match voorgesteld door software en bevestigd door een mens, en een traject dat we echt meten.",
+    },
+    privacy: {
+      title: "Privacy — Gingermood",
+      description: "Begeleiding werkt alleen als je eerlijk kunt zijn. Onze privacybeloftes in gewone taal: jouw antwoorden blijven van jou, werkgevers zien trends — nooit personen.",
+    },
+    root: {
+      title: "Gingermood — de juiste psycholoog of coach",
+      description: "Persoonlijke begeleiding die begint met een zorgvuldige match, gecontroleerd door een mens. Productdemo met illustratieve data.",
+    },
+    employers: {
+      title: "Voor werkgevers — Gingermood",
+      description: "Doorlopende toegang tot psychologen en coaches voor je mensen: individuele matching op echte behoeften, een mens die meekijkt, en anonieme geaggregeerde rapportage.",
+    },
+    employees: {
+      title: "Voor medewerkers — Gingermood",
+      description: "Je werkgever biedt toegang tot Gingermood. Vind de psycholoog of coach die bij jouw situatie past — en zie wat je werkgever wel en niet kan zien.",
+    },
+  },
+
+  privacy: {
+    promise1: {
+      title: "Jouw antwoorden blijven van jou",
+      body: "Wat je ons vertelt in de intake, wat je bespreekt met jouw coach, je check-in-scores — niets daarvan is ooit zichtbaar voor je werkgever. Niet voor HR, niet voor je manager, in geen enkel rapport.",
+    },
+    promise2: {
+      title: "Werkgevers zien trends, nooit personen",
+      body: "Werkgevers krijgen alleen geanonimiseerde, geaggregeerde inzichten — hoe teams er als geheel voor staan. Als een groep uit minder dan 15 mensen bestaat, laten we helemaal niets zien, zodat niemand eruit gepikt kan worden.",
+    },
+    promise3: {
+      title: "We vragen alleen wat we nodig hebben",
+      body: "Geen trackingprofielen, geen verkochte data, geen hamsteren. We verzamelen wat nodig is om je goed te matchen en je traject te ondersteunen — en niets meer dan dat.",
+    },
+    promise4: {
+      title: "Verwijder je gegevens, wanneer je maar wilt",
+      body: "Je kunt je account en alles daarin verwijderen wanneer je maar wilt, direct vanuit je instellingen. Weg is weg — verwijderd uit onze systemen, niet alleen uit het zicht.",
+    },
+    eyebrow: "Privacy",
+    h1: "Privacy, in gewone taal",
+    subtitle: "Begeleiding werkt alleen als je helemaal eerlijk kunt zijn — over je werk, je manager, jezelf. Daarom is privacy hier niet de kleine lettertjes; het is onderdeel van het product. Dit zijn onze beloftes.",
+    practice: {
+      title: "Wat dit in de praktijk betekent",
+      body: "Zeg wat je echt denkt in je intake en je gesprekken. Je werkgever betaalt voor de begeleiding, maar kijkt nooit over je schouder mee — die grens zit ingebouwd in het product, niet er later opgeplakt.",
+      link: "Bekijk hoe matchen werkt",
+    },
+  },
 };

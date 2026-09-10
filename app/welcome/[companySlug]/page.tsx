@@ -8,13 +8,14 @@ import { useCopy } from "@/components/platform/LanguageProvider";
 import { IconCheck, IconShield } from "@/components/platform/icons";
 
 function Chrome({ providedThrough, children }: { providedThrough?: string; children: React.ReactNode }) {
-  const C = useCopy().welcome;
+  const t = useCopy();
+  const C = t.welcome;
   return (
     <div className="relative flex min-h-dvh flex-col bg-page">
       <div className="h-[3px] w-full bg-orange" />
       <header className="border-b border-hair bg-surface/85 backdrop-blur">
         <div className="mx-auto flex h-[68px] max-w-[720px] items-center justify-between gap-4 px-6">
-          <Link href="/" className="gm-focus -m-2 rounded-md p-2" aria-label="Gingermood — home">
+          <Link href="/" className="gm-focus -m-2 rounded-md p-2" aria-label={t.a11y.logoHome}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.svg" alt="Gingermood" className="h-8 w-auto" />
           </Link>

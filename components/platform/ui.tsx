@@ -1,6 +1,7 @@
 "use client";
 
 import { IconCheck } from "./icons";
+import { useCopy } from "./LanguageProvider";
 
 /**
  * Small shared primitives for the platform, derived 1:1 from the quiz's design
@@ -39,23 +40,25 @@ export function SectionLabel({ children }: { children: React.ReactNode }) {
 
 /** Honest-data tag — required anywhere aggregate statistics are shown. */
 export function IllustrativeTag({ className = "" }: { className?: string }) {
+  const c = useCopy().components;
   return (
     <span
       className={`inline-flex items-center rounded-full border border-hair bg-surface px-3 py-1 text-[12px] text-muted ${className}`}
     >
-      Illustrative data
+      {c.illustrativeTag}
     </span>
   );
 }
 
 /** Human-in-the-loop badge — a designed element, not an afterthought. */
 export function ConfirmedBadge({ className = "" }: { className?: string }) {
+  const c = useCopy().components;
   return (
     <span
       className={`inline-flex items-center gap-1.5 rounded-full bg-tint px-3 py-1 text-[13px] font-semibold text-purple-700 ${className}`}
     >
       <IconCheck size={14} />
-      Reviewed &amp; confirmed by the Gingermood team
+      {c.confirmedBadge}
     </span>
   );
 }

@@ -7,11 +7,10 @@ import { Card, IllustrativeTag } from "@/components/platform/ui";
 import { EnquiryForm } from "@/components/platform/EnquiryForm";
 import { IconShield } from "@/components/platform/icons";
 
-export const metadata: Metadata = {
-  title: "For employers — Gingermood",
-  description:
-    "Ongoing access to psychologists and coaches for the people you cover: individual matching on real needs, a person involved, and anonymous aggregate reporting.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getServerCopy();
+  return { title: t.meta.employers.title, description: t.meta.employers.description };
+}
 
 export default async function EmployersPage() {
   const t = await getServerCopy();

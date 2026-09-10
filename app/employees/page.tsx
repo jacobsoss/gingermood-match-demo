@@ -6,11 +6,10 @@ import { MarketingShell } from "@/components/platform/MarketingShell";
 import { Card } from "@/components/platform/ui";
 import { IconCheck, IconShield } from "@/components/platform/icons";
 
-export const metadata: Metadata = {
-  title: "For employees — Gingermood",
-  description:
-    "Your employer provides access to Gingermood. Find the psychologist or coach who fits your situation — and see what your employer can and can't see.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getServerCopy();
+  return { title: t.meta.employees.title, description: t.meta.employees.description };
+}
 
 export default async function EmployeesPage() {
   const t = await getServerCopy();

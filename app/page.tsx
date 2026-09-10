@@ -53,7 +53,7 @@ export default async function HomePage() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/onafhankelijke-coaches.jpg"
-                alt="A psychologist or coach in conversation with a client at a table"
+                alt={t.a11y.heroImageAlt}
                 className="h-full w-full object-cover"
                 style={{ objectPosition: "57% 50%" }}
               />

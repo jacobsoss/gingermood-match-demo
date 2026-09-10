@@ -27,7 +27,8 @@ function homeFor(user: DemoUser): string {
 
 export default function LoginPage() {
   const { login } = useDemo();
-  const C = useCopy().login;
+  const t = useCopy();
+  const C = t.login;
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -53,7 +54,7 @@ export default function LoginPage() {
     <div className="relative flex min-h-dvh flex-col bg-page">
       <div className="h-[3px] w-full bg-orange" />
       <div className="relative z-10 mx-auto flex w-full max-w-[420px] flex-1 flex-col justify-center px-6 py-12">
-        <Link href="/" className="gm-focus -m-2 mb-8 w-fit rounded-md p-2" aria-label="Gingermood — home">
+        <Link href="/" className="gm-focus -m-2 mb-8 w-fit rounded-md p-2" aria-label={t.a11y.logoHome}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt="Gingermood" className="h-8 w-auto" />
         </Link>
@@ -72,7 +73,7 @@ export default function LoginPage() {
               autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@company.nl"
+              placeholder={t.forms.emailPlaceholder}
               className={inputCls}
               aria-invalid={!!errors.email}
             />
@@ -88,7 +89,7 @@ export default function LoginPage() {
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Your password"
+              placeholder={t.forms.passwordPlaceholder}
               className={inputCls}
               aria-invalid={!!errors.password}
             />

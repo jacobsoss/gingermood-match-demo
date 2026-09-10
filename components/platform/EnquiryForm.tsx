@@ -17,7 +17,8 @@ const EMPTY: Fields = { org: "", name: "", email: "", size: "", message: "" };
  * received; it never claims a message was sent and stores nothing (§3, §8).
  */
 export function EnquiryForm() {
-  const c = useCopy().enquiry;
+  const t = useCopy();
+  const c = t.enquiry;
   const [f, setF] = useState<Fields>(EMPTY);
   const [previewed, setPreviewed] = useState(false);
   const set = (k: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -71,7 +72,7 @@ export function EnquiryForm() {
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <label htmlFor="eq-org" className={labelCls}>{c.orgLabel}</label>
-          <input id="eq-org" className={inputCls} value={f.org} onChange={set("org")} placeholder="Nova Health Group" />
+          <input id="eq-org" className={inputCls} value={f.org} onChange={set("org")} placeholder={t.forms.orgPlaceholder} />
         </div>
         <div>
           <label htmlFor="eq-name" className={labelCls}>{c.nameLabel}</label>
@@ -79,11 +80,11 @@ export function EnquiryForm() {
         </div>
         <div>
           <label htmlFor="eq-email" className={labelCls}>{c.emailLabel}</label>
-          <input id="eq-email" type="email" className={inputCls} value={f.email} onChange={set("email")} autoComplete="email" placeholder="you@company.nl" />
+          <input id="eq-email" type="email" className={inputCls} value={f.email} onChange={set("email")} autoComplete="email" placeholder={t.forms.emailPlaceholder} />
         </div>
         <div>
           <label htmlFor="eq-size" className={labelCls}>{c.sizeLabel}</label>
-          <input id="eq-size" className={inputCls} value={f.size} onChange={set("size")} placeholder="e.g. 250" inputMode="numeric" />
+          <input id="eq-size" className={inputCls} value={f.size} onChange={set("size")} placeholder={t.forms.sizePlaceholder} inputMode="numeric" />
         </div>
         <div className="sm:col-span-2">
           <label htmlFor="eq-msg" className={labelCls}>{c.messageLabel}</label>

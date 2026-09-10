@@ -58,7 +58,7 @@ export function MarketingNav() {
 
   return (
     <div ref={wrapRef} className="relative">
-      <nav aria-label="Main">
+      <nav aria-label={t.a11y.mainNav}>
         {/* Desktop */}
         <ul className="hidden items-center gap-1 md:flex">
           {links.map((l) => (
@@ -88,7 +88,7 @@ export function MarketingNav() {
             type="button"
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={open ? t.a11y.closeMenu : t.a11y.openMenu}
             className="gm-focus flex h-10 w-10 items-center justify-center rounded-md text-ink transition-colors hover:bg-wash"
           >
             {open ? <CloseIcon /> : <MenuIcon />}

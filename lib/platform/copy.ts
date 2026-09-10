@@ -380,6 +380,168 @@ export const en = {
     en: "English",
     nl: "Nederlands",
   },
+
+  // ── Batch 1: marketing pages, metadata, chrome, forms, a11y. ──
+  a11y: {
+    heroImageAlt: "A psychologist or coach in conversation with a client at a table",
+    mainNav: "Main",
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    footer: "Footer",
+    logoHome: "Gingermood — home",
+  },
+
+  about: {
+    eyebrow: "About Gingermood",
+    h1: "Matching people with coaches, for over a decade",
+    story: {
+      p1: "Gingermood started more than ten years ago in the Netherlands, out of a simple irritation: coaching directories were everywhere, but a directory is not a match. People picked a coach from a photo and a list of certificates — and too often it just didn't click.",
+      p2: "So we did it differently. We listened to people's stories — long phone calls, careful notes — and introduced them to the one coach we genuinely believed would fit. It worked. It still does.",
+      p3: "Today software helps us listen at scale: the intake adapts to your answers and proposes coaches from our network. But the principle hasn't moved an inch — software proposes, people confirm. A matchmaker from our team reviews every single match before it reaches you.",
+    },
+    mission: {
+      label: "Our mission",
+      body: "The right coach for every person. Not the available one, not the nearest one — the right one.",
+    },
+    values: {
+      label: "What we hold ourselves to",
+      listen: {
+        title: "Listen properly",
+        body: "Your story comes first, in your own words. We'd rather ask one more question than guess.",
+      },
+      match: {
+        title: "Match carefully",
+        body: "Fit beats availability. We propose the coach we believe in — and a human checks our work.",
+      },
+      measure: {
+        title: "Measure honestly",
+        body: "We follow up on whether coaching actually helped. When a match isn't working, we say so and fix it.",
+      },
+    },
+    team: {
+      label: "The team behind your match",
+      role1: "Founder & head matchmaker",
+      line1: "Matched our first hundred clients by phone, notebook in hand.",
+      role2: "Coach network lead",
+      line2: "Interviews every coach who joins us — and turns most applicants away.",
+      role3: "Matchmaker",
+      line3: "Reviews proposed matches daily. Known for overruling the software.",
+      role4: "Product & research",
+      line4: "Builds the matching engine, then checks whether it actually helped.",
+      disclaimer: "Team members shown are illustrative for this demo.",
+    },
+    cta: {
+      title: "Curious who we'd match you with?",
+      body: "Tell us your story — it takes about five minutes — and find out.",
+      button: "Get started",
+    },
+  },
+
+  components: {
+    confirmedBadge: "Reviewed & confirmed by the Gingermood team",
+    illustrativeTag: "Illustrative data",
+  },
+
+  forms: {
+    emailPlaceholder: "you@company.nl",
+    passwordPlaceholder: "Your password",
+    namePlaceholder: "Sanne de Vries",
+    passwordHint: "At least 6 characters",
+    orgPlaceholder: "Nova Health Group",
+    sizePlaceholder: "e.g. 250",
+  },
+
+  howItWorks: {
+    eyebrow: "How it works",
+    h1: "From your story to the right coach, in three steps",
+    subtitle: "No directories to scroll through, no coach assigned because they happened to have a free slot. Here's what actually happens.",
+    step1: {
+      title: "Tell us your story",
+      body: "It starts with a short intake — about five minutes. You tell us what's going on in your own words, and the next question adapts to what you just said. Prefer talking over typing? Just speak; the intake supports voice.",
+      b1: "Adapts to your answers — no two intakes are the same",
+      b2: "Type or talk, whatever feels natural",
+      b3: "Your own words, not a form full of checkboxes",
+    },
+    step2: {
+      title: "We match — a human confirms",
+      body: "Our software compares your story against our network of professional coaches: what you need help with, how you like to work, and the practical things — language, region, online or in person. It proposes the best fit. Then a Gingermood matchmaker reads that proposal and confirms it, or overrules it. No match reaches you unchecked.",
+      b1: "Matched on needs and working style, not on availability",
+      b2: "Practical fit included: language, region, online or in person",
+      b3: "Every match reviewed by a human before you see it",
+    },
+    step3: {
+      title: "Grow with your coach",
+      body: "You meet, you talk, you get to work. Book sessions the way they fit your week — video, in person or by phone. Between sessions there's a library of short, practical reads, and a quarterly check-in tracks how you're actually doing. And if the first session tells you the fit isn't right after all? Say so — we'll rematch you, no questions asked.",
+      b1: "Sessions by video, in person or by phone",
+      b2: "A library of short, practical reads between sessions",
+      b3: "Quarterly check-ins, so progress is measured — not assumed",
+    },
+    why: {
+      label: "Why matching matters",
+      p1: "Research shows the fit between you and your professional is one of the strongest predictors of success — so we treat matching as the product, not an afterthought.",
+      p2: "Stronger than the method, stronger than the technique: whether you click with the person across the table. It's the part we've spent over a decade getting right — first by hand, now with software that a human still double-checks.",
+    },
+    cta: {
+      title: "See who fits you",
+      body: "Five minutes, your own words, and a human checks the match before you meet.",
+      getStartedLink: "Get started",
+      privacyLink: "Read our privacy promises",
+    },
+  },
+
+  meta: {
+    about: {
+      title: "About — Gingermood",
+      description: "Gingermood has matched people with coaches for over a decade. Software proposes, people confirm — that principle hasn't moved an inch.",
+    },
+    howItWorks: {
+      title: "How it works — Gingermood",
+      description: "From your story to the right coach in three steps: an intake that adapts to you, a match proposed by software and confirmed by a human, and a trajectory we actually measure.",
+    },
+    privacy: {
+      title: "Privacy — Gingermood",
+      description: "Coaching only works when you can be honest. Our privacy promises in plain language: your answers stay yours, employers see trends — never people.",
+    },
+    root: {
+      title: "Gingermood — the right psychologist or coach",
+      description: "Personal guidance that starts with a careful match, checked by a person. Product demo with illustrative data.",
+    },
+    employers: {
+      title: "For employers — Gingermood",
+      description: "Ongoing access to psychologists and coaches for the people you cover: individual matching on real needs, a person involved, and anonymous aggregate reporting.",
+    },
+    employees: {
+      title: "For employees — Gingermood",
+      description: "Your employer provides access to Gingermood. Find the psychologist or coach who fits your situation — and see what your employer can and can't see.",
+    },
+  },
+
+  privacy: {
+    promise1: {
+      title: "Your answers stay yours",
+      body: "What you tell us in the intake, what you discuss with your coach, your check-in scores — none of it is ever visible to your employer. Not to HR, not to your manager, not in any report.",
+    },
+    promise2: {
+      title: "Employers see trends, never people",
+      body: "Employers receive anonymised, aggregated insights only — how teams are doing as a whole. If a group has fewer than 15 people, we show nothing at all, so no one can be singled out.",
+    },
+    promise3: {
+      title: "We only ask what we need",
+      body: "No tracking profiles, no data sold, no hoarding. We collect what's needed to match you well and support your trajectory — and nothing more than that.",
+    },
+    promise4: {
+      title: "Delete your data, anytime",
+      body: "You can delete your account and everything in it whenever you want, straight from your settings. Gone means gone — removed from our systems, not just hidden from view.",
+    },
+    eyebrow: "Privacy",
+    h1: "Privacy, in plain language",
+    subtitle: "Coaching only works when you can be completely honest — about your work, your manager, yourself. So privacy isn't the fine print here; it's part of the product. These are our promises.",
+    practice: {
+      title: "What this means in practice",
+      body: "Say what you actually think in your intake and your sessions. Your employer pays for the coaching, but they never look over your shoulder — that boundary is built into the product, not bolted on.",
+      link: "See how matching works",
+    },
+  },
 };
 
 export type Lang = "en" | "nl";

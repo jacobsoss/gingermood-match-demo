@@ -25,7 +25,7 @@ export async function MarketingShell({ children }: { children: React.ReactNode }
         <div className="h-[3px] w-full bg-orange" />
         <header className="h-[68px] border-b border-hair bg-surface/85 backdrop-blur">
           <div className="mx-auto flex h-full max-w-[1080px] items-center justify-between gap-6 px-6 sm:px-8">
-            <Link href="/" className="gm-focus -m-2 rounded-md p-2" aria-label="Gingermood — home">
+            <Link href="/" className="gm-focus -m-2 rounded-md p-2" aria-label={t.a11y.logoHome}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo.svg" alt="Gingermood" className="h-7 w-auto" />
             </Link>
@@ -43,7 +43,7 @@ export async function MarketingShell({ children }: { children: React.ReactNode }
             <img src="/logo.svg" alt="Gingermood" className="h-6 w-auto" />
             <p className="mt-3 max-w-xs text-[14px] leading-relaxed text-muted">{t.shell.footer.blurb}</p>
           </div>
-          <nav aria-label="Footer">
+          <nav aria-label={t.a11y.footer}>
             <p className="eyebrow text-muted">{t.shell.footer.explore}</p>
             <ul className="mt-3 flex flex-col gap-2">
               {footerLinks.map((l) => (

@@ -45,7 +45,7 @@ export default function RegisterPage() {
     <div className="relative flex min-h-dvh flex-col bg-page">
       <div className="h-[3px] w-full bg-orange" />
       <div className="relative z-10 mx-auto flex w-full max-w-[440px] flex-1 flex-col justify-center px-6 py-12">
-        <Link href="/" className="gm-focus -m-2 mb-8 w-fit rounded-md p-2" aria-label="Gingermood — home">
+        <Link href="/" className="gm-focus -m-2 mb-8 w-fit rounded-md p-2" aria-label={t.a11y.logoHome}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt="Gingermood" className="h-8 w-auto" />
         </Link>
@@ -67,7 +67,7 @@ export default function RegisterPage() {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Sanne de Vries"
+              placeholder={t.forms.namePlaceholder}
               autoComplete="name"
               className={inputCls}
               aria-invalid={!!errors.name}
@@ -83,7 +83,7 @@ export default function RegisterPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@company.nl"
+              placeholder={t.forms.emailPlaceholder}
               autoComplete="email"
               className={inputCls}
               aria-invalid={!!errors.email}
@@ -99,7 +99,7 @@ export default function RegisterPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="At least 6 characters"
+              placeholder={t.forms.passwordHint}
               autoComplete="new-password"
               className={inputCls}
               aria-invalid={!!errors.password}
