@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { PLATFORM } from "@/lib/platform/copy";
 import { btnPrimary, btnLink } from "@/lib/platform/ui-classes";
+import { useCopy } from "./LanguageProvider";
 import { IconCheck } from "./icons";
 
 const inputCls =
@@ -17,7 +17,7 @@ const EMPTY: Fields = { org: "", name: "", email: "", size: "", message: "" };
  * received; it never claims a message was sent and stores nothing (§3, §8).
  */
 export function EnquiryForm() {
-  const c = PLATFORM.enquiry;
+  const c = useCopy().enquiry;
   const [f, setF] = useState<Fields>(EMPTY);
   const [previewed, setPreviewed] = useState(false);
   const set = (k: keyof Fields) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>

@@ -2,18 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { PLATFORM } from "@/lib/platform/copy";
-
-const LINKS = [
-  { href: "/employers", label: PLATFORM.nav.employers },
-  { href: "/employees", label: PLATFORM.nav.employees },
-  { href: "/how-it-works", label: PLATFORM.nav.howItWorks },
-];
-
-const MORE = [
-  { href: "/about", label: PLATFORM.nav.about },
-  { href: "/privacy", label: PLATFORM.nav.privacy },
-];
+import { useCopy } from "./LanguageProvider";
+import { LanguageMenu } from "./LanguageMenu";
 
 const navLink =
   "gm-focus rounded-md px-3 py-2 text-[15px] font-medium text-muted transition-colors hover:text-ink";
@@ -35,10 +25,21 @@ function CloseIcon() {
   );
 }
 
-/** Public-site navigation: audience-separated links, with a mobile disclosure. */
+/** Public-site navigation: audience-separated links + real EN/NL switcher, with a mobile disclosure. */
 export function MarketingNav() {
+  const t = useCopy();
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
+
+  const links = [
+    { href: "/employers", label: t.nav.employers },
+    { href: "/employees", label: t.nav.employees },
+    { href: "/how-it-works", label: t.nav.howItWorks },
+  ];
+  const more = [
+    { href: "/about", label: t.nav.about },
+    { href: "/privacy", label: t.nav.privacy },
+  ];
 
   useEffect(() => {
     function onDoc(e: MouseEvent) {
@@ -60,7 +61,7 @@ export function MarketingNav() {
       <nav aria-label="Main">
         {/* Desktop */}
         <ul className="hidden items-center gap-1 md:flex">
-          {LINKS.map((l) => (
+          {links.map((l) => (
             <li key={l.href}>
               <Link href={l.href} className={navLink}>
                 {l.label}
@@ -69,15 +70,19 @@ export function MarketingNav() {
           ))}
           <li>
             <Link href="/login" className={loginLink}>
-              {PLATFORM.nav.login}
+              {t.nav.login}
             </Link>
+          </li>
+          <li>
+            <LanguageMenu />
           </li>
         </ul>
 
-        {/* Mobile: Log in stays inline; the rest lives behind a menu button */}
+        {/* Mobile: Log in + language stay inline; the rest lives behind a menu button */}
         <div className="flex items-center gap-1 md:hidden">
+          <LanguageMenu />
           <Link href="/login" className={loginLink}>
-            {PLATFORM.nav.login}
+            {t.nav.login}
           </Link>
           <button
             type="button"
@@ -94,7 +99,7 @@ export function MarketingNav() {
       {open && (
         <div className="gm-rise absolute right-0 top-[calc(100%+10px)] z-50 w-60 overflow-hidden rounded-[var(--radius-input)] border border-hair bg-surface py-1.5 shadow-[var(--shadow-coach)] md:hidden">
           <ul>
-            {[...LINKS, ...MORE].map((l) => (
+            {[...links, ...more].map((l) => (
               <li key={l.href}>
                 <Link
                   href={l.href}

@@ -18,7 +18,7 @@
 export const SESSION_RANGE = "five to ten";
 const SESSION_RANGE_CAP = SESSION_RANGE.charAt(0).toUpperCase() + SESSION_RANGE.slice(1);
 
-export const PLATFORM = {
+export const en = {
   brand: "Gingermood",
 
   nav: {
@@ -51,6 +51,8 @@ export const PLATFORM = {
     secondaryCta: "I have access through my employer",
     proofLine:
       "[X] BIG/NIP-registered psychologists and NOBCO coaches · [98% — definition pending] · Trusted by [client names — confirm permission]",
+    metaTitle: "Gingermood — the right psychologist or coach",
+    metaDescription: `Gingermood matches employees to the right psychologist or coach for ${SESSION_RANGE} in-depth conversations. Carefully matched on what they need, and checked by a person.`,
 
     audience: {
       title: "Where would you like to start?",
@@ -345,4 +347,43 @@ export const PLATFORM = {
     demoDisclaimer:
       "This is a product demo with fictional people and illustrative data. It is not a production system and does not provide production-grade confidentiality.",
   },
-} as const;
+
+  // ── Signed-in app chrome (dashboard shell). ─────────────────────────────────
+  shell: {
+    nav: {
+      home: "Home",
+      coach: "My coach",
+      sessions: "Sessions",
+      library: "Library",
+      checkin: "Check-in",
+      settings: "Settings",
+    },
+    signOut: "Sign out",
+    demoEnv: "Demo environment · illustrative product",
+    notifications: {
+      title: "Notifications",
+      markAllRead: "Mark all read",
+      empty: "Nothing here yet.",
+    },
+    footer: {
+      blurb: "The right psychologist or coach for every person. Matched on real needs — with a person involved.",
+      explore: "Explore",
+      aboutTitle: "About this site",
+      aboutBody: "This is a product demo. All people, companies and statistics shown are fictional and illustrative — it is not a production system.",
+      location: "Gingermood · Amsterdam, The Netherlands",
+    },
+  },
+
+  // ── Language switcher. ──────────────────────────────────────────────────────
+  lang: {
+    label: "Language",
+    en: "English",
+    nl: "Nederlands",
+  },
+};
+
+export type Lang = "en" | "nl";
+export type Copy = typeof en;
+
+/** English fallback for any surface not yet wired to the language switch. */
+export const PLATFORM = en;

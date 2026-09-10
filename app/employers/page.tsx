@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PLATFORM } from "@/lib/platform/copy";
+import { getServerCopy } from "@/lib/platform/lang-server";
 import { btnPrimaryLg, btnSecondary, headingUi } from "@/lib/platform/ui-classes";
 import { MarketingShell } from "@/components/platform/MarketingShell";
 import { Card, IllustrativeTag } from "@/components/platform/ui";
 import { EnquiryForm } from "@/components/platform/EnquiryForm";
 import { IconShield } from "@/components/platform/icons";
 
-const C = PLATFORM.employers;
-
 export const metadata: Metadata = {
   title: "For employers — Gingermood",
   description:
-    "Ongoing coaching access for the people you cover: individual matching on real needs, a human involved, and anonymous aggregate reporting.",
+    "Ongoing access to psychologists and coaches for the people you cover: individual matching on real needs, a person involved, and anonymous aggregate reporting.",
 };
 
-export default function EmployersPage() {
+export default async function EmployersPage() {
+  const t = await getServerCopy();
+  const C = t.employers;
   return (
     <MarketingShell>
       {/* Hero */}
@@ -81,7 +81,7 @@ export default function EmployersPage() {
             <IconShield size={18} />
           </span>
           <p className="measure text-[15px] leading-relaxed text-muted">
-            {PLATFORM.trust.privacyShort} <IllustrativeTag className="ml-1 align-middle" />
+            {t.trust.privacyShort} <IllustrativeTag className="ml-1 align-middle" />
           </p>
         </div>
       </section>
@@ -89,8 +89,8 @@ export default function EmployersPage() {
       {/* Enquiry */}
       <section id="enquiry" className="border-t border-hair bg-surface scroll-mt-24">
         <div className="mx-auto max-w-[720px] px-6 py-14 sm:px-8">
-          <h2 className={`${headingUi} text-[26px]`}>{PLATFORM.enquiry.title}</h2>
-          <p className="mt-3 text-[16px] leading-relaxed text-muted">{PLATFORM.enquiry.subtitle}</p>
+          <h2 className={`${headingUi} text-[26px]`}>{t.enquiry.title}</h2>
+          <p className="mt-3 text-[16px] leading-relaxed text-muted">{t.enquiry.subtitle}</p>
           <div className="mt-6">
             <EnquiryForm />
           </div>

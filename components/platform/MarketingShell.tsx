@@ -1,22 +1,24 @@
 import Link from "next/link";
-import { PLATFORM } from "@/lib/platform/copy";
+import { getServerCopy } from "@/lib/platform/lang-server";
 import { MarketingNav } from "./MarketingNav";
-
-const FOOTER_LINKS = [
-  { href: "/employers", label: PLATFORM.nav.employers },
-  { href: "/employees", label: PLATFORM.nav.employees },
-  { href: "/how-it-works", label: PLATFORM.nav.howItWorks },
-  { href: "/about", label: PLATFORM.nav.about },
-  { href: "/privacy", label: PLATFORM.nav.privacy },
-  { href: "/login", label: PLATFORM.nav.login },
-];
 
 /**
  * Public-site chrome: same 3px orange stripe + frosted 68px nav as the product,
- * so marketing and app read as one brand. Server component; the interactive nav
- * (audience links + mobile menu) is the client MarketingNav.
+ * so marketing and app read as one brand. Server component; reads the language
+ * from the cookie so it re-renders on switch. The interactive nav (audience
+ * links, mobile menu, language switcher) is the client MarketingNav.
  */
-export function MarketingShell({ children }: { children: React.ReactNode }) {
+export async function MarketingShell({ children }: { children: React.ReactNode }) {
+  const t = await getServerCopy();
+  const footerLinks = [
+    { href: "/employers", label: t.nav.employers },
+    { href: "/employees", label: t.nav.employees },
+    { href: "/how-it-works", label: t.nav.howItWorks },
+    { href: "/about", label: t.nav.about },
+    { href: "/privacy", label: t.nav.privacy },
+    { href: "/login", label: t.nav.login },
+  ];
+
   return (
     <div className="flex min-h-dvh flex-col bg-page">
       <div className="sticky top-0 z-40">
@@ -39,15 +41,12 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.svg" alt="Gingermood" className="h-6 w-auto" />
-            <p className="mt-3 max-w-xs text-[14px] leading-relaxed text-muted">
-              The right psychologist or coach for every person. Matched on real needs — with a
-              person involved.
-            </p>
+            <p className="mt-3 max-w-xs text-[14px] leading-relaxed text-muted">{t.shell.footer.blurb}</p>
           </div>
           <nav aria-label="Footer">
-            <p className="eyebrow text-muted">Explore</p>
+            <p className="eyebrow text-muted">{t.shell.footer.explore}</p>
             <ul className="mt-3 flex flex-col gap-2">
-              {FOOTER_LINKS.map((l) => (
+              {footerLinks.map((l) => (
                 <li key={l.href}>
                   <Link
                     href={l.href}
@@ -60,16 +59,13 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
             </ul>
           </nav>
           <div>
-            <p className="eyebrow text-muted">About this site</p>
-            <p className="mt-3 text-[14px] leading-relaxed text-muted">
-              This is a product demo. All people, companies and statistics shown are fictional
-              and illustrative — it is not a production system.
-            </p>
+            <p className="eyebrow text-muted">{t.shell.footer.aboutTitle}</p>
+            <p className="mt-3 text-[14px] leading-relaxed text-muted">{t.shell.footer.aboutBody}</p>
           </div>
         </div>
         <div className="border-t border-hair">
           <div className="mx-auto max-w-[1080px] px-6 py-4 sm:px-8">
-            <p className="text-[13px] text-muted">Gingermood · Amsterdam, The Netherlands</p>
+            <p className="text-[13px] text-muted">{t.shell.footer.location}</p>
           </div>
         </div>
       </footer>

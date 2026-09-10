@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PLATFORM } from "@/lib/platform/copy";
+import { getServerCopy } from "@/lib/platform/lang-server";
 import { btnPrimaryLg, btnSecondary, headingUi } from "@/lib/platform/ui-classes";
 import { MarketingShell } from "@/components/platform/MarketingShell";
 import { Card } from "@/components/platform/ui";
 import { IconCheck, IconShield } from "@/components/platform/icons";
 
-const C = PLATFORM.employees;
-
 export const metadata: Metadata = {
   title: "For employees — Gingermood",
   description:
-    "Your employer provides access to Gingermood. Find the coach who fits your situation — and see what your employer can and can't see.",
+    "Your employer provides access to Gingermood. Find the psychologist or coach who fits your situation — and see what your employer can and can't see.",
 };
 
-export default function EmployeesPage() {
+export default async function EmployeesPage() {
+  const t = await getServerCopy();
+  const C = t.employees;
   return (
     <MarketingShell>
       {/* Hero + confidentiality near the action */}

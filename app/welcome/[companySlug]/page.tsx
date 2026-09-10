@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { PLATFORM } from "@/lib/platform/copy";
 import { lookupInvitation, SAMPLE_COMPANY_SLUG } from "@/lib/demo/companies";
 import { btnPrimaryLg, btnSecondary, headingUi } from "@/lib/platform/ui-classes";
+import { useCopy } from "@/components/platform/LanguageProvider";
 import { IconCheck, IconShield } from "@/components/platform/icons";
 
-const C = PLATFORM.welcome;
-
 function Chrome({ providedThrough, children }: { providedThrough?: string; children: React.ReactNode }) {
+  const C = useCopy().welcome;
   return (
     <div className="relative flex min-h-dvh flex-col bg-page">
       <div className="h-[3px] w-full bg-orange" />
@@ -30,6 +29,7 @@ function Chrome({ providedThrough, children }: { providedThrough?: string; child
 }
 
 function Recovery({ kind }: { kind: "expired" | "invalid" }) {
+  const C = useCopy().welcome;
   const r = kind === "expired" ? C.expired : C.invalid;
   return (
     <Chrome>
@@ -50,6 +50,7 @@ function Recovery({ kind }: { kind: "expired" | "invalid" }) {
 }
 
 export default function WelcomePage() {
+  const C = useCopy().welcome;
   const params = useParams<{ companySlug: string }>();
   const slug = Array.isArray(params.companySlug) ? params.companySlug[0] : params.companySlug;
   const { state, company } = lookupInvitation(slug);

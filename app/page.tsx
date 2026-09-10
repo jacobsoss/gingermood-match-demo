@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PLATFORM, SESSION_RANGE } from "@/lib/platform/copy";
+import { getServerCopy } from "@/lib/platform/lang-server";
 import { btnPrimaryLg, headingUi } from "@/lib/platform/ui-classes";
 import { MarketingShell } from "@/components/platform/MarketingShell";
 import { IconChevronRight, IconShield, IconUser, IconCheck } from "@/components/platform/icons";
 
-const H = PLATFORM.home;
-
-export const metadata: Metadata = {
-  title: "Gingermood — the right psychologist or coach",
-  description: `Gingermood matches employees to the right psychologist or coach for ${SESSION_RANGE} in-depth conversations. Carefully matched on what they need, and checked by a person.`,
-};
-
 const AUDIENCE_ICONS = { employer: IconShield, employee: IconUser } as const;
 
-export default function HomePage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getServerCopy();
+  return { title: t.home.metaTitle, description: t.home.metaDescription };
+}
+
+export default async function HomePage() {
+  const t = await getServerCopy();
+  const H = t.home;
   return (
     <MarketingShell>
       {/* ── Hero ──────────────────────────────────────────────────────────── */}
@@ -58,7 +58,6 @@ export default function HomePage() {
                 style={{ objectPosition: "57% 50%" }}
               />
             </div>
-            <p className="mt-2 text-[12px] text-muted">Illustrative photo — not a real client, psychologist or coach.</p>
           </div>
         </div>
       </section>

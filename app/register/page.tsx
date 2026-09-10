@@ -4,17 +4,17 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDemo } from "@/lib/demo/store";
-import { PLATFORM } from "@/lib/platform/copy";
 import { readNext, readParam } from "@/lib/platform/params";
 import { btnPrimary } from "@/lib/platform/ui-classes";
-
-const C = PLATFORM.register;
+import { useCopy } from "@/components/platform/LanguageProvider";
 
 const inputCls =
   "gm-focus w-full rounded-[var(--radius-input)] border-[1.5px] border-hair bg-surface px-4 py-3 text-[16px] text-ink outline-none transition-colors placeholder:text-muted";
 
 export default function RegisterPage() {
   const { register } = useDemo();
+  const t = useCopy();
+  const C = t.register;
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -54,7 +54,7 @@ export default function RegisterPage() {
         <p className="mt-2 text-[16px] text-muted">{C.subtitle}</p>
         {company && (
           <p className="mt-3 inline-flex w-fit rounded-full bg-wash px-3 py-1 text-[13px] font-medium text-purple">
-            {PLATFORM.welcome.providedThrough(company)}
+            {t.welcome.providedThrough(company)}
           </p>
         )}
 

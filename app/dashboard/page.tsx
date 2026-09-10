@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDemo } from "@/lib/demo/store";
-import { PLATFORM } from "@/lib/platform/copy";
+import { useCopy } from "@/components/platform/LanguageProvider";
 import { LIBRARY_BY_ID, recommendedFor } from "@/lib/demo/seeds";
 import { firstName, formatDay, formatTime, timeGreeting } from "@/lib/demo/format";
 import { getCoach } from "@/data/coaches";
@@ -128,6 +128,7 @@ function PrivacyLine() {
 
 export default function DashboardHome() {
   const { ready, user, employee, respondNudge, setTourDone } = useDemo();
+  const t = useCopy();
   const router = useRouter();
   const [showTour, setShowTour] = useState<boolean | null>(null);
 
@@ -170,7 +171,7 @@ export default function DashboardHome() {
         <p className="mt-1 text-[15px] text-muted">
           {matched && coach
             ? `Trajectory with ${firstName(coach.name)} · ${SPECIALISM_LABEL[matched.theme]}`
-            : PLATFORM.dashboard.greetingNew}
+            : t.dashboard.greetingNew}
         </p>
       </header>
 
@@ -184,20 +185,20 @@ export default function DashboardHome() {
           >
             <p className="eyebrow text-purple">Your next step</p>
             <h2 className="mt-3 font-body text-[24px] font-semibold leading-snug text-ink sm:text-[27px]">
-              {PLATFORM.dashboard.actions.findSupport.title}
+              {t.dashboard.actions.findSupport.title}
             </h2>
             <p className="mt-3 max-w-lg text-[16px] leading-relaxed text-muted">
-              {PLATFORM.dashboard.actions.findSupport.body}
+              {t.dashboard.actions.findSupport.body}
             </p>
             <button
               type="button"
               onClick={() => router.push("/dashboard/match")}
               className={`${btnPrimary} mt-6`}
             >
-              {PLATFORM.dashboard.actions.findSupport.title}
+              {t.dashboard.actions.findSupport.title}
             </button>
             <p className="mt-4 max-w-lg text-[13px] leading-relaxed text-muted">
-              {PLATFORM.dashboard.humanNote} {PLATFORM.dashboard.reviewSimulatedNote}
+              {t.dashboard.humanNote} {t.dashboard.reviewSimulatedNote}
             </p>
           </div>
 
@@ -210,10 +211,10 @@ export default function DashboardHome() {
                 </span>
                 <div>
                   <h3 className="font-body text-[17px] font-semibold text-ink">
-                    {PLATFORM.dashboard.actions.checkin.title}
+                    {t.dashboard.actions.checkin.title}
                   </h3>
                   <p className="mt-1.5 text-[15px] leading-relaxed text-muted">
-                    {PLATFORM.dashboard.actions.checkin.body}
+                    {t.dashboard.actions.checkin.body}
                   </p>
                   <Link href="/dashboard/checkin" className={`${btnSecondary} mt-4`}>
                     Check in
@@ -286,7 +287,7 @@ export default function DashboardHome() {
             </div>
 
             <p className="mt-4 text-[12px] leading-relaxed text-muted">
-              {PLATFORM.dashboard.reviewSimulatedNote}
+              {t.dashboard.reviewSimulatedNote}
             </p>
           </Card>
 

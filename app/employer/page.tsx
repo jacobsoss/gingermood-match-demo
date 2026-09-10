@@ -2,10 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useDemo } from "@/lib/demo/store";
-import { PLATFORM } from "@/lib/platform/copy";
+import { useCopy } from "@/components/platform/LanguageProvider";
 import { EMPLOYER } from "@/lib/demo/seeds";
 import { RequireRole } from "@/components/platform/guard";
 import { RoleSwitch } from "@/components/platform/RoleSwitch";
+import { LanguageMenu } from "@/components/platform/LanguageMenu";
 import { TrendChart, ZoneBar, ZoneLegend } from "@/components/platform/charts";
 import { Card, IllustrativeTag, SectionLabel, Stat } from "@/components/platform/ui";
 import { IconArrowUp, IconLogout, IconShield } from "@/components/platform/icons";
@@ -27,6 +28,7 @@ function EmployerChrome() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt="Gingermood" className="h-7 w-auto" />
           <div className="flex items-center gap-2.5">
+            <LanguageMenu />
             <RoleSwitch current="org" />
             {user && (
               <span className="hidden text-[14px] font-semibold text-ink sm:inline">
@@ -53,6 +55,7 @@ function EmployerChrome() {
 }
 
 function EmployerOverview() {
+  const t = useCopy();
   const k = EMPLOYER.kpis;
 
   return (
@@ -70,7 +73,7 @@ function EmployerOverview() {
           <span className="mt-0.5 shrink-0 text-purple">
             <IconShield size={15} />
           </span>
-          {PLATFORM.org.personalHiddenNote}
+          {t.org.personalHiddenNote}
         </p>
       </header>
 

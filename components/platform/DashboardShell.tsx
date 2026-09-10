@@ -7,6 +7,8 @@ import { initialsOf } from "@/lib/demo/format";
 import { Avatar } from "@/components/Avatar";
 import { NotificationsBell } from "./NotificationsBell";
 import { RoleSwitch } from "./RoleSwitch";
+import { LanguageMenu } from "./LanguageMenu";
+import { useCopy } from "./LanguageProvider";
 import {
   IconBook,
   IconCalendar,
@@ -17,14 +19,15 @@ import {
   IconUser,
 } from "./icons";
 
+/** `key` indexes into copy `shell.nav` so labels translate with the language switch. */
 const NAV = [
-  { href: "/dashboard", label: "Home", icon: IconHome, exact: true },
-  { href: "/dashboard/coach", label: "My coach", icon: IconUser },
-  { href: "/dashboard/sessions", label: "Sessions", icon: IconCalendar },
-  { href: "/dashboard/library", label: "Library", icon: IconBook },
-  { href: "/dashboard/checkin", label: "Check-in", icon: IconPulse },
-  { href: "/dashboard/settings", label: "Settings", icon: IconSettings },
-];
+  { href: "/dashboard", key: "home", icon: IconHome, exact: true },
+  { href: "/dashboard/coach", key: "coach", icon: IconUser, exact: false },
+  { href: "/dashboard/sessions", key: "sessions", icon: IconCalendar, exact: false },
+  { href: "/dashboard/library", key: "library", icon: IconBook, exact: false },
+  { href: "/dashboard/checkin", key: "checkin", icon: IconPulse, exact: false },
+  { href: "/dashboard/settings", key: "settings", icon: IconSettings, exact: false },
+] as const;
 
 function isActive(pathname: string, href: string, exact?: boolean): boolean {
   return exact ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
@@ -37,6 +40,8 @@ function isActive(pathname: string, href: string, exact?: boolean): boolean {
  */
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const { user, logout } = useDemo();
+  const t = useCopy();
+  const nav = t.shell.nav;
   const pathname = usePathname();
   const router = useRouter();
 
@@ -51,6 +56,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
               <img src="/logo.svg" alt="Gingermood" className="h-7 w-auto" />
             </Link>
             <div className="flex items-center gap-2.5">
+              <LanguageMenu />
               <RoleSwitch current="personal" />
               <NotificationsBell />
               {user && (
@@ -65,8 +71,8 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                   logout();
                   router.push("/login");
                 }}
-                aria-label="Sign out"
-                title="Sign out"
+                aria-label={t.shell.signOut}
+                title={t.shell.signOut}
                 className="gm-focus flex h-10 w-10 items-center justify-center rounded-full text-muted transition-colors hover:bg-wash hover:text-ink"
               >
                 <IconLogout size={18} />
@@ -78,7 +84,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         {/* Mobile nav — horizontal pills (reliable on stage; no drawer) */}
         <nav className="border-b border-hair bg-surface/95 backdrop-blur lg:hidden" aria-label="Dashboard">
           <ul className="flex gap-1.5 overflow-x-auto px-4 py-2.5">
-            {NAV.map(({ href, label, exact }) => {
+            {NAV.map(({ href, key, exact }) => {
               const active = isActive(pathname, href, exact);
               return (
                 <li key={href} className="shrink-0">
@@ -89,7 +95,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                       active ? "bg-purple text-white" : "bg-wash text-purple-700 hover:bg-tint"
                     }`}
                   >
-                    {label}
+                    {nav[key]}
                   </Link>
                 </li>
               );
@@ -103,7 +109,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <aside className="sticky top-[71px] hidden h-[calc(100dvh-71px)] w-60 shrink-0 flex-col border-r border-hair bg-surface lg:flex">
           <nav className="flex-1 px-3 py-5" aria-label="Dashboard">
             <ul className="flex flex-col gap-1">
-              {NAV.map(({ href, label, icon: Icon, exact }) => {
+              {NAV.map(({ href, key, icon: Icon, exact }) => {
                 const active = isActive(pathname, href, exact);
                 return (
                   <li key={href}>
@@ -117,7 +123,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
                       }`}
                     >
                       <Icon size={18} />
-                      {label}
+                      {nav[key]}
                     </Link>
                   </li>
                 );
@@ -126,7 +132,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           </nav>
           <div className="border-t border-hair px-5 py-4">
             <p className="text-[12px] leading-relaxed text-muted">
-              Demo environment · illustrative product
+              {t.shell.demoEnv}
             </p>
           </div>
         </aside>

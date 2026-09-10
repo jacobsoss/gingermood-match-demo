@@ -6,12 +6,10 @@ import { useRouter } from "next/navigation";
 import { useDemo } from "@/lib/demo/store";
 import type { DemoUser } from "@/lib/demo/types";
 import { DEMO_ACCOUNTS } from "@/lib/demo/seeds";
-import { PLATFORM } from "@/lib/platform/copy";
 import { readNext } from "@/lib/platform/params";
 import { btnPrimary } from "@/lib/platform/ui-classes";
+import { useCopy } from "@/components/platform/LanguageProvider";
 import { IconChevronRight } from "@/components/platform/icons";
-
-const C = PLATFORM.login;
 
 const inputCls =
   "gm-focus w-full rounded-[var(--radius-input)] border-[1.5px] border-hair bg-surface px-4 py-3 text-[16px] text-ink outline-none transition-colors placeholder:text-muted";
@@ -29,6 +27,7 @@ function homeFor(user: DemoUser): string {
 
 export default function LoginPage() {
   const { login } = useDemo();
+  const C = useCopy().login;
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
