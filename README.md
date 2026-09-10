@@ -12,42 +12,56 @@ seeded — no real backend, no real auth, no external services in the demo path.
 > ⚠️ **All people, companies, statistics and content are fictional.** Aggregate numbers
 > carry an "Illustrative data" tag in the UI. No real records (GDPR Art. 9).
 
+This repo is the early demo of Gingermood's **annual-subscription** platform (an
+organisation gives its covered employees ongoing access). See DECISIONS.md D17–D27 for
+the 2026-09 navigation/subscription revision.
+
 ## Route map
 
 ```
-/                      Marketing home (public)
-/about                 Company story, values, team (public)
-/privacy               The privacy promise, designed (public)
-/how-it-works          Matching approach in 3 steps (public)
-/login                 Demo sign-in (any email/password works)
-/register              Create account → role choice: Employee | Employer
+PUBLIC
+/                      Marketing home — employer-primary, easy employee route
+/employers             For employers: annual access, the two commercial routes, enquiry
+/employees             For employees: how employer access works, confidentiality
+/how-it-works          Matching approach in 3 steps
+/about  /privacy       Company story · privacy promise (kept in the footer, off the main nav)
+/welcome/[companySlug] Employer-branded invitation → demo activation (nova-health,
+                       meridiaan, kade-11 = valid · orion-media = expired · other = invalid)
+/login                 One login entry (+ presenter demo-account shortcuts)
+/register              "Activate your access" — employee only, no employer self-grant
 
-/dashboard             Employee home — State A (no match) / State B (matched)
-/dashboard/match       THE QUIZ (adaptive intake, voice dictation) — unchanged logic
-/dashboard/match/result  Match reveal + "Confirm my coach" (simulated human review)
-/dashboard/coach       Coach profile, next session, message thread
-/dashboard/sessions    Booking (seeded availability), reschedule/cancel, history + rating
-/dashboard/library     12 items, search + category filter, 3 fully written articles
-/dashboard/checkin     Quarterly wellbeing pulse (6 questions) + trends
-/dashboard/settings    Account, privacy promises, Stage mode, Reset demo
+EMPLOYEE (guarded)
+/dashboard             Home — actions: Check in with yourself · Find the right support ·
+                       View your coaching (State A new / State B matched)
+/dashboard/match       THE QUIZ (adaptive intake, voice dictation) — unchanged
+/dashboard/match/result  Match reveal + "Confirm my coach" (SIMULATED human review)
+/dashboard/coach · /sessions · /library · /checkin · /settings   (unchanged behaviour)
 
-/employer              Employer preview screen (employer role only)
-/match, /quiz          → redirect to /dashboard/match (old links keep working)
+EMPLOYER / ORG (guarded)
+/employer              Organisation view — anonymous aggregates only, min-group-size 15
+/match, /quiz          → redirect to /dashboard/match (old links)
 ```
 
-Auth gating is a client-side guard on the demo session (localStorage). Logged-out visits
-to `/dashboard*` or `/employer` land on `/login`; wrong-role visits are routed home.
+Public nav is **For employers · For employees · How it works · Log in** (About/Privacy in
+the footer), with a mobile disclosure menu. Auth gating is a client-side guard on the
+localStorage session — a **demo guard, not production security**. Logged-out visits to a
+guarded page bounce to `/login?next=<that page>` and return there after login. The org
+view is reachable by an employer **or** a dual-role org admin, and never reads personal
+coaching data.
 
 ## Demo accounts
 
 | Account | Who | State |
 | --- | --- | --- |
-| `emma@demo.gingermood.nl` | Emma de Jong — employee | Fresh: no match, onboarding tour, "Get matched" journey from zero |
-| `daan@demo.gingermood.nl` | Daan Bakker — employee | Living: matched 5 weeks ago with Mara de Wit, 3/8 sessions done, next session booked, check-in history, messages, nudge |
-| `hr@demo.gingermood.nl` | Sanne Visser — employer | Lands on `/employer` |
+| `emma@demo.gingermood.nl` | Emma de Jong — employee | Fresh: no match, onboarding tour, "Find the right support" from zero |
+| `daan@demo.gingermood.nl` | Daan Bakker — employee | Living: matched with Mara de Wit, 3/8 sessions, next session booked, check-in history, messages, nudge |
+| `duo@demo.gingermood.nl` | Iris Molenaar — employee **+ org admin** | Dual role: lands in personal view, can switch to Organisation management (no personal data leaks into it) |
+| `hr@demo.gingermood.nl` | Sanne Visser — employer | Lands on `/employer` (organisation view) |
 
-Quick-login buttons live under **"Demo accounts"** on the login page. Any other
-email/password also signs in (as a fresh employee).
+Quick-login buttons live under **"Demo accounts"** on the login page (presenter shortcuts —
+they bypass the normal invitation flow). Any other email/password signs in as a fresh
+employee. Employer/org-admin roles are seeded only; the normal `/register` flow cannot
+self-assign them.
 
 **Reset demo:** Settings → "Reset demo data", or hold **Shift** and press **R** then **D**
 anywhere. Restores all three accounts to their seeded state and returns to login.

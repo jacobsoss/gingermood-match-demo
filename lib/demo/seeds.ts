@@ -19,7 +19,11 @@ export const DEMO_ACCOUNTS = {
   emma: "emma@demo.gingermood.nl",
   daan: "daan@demo.gingermood.nl",
   hr: "hr@demo.gingermood.nl",
+  duo: "duo@demo.gingermood.nl",
 } as const;
+
+/** The organisation used across the employer view and dual-role account. */
+export const DEMO_ORG = "Meridiaan Consulting B.V.";
 
 export const DAAN_COACH_ID = "mara-de-wit";
 export const SESSIONS_PLANNED = 8;
@@ -364,9 +368,18 @@ function daanState(now: Date): EmployeeState {
 }
 
 const USERS: DemoUser[] = [
-  { name: "Emma de Jong", email: DEMO_ACCOUNTS.emma, role: "employee" },
-  { name: "Daan Bakker", email: DEMO_ACCOUNTS.daan, role: "employee" },
-  { name: "Sanne Visser", email: DEMO_ACCOUNTS.hr, role: "employer" },
+  { name: "Emma de Jong", email: DEMO_ACCOUNTS.emma, role: "employee", company: DEMO_ORG },
+  { name: "Daan Bakker", email: DEMO_ACCOUNTS.daan, role: "employee", company: DEMO_ORG },
+  { name: "Sanne Visser", email: DEMO_ACCOUNTS.hr, role: "employer", company: DEMO_ORG },
+  // Dual-role: an employee who is also an org admin (D22). Personal coaching data
+  // lives in their employee slice; the organisation view never reads it.
+  {
+    name: "Iris Molenaar",
+    email: DEMO_ACCOUNTS.duo,
+    role: "employee",
+    orgAdmin: true,
+    company: DEMO_ORG,
+  },
 ];
 
 export function seedInitialState(now = new Date()): DemoState {
@@ -377,6 +390,7 @@ export function seedInitialState(now = new Date()): DemoState {
       [DEMO_ACCOUNTS.emma]: { user: USERS[0], employee: emmaState(now) },
       [DEMO_ACCOUNTS.daan]: { user: USERS[1], employee: daanState(now) },
       [DEMO_ACCOUNTS.hr]: { user: USERS[2] },
+      [DEMO_ACCOUNTS.duo]: { user: USERS[3], employee: freshEmployeeState(now) },
     },
   };
 }

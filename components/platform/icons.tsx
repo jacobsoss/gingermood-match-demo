@@ -91,6 +91,20 @@ export const IconChevronRight = ({ size = 18 }: IconProps) => (
   </svg>
 );
 
+export const IconChevronDown = ({ size = 18 }: IconProps) => (
+  <svg {...base(size)}>
+    <path d="m6 9 6 6 6-6" />
+  </svg>
+);
+
+export const IconGlobe = ({ size = 18 }: IconProps) => (
+  <svg {...base(size)}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M3 12h18" />
+    <path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z" />
+  </svg>
+);
+
 export const IconPlay = ({ size = 18 }: IconProps) => (
   <svg {...base(size)}>
     <path d="m7 4 13 8-13 8Z" />

@@ -2,8 +2,10 @@
 
 import { useRouter } from "next/navigation";
 import { useDemo } from "@/lib/demo/store";
+import { PLATFORM } from "@/lib/platform/copy";
 import { EMPLOYER } from "@/lib/demo/seeds";
 import { RequireRole } from "@/components/platform/guard";
+import { RoleSwitch } from "@/components/platform/RoleSwitch";
 import { TrendChart, ZoneBar, ZoneLegend } from "@/components/platform/charts";
 import { Card, IllustrativeTag, SectionLabel, Stat } from "@/components/platform/ui";
 import { IconArrowUp, IconLogout, IconShield } from "@/components/platform/icons";
@@ -25,6 +27,7 @@ function EmployerChrome() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt="Gingermood" className="h-7 w-auto" />
           <div className="flex items-center gap-2.5">
+            <RoleSwitch current="org" />
             {user && (
               <span className="hidden text-[14px] font-semibold text-ink sm:inline">
                 {user.name}
@@ -57,12 +60,18 @@ function EmployerOverview() {
       {/* Page header */}
       <header className="gm-rise">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <h1 className="font-display text-[28px] font-semibold text-ink sm:text-[32px]">
+          <h1 className="font-body text-[28px] font-semibold text-ink sm:text-[32px]">
             {EMPLOYER.company} — Workforce wellbeing overview
           </h1>
           <IllustrativeTag />
         </div>
         <p className="mt-1 text-[15px] text-muted">Quarterly view · updated this week</p>
+        <p className="mt-3 flex items-start gap-2 text-[13px] leading-relaxed text-muted">
+          <span className="mt-0.5 shrink-0 text-purple">
+            <IconShield size={15} />
+          </span>
+          {PLATFORM.org.personalHiddenNote}
+        </p>
       </header>
 
       {/* KPI row */}

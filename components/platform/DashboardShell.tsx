@@ -6,6 +6,7 @@ import { useDemo } from "@/lib/demo/store";
 import { initialsOf } from "@/lib/demo/format";
 import { Avatar } from "@/components/Avatar";
 import { NotificationsBell } from "./NotificationsBell";
+import { RoleSwitch } from "./RoleSwitch";
 import {
   IconBook,
   IconCalendar,
@@ -50,6 +51,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
               <img src="/logo.svg" alt="Gingermood" className="h-7 w-auto" />
             </Link>
             <div className="flex items-center gap-2.5">
+              <RoleSwitch current="personal" />
               <NotificationsBell />
               {user && (
                 <span className="hidden items-center gap-2.5 sm:flex">

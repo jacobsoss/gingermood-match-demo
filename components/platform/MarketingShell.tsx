@@ -1,14 +1,20 @@
 import Link from "next/link";
+import { PLATFORM } from "@/lib/platform/copy";
+import { MarketingNav } from "./MarketingNav";
 
-const LINKS = [
-  { href: "/how-it-works", label: "How it works" },
-  { href: "/about", label: "About" },
-  { href: "/privacy", label: "Privacy" },
+const FOOTER_LINKS = [
+  { href: "/employers", label: PLATFORM.nav.employers },
+  { href: "/employees", label: PLATFORM.nav.employees },
+  { href: "/how-it-works", label: PLATFORM.nav.howItWorks },
+  { href: "/about", label: PLATFORM.nav.about },
+  { href: "/privacy", label: PLATFORM.nav.privacy },
+  { href: "/login", label: PLATFORM.nav.login },
 ];
 
 /**
  * Public-site chrome: same 3px orange stripe + frosted 68px nav as the product,
- * so marketing and app read as one brand. Server component (no state).
+ * so marketing and app read as one brand. Server component; the interactive nav
+ * (audience links + mobile menu) is the client MarketingNav.
  */
 export function MarketingShell({ children }: { children: React.ReactNode }) {
   return (
@@ -21,36 +27,7 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo.svg" alt="Gingermood" className="h-7 w-auto" />
             </Link>
-            <nav aria-label="Main">
-              <ul className="flex items-center gap-1 sm:gap-2">
-                {LINKS.map((l) => (
-                  <li key={l.href} className="hidden sm:block">
-                    <Link
-                      href={l.href}
-                      className="gm-focus rounded-md px-3 py-2 text-[15px] font-semibold text-muted transition-colors hover:text-ink"
-                    >
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-                <li>
-                  <Link
-                    href="/login"
-                    className="gm-focus rounded-md px-3 py-2 text-[15px] font-semibold text-purple transition-colors hover:text-purple-700"
-                  >
-                    Log in
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/register"
-                    className="gm-focus inline-flex min-h-[42px] items-center rounded-full bg-orange px-5 text-[15px] font-semibold text-ink transition-all hover:bg-orange-600 active:scale-[0.98]"
-                  >
-                    Get started
-                  </Link>
-                </li>
-              </ul>
-            </nav>
+            <MarketingNav />
           </div>
         </header>
       </div>
@@ -63,16 +40,14 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.svg" alt="Gingermood" className="h-6 w-auto" />
             <p className="mt-3 max-w-xs text-[14px] leading-relaxed text-muted">
-              The right coach for every person. Matching on real needs — checked by a human,
-              measured for outcomes.
+              The right coach for every person. Matched on real needs — with a person involved,
+              and support that continues over time.
             </p>
           </div>
           <nav aria-label="Footer">
-            <p className="text-[13px] font-semibold uppercase tracking-[0.12em] text-muted">
-              Explore
-            </p>
+            <p className="eyebrow text-muted">Explore</p>
             <ul className="mt-3 flex flex-col gap-2">
-              {[...LINKS, { href: "/login", label: "Log in" }].map((l) => (
+              {FOOTER_LINKS.map((l) => (
                 <li key={l.href}>
                   <Link
                     href={l.href}
@@ -85,12 +60,10 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
             </ul>
           </nav>
           <div>
-            <p className="text-[13px] font-semibold uppercase tracking-[0.12em] text-muted">
-              About this site
-            </p>
+            <p className="eyebrow text-muted">About this site</p>
             <p className="mt-3 text-[14px] leading-relaxed text-muted">
-              This is a product demo. All people, companies and statistics shown are
-              fictional and illustrative.
+              This is a product demo. All people, companies and statistics shown are fictional
+              and illustrative — it is not a production system.
             </p>
           </div>
         </div>

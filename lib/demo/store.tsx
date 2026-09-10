@@ -18,7 +18,6 @@ import type {
   DemoState,
   DemoUser,
   EmployeeState,
-  Role,
   SessionType,
 } from "./types";
 import { SESSIONS_PLANNED, freshEmployeeState, seedInitialState } from "./seeds";
@@ -39,7 +38,13 @@ export interface DemoApi {
   /** Current user's employee slice; null for employers / logged out. */
   employee: EmployeeState | null;
   login: (email: string) => DemoUser;
-  register: (name: string, email: string, role: Role) => DemoUser;
+  /**
+   * Activate a normal (employee) account. There is deliberately no way to
+   * self-assign an employer/org-admin role here (D21); those are seeded and
+   * reached via the labelled demo-account shortcuts. `company` ties the new
+   * employee to the inviting organisation for display.
+   */
+  register: (name: string, email: string, company?: string) => DemoUser;
   logout: () => void;
   resetDemo: () => void;
 
@@ -181,21 +186,20 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
         return user;
       },
 
-      register: (name: string, email: string, role: Role) => {
+      register: (name: string, email: string, company?: string) => {
         const norm = email.trim().toLowerCase();
-        const user: DemoUser = { name: name.trim() || deriveName(norm), email: norm, role };
+        const user: DemoUser = {
+          name: name.trim() || deriveName(norm),
+          email: norm,
+          role: "employee",
+          ...(company ? { company } : {}),
+        };
         setState((prev) => {
           const base = prev ?? seedInitialState();
           return {
             ...base,
             session: user,
-            users: {
-              ...base.users,
-              [norm]: {
-                user,
-                employee: role === "employee" ? freshEmployeeState() : undefined,
-              },
-            },
+            users: { ...base.users, [norm]: { user, employee: freshEmployeeState() } },
           };
         });
         return user;

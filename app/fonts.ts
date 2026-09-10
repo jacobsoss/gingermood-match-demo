@@ -21,11 +21,12 @@ export const zillaSlab = Zilla_Slab({
   fallback: ["Georgia", "Times New Roman", "serif"], // serif → serif only
 });
 
-// Body & UI — Inter 400 (body) and 500 (buttons, nav, emphasis, eyebrow).
+// Body & UI — Inter 400 (body), 500 (buttons, nav, emphasis, eyebrow),
+// 600 (interface headings: cards, forms, dashboard — Inter replaces Zilla here).
 export const inter = Inter({
   variable: "--font-body",
   subsets: ["latin", "latin-ext"],
   display: "swap",
-  weight: ["400", "500"],
+  weight: ["400", "500", "600"],
   fallback: ["-apple-system", "Segoe UI", "Helvetica", "Arial", "sans-serif"],
 });

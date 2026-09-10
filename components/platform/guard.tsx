@@ -1,15 +1,24 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useDemo } from "@/lib/demo/store";
+import type { DemoUser } from "@/lib/demo/types";
 import { Skeleton } from "./ui";
 
 /**
- * Client-side auth gate (the demo session lives in localStorage, so middleware
- * can't see it — documented in DECISIONS.md D3). Logged-out → /login; wrong
- * role → that role's home. Shows a quiet skeleton while hydrating.
+ * Client-side auth gate. The demo session lives in localStorage, so middleware
+ * can't see it (DECISIONS.md D3) — this is a demo guard, NOT production security.
+ *
+ * - Logged out → /login?next=<the page they wanted> so login returns them there.
+ * - Employer view is reachable by a real employer OR a dual-role org admin (D22).
+ * - Wrong role → that role's home.
  */
+function canAccess(user: DemoUser, role: "employee" | "employer"): boolean {
+  if (role === "employer") return user.role === "employer" || !!user.orgAdmin;
+  return user.role === "employee";
+}
+
 export function RequireRole({
   role,
   children,
@@ -19,14 +28,22 @@ export function RequireRole({
 }) {
   const { ready, user } = useDemo();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!ready) return;
-    if (!user) router.replace("/login");
-    else if (user.role !== role) router.replace(user.role === "employer" ? "/employer" : "/dashboard");
-  }, [ready, user, role, router]);
+    if (!user) {
+      const search = typeof window !== "undefined" ? window.location.search : "";
+      const next = encodeURIComponent(`${pathname}${search}`);
+      router.replace(`/login?next=${next}`);
+      return;
+    }
+    if (!canAccess(user, role)) {
+      router.replace(user.role === "employer" ? "/employer" : "/dashboard");
+    }
+  }, [ready, user, role, router, pathname]);
 
-  if (!ready || !user || user.role !== role) {
+  if (!ready || !user || !canAccess(user, role)) {
     return (
       <div className="mx-auto w-full max-w-[960px] px-6 py-10">
         <Skeleton className="h-8 w-56" />

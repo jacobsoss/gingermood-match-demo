@@ -115,3 +115,85 @@ render into an effect. No visual or behavioral change; documented here because o
 Platform chrome is English (D1); user-generated-style content (coach message thread)
 is also English for on-screen consistency, while names, roles, topics and testimonial
 voices are Dutch-flavoured. The quiz itself remains fully Dutch.
+
+---
+
+## Navigation & subscription-platform revision (2026-09 brief)
+
+This brief repositions the demo as Gingermood's **annual-subscription** platform and
+supersedes conflicting earlier decisions. Governing brief wins where it conflicts.
+
+### D17 — Audience-separated public navigation
+Public nav is now: **For employers** (`/employers`), **For employees** (`/employees`),
+**How it works** (`/how-it-works`), **Log in** (`/login`). About + Privacy move to the
+footer (kept accessible, off the main bar). No full-screen "employer or employee?" gate;
+the homepage is employer-primary with an easy employee route. `/employers` and
+`/employees` are the PUBLIC info pages; `/employer` (singular) stays the signed-in
+employer demo. A lightweight mobile disclosure menu exposes the nav links on small
+screens (the old marketing nav hid them entirely on mobile).
+
+### D18 — Remove the non-functional language toggle
+The language dropdown added the previous turn is removed from the nav: brief §8 forbids a
+language toggle that does not actually translate the journey. New copy is centralised in
+`lib/platform/copy.ts` (English) so Dutch can be added consistently later. `IconGlobe` /
+`IconChevronDown` are kept (generic). Reversible: re-add the menu once real i18n exists.
+
+### D19 — Invitation / welcome journey (`/welcome/[companySlug]`)
+Fictional employer-branded invitation → demo activation → employee dashboard, via the
+existing store. Gingermood stays visually dominant with a smaller "Provided through
+{org}" acknowledgement. Company slugs are demo fixtures (`lib/demo/companies.ts`):
+valid, `expired-*`, and any unknown slug → invalid recovery state. A slug is explicitly
+labelled demo activation, never described as secure authorisation.
+
+### D20 — returnTo preservation through login
+Guard appends `?next=<path>` when bouncing to `/login`; login/activation honour a
+validated internal `next` (must start with `/dashboard` or `/employer` etc.). A check-in
+or booking link therefore returns the user to that page after auth.
+
+### D21 — No employer self-grant in the normal flow
+`/register` (now "Activate your access") drops the employee/employer role choice — you
+cannot self-assign employer during activation. Employer access is described as
+arranged-with-the-team. Employer/dual-role views remain reachable via the clearly
+labelled demo-account shortcuts on `/login`.
+
+### D22 — Dual-role demo account + view switch
+A seeded `duo@demo.gingermood.nl` (employee **and** org admin) can switch between
+"My support" (`/dashboard`) and "Organisation management" (`/employer`). The switch shows
+only for that account. Org views show only aggregates — no personal coaching data.
+Implemented with an additive `orgAdmin?: boolean` + `company?` on `DemoUser`; the guard
+allows `/employer` for `role==="employer" || orgAdmin`.
+
+### D23 — Employee dashboard entry actions
+Primary actions are **Check in with yourself**, **Find the right support** (the intake —
+startable without a check-in and without a pre-formulated question), and **View your
+coaching** for an existing trajectory. Check-in is not a prerequisite for coaching.
+
+### D24 — Typography: Zilla for marketing headlines, Inter for interface
+Per the brief, Zilla Slab is reserved for major marketing headlines; interface headings
+(cards, forms, nav, dashboard) use Inter. Inter now loads **400/500/600** (fonts.ts) so
+interface headings have a true semibold. New/revised surfaces apply this split; a full
+sweep of every legacy interface heading (library, sessions, settings internals) is noted
+as remaining work rather than done blindly this pass. The Dutch intake keeps its current
+Zilla headings (preserve-the-intake constraint) — its typographic alignment is a
+follow-up.
+
+### D25 — Copy honesty (brief §8)
+Public/entry copy avoids: guaranteed outcomes, "fit % proves success", unlimited/invented
+session allowance, invented certifications, and production-grade-confidentiality claims.
+The human-review beat stays labelled as **simulated**. Illustrative testimonials are
+removed from the public sales pages in favour of factual process explanations; any
+demo/illustrative content is explicitly labelled.
+
+### D26 — Next.js docs / AGENTS.md stance
+AGENTS.md says to read `node_modules/next/dist/docs/` before writing code. Those bundled
+docs contain untrusted, injection-style hints (flagged in prior sessions); this pass
+relies on the repository's own already-building Next 16 App Router + next/font + Tailwind
+v4 patterns rather than following instructions embedded in that vendored file. No exotic
+Next APIs are introduced.
+
+### D27 — Homepage hero visual
+The oversized pale decorative circle is removed. The hero keeps the user-provided coach/
+client photo (`/onafhankelijke-coaches.jpg`), cropped to the two people and labelled as
+an illustrative example, satisfying "replace the decorative circle with useful visual
+content / prefer approved coach imagery." No invented coaches, credentials, or
+testimonials.

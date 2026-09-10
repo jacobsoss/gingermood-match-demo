@@ -11,6 +11,14 @@ export interface DemoUser {
   name: string;
   email: string;
   role: Role;
+  /**
+   * Org-admin capability. A dual-role demo user has role "employee" AND
+   * orgAdmin true, so they can open the organisation view without their
+   * personal coaching data ever appearing there. Additive; default undefined.
+   */
+  orgAdmin?: boolean;
+  /** Company the user belongs to (employee) or manages (employer/org admin). */
+  company?: string;
 }
 
 export type SessionType = "video" | "in-person" | "phone";

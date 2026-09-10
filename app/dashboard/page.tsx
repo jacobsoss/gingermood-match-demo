@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDemo } from "@/lib/demo/store";
+import { PLATFORM } from "@/lib/platform/copy";
 import { LIBRARY_BY_ID, recommendedFor } from "@/lib/demo/seeds";
 import { firstName, formatDay, formatTime, timeGreeting } from "@/lib/demo/format";
 import { getCoach } from "@/data/coaches";
@@ -163,49 +164,64 @@ export default function DashboardHome() {
     <div className="mx-auto w-full max-w-[880px] px-6 py-8 sm:px-8">
       {/* Greeting */}
       <header className="gm-rise">
-        <h1 className="font-display text-[28px] font-semibold text-ink sm:text-[32px]">
+        <h1 className="font-body text-[28px] font-semibold text-ink sm:text-[32px]">
           {timeGreeting()}, {firstName(user.name)}
         </h1>
         <p className="mt-1 text-[15px] text-muted">
           {matched && coach
             ? `Trajectory with ${firstName(coach.name)} · ${SPECIALISM_LABEL[matched.theme]}`
-            : "Let's find the coach who actually fits you."}
+            : PLATFORM.dashboard.greetingNew}
         </p>
       </header>
 
       {!matched && (
-        /* ── State A — the conversion center ─────────────────────────────── */
+        /* ── State A — a calm start, one obvious action (§6) ──────────────── */
         <div className="mt-7 flex flex-col gap-4">
           <div
             data-tour="match"
             className="gm-rise rounded-[var(--radius-card)] border border-hair bg-surface p-7 shadow-[var(--shadow-coach)] sm:p-9"
             style={{ animationDelay: "60ms" }}
           >
-            <p className="text-[13px] font-semibold uppercase tracking-[0.16em] text-purple">
-              Your match
-            </p>
-            <h2 className="mt-3 font-display text-[26px] font-semibold leading-snug text-ink sm:text-[30px]">
-              Find the coach who actually fits you
+            <p className="eyebrow text-purple">Your next step</p>
+            <h2 className="mt-3 font-body text-[24px] font-semibold leading-snug text-ink sm:text-[27px]">
+              {PLATFORM.dashboard.actions.findSupport.title}
             </h2>
             <p className="mt-3 max-w-lg text-[16px] leading-relaxed text-muted">
-              Answer a few questions — in your own words or out loud — and we&apos;ll match you
-              on what you actually need. Takes about 5 minutes.
+              {PLATFORM.dashboard.actions.findSupport.body}
             </p>
             <button
               type="button"
               onClick={() => router.push("/dashboard/match")}
               className={`${btnPrimary} mt-6`}
             >
-              Get matched
+              {PLATFORM.dashboard.actions.findSupport.title}
             </button>
-            <p className="mt-4 text-[13px] text-muted">
-              Every match is reviewed and confirmed by the Gingermood team.
+            <p className="mt-4 max-w-lg text-[13px] leading-relaxed text-muted">
+              {PLATFORM.dashboard.humanNote} {PLATFORM.dashboard.reviewSimulatedNote}
             </p>
           </div>
 
+          {/* Check-in is offered, never required before coaching */}
           <div className="gm-rise grid gap-4 sm:grid-cols-2" style={{ animationDelay: "140ms" }}>
+            <Card className="p-6" data-tour="checkin">
+              <div className="flex items-start gap-3">
+                <span className="mt-0.5 text-purple">
+                  <IconPulse size={18} />
+                </span>
+                <div>
+                  <h3 className="font-body text-[17px] font-semibold text-ink">
+                    {PLATFORM.dashboard.actions.checkin.title}
+                  </h3>
+                  <p className="mt-1.5 text-[15px] leading-relaxed text-muted">
+                    {PLATFORM.dashboard.actions.checkin.body}
+                  </p>
+                  <Link href="/dashboard/checkin" className={`${btnSecondary} mt-4`}>
+                    Check in
+                  </Link>
+                </div>
+              </div>
+            </Card>
             <LibraryTeaser ids={recs} />
-            <CheckinTeaser done={checkinDoneRecently} />
           </div>
 
           <div className="gm-rise" style={{ animationDelay: "200ms" }}>
@@ -268,6 +284,10 @@ export default function DashboardHome() {
               </div>
               <Bar value={(completed / matched.sessionsPlanned) * 100} />
             </div>
+
+            <p className="mt-4 text-[12px] leading-relaxed text-muted">
+              {PLATFORM.dashboard.reviewSimulatedNote}
+            </p>
           </Card>
 
           {/* Wellbeing trend + nudge */}

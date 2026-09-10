@@ -4,26 +4,28 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDemo } from "@/lib/demo/store";
+import type { DemoUser } from "@/lib/demo/types";
 import { DEMO_ACCOUNTS } from "@/lib/demo/seeds";
-import { btnPrimary } from "@/components/platform/ui";
+import { PLATFORM } from "@/lib/platform/copy";
+import { readNext } from "@/lib/platform/params";
+import { btnPrimary } from "@/lib/platform/ui-classes";
 import { IconChevronRight } from "@/components/platform/icons";
+
+const C = PLATFORM.login;
 
 const inputCls =
   "gm-focus w-full rounded-[var(--radius-input)] border-[1.5px] border-hair bg-surface px-4 py-3 text-[16px] text-ink outline-none transition-colors placeholder:text-muted";
 
 const DEMO_LIST = [
-  {
-    email: DEMO_ACCOUNTS.emma,
-    name: "Emma de Jong",
-    note: "Employee · new — hasn't been matched yet",
-  },
-  {
-    email: DEMO_ACCOUNTS.daan,
-    name: "Daan Bakker",
-    note: "Employee · matched, 3 sessions in",
-  },
-  { email: DEMO_ACCOUNTS.hr, name: "Sanne Visser", note: "Employer · HR view" },
+  { email: DEMO_ACCOUNTS.emma, name: "Emma de Jong", note: "Employee · not yet matched" },
+  { email: DEMO_ACCOUNTS.daan, name: "Daan Bakker", note: "Employee · matched, mid-trajectory" },
+  { email: DEMO_ACCOUNTS.duo, name: "Iris Molenaar", note: "Employee + org admin · dual role" },
+  { email: DEMO_ACCOUNTS.hr, name: "Sanne Visser", note: "Employer · organisation view" },
 ];
+
+function homeFor(user: DemoUser): string {
+  return user.role === "employer" ? "/employer" : "/dashboard";
+}
 
 export default function LoginPage() {
   const { login } = useDemo();
@@ -33,9 +35,10 @@ export default function LoginPage() {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [showDemo, setShowDemo] = useState(false);
 
-  function go(emailToUse: string) {
+  function go(emailToUse: string, honorNext: boolean) {
     const user = login(emailToUse);
-    router.push(user.role === "employer" ? "/employer" : "/dashboard");
+    const next = honorNext ? readNext() : null;
+    router.push(next ?? homeFor(user));
   }
 
   function submit(e: React.FormEvent) {
@@ -44,29 +47,25 @@ export default function LoginPage() {
     if (!/^\S+@\S+\.\S+$/.test(email.trim())) next.email = "Enter a valid email address.";
     if (password.length < 1) next.password = "Enter your password.";
     setErrors(next);
-    if (Object.keys(next).length === 0) go(email);
+    if (Object.keys(next).length === 0) go(email, true);
   }
 
   return (
     <div className="relative flex min-h-dvh flex-col bg-page">
       <div className="h-[3px] w-full bg-orange" />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-44 -top-48 h-[600px] w-[600px] rounded-full bg-tint opacity-40"
-      />
       <div className="relative z-10 mx-auto flex w-full max-w-[420px] flex-1 flex-col justify-center px-6 py-12">
         <Link href="/" className="gm-focus -m-2 mb-8 w-fit rounded-md p-2" aria-label="Gingermood — home">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/logo.svg" alt="Gingermood" className="h-8 w-auto" />
         </Link>
 
-        <h1 className="font-display text-[30px] font-semibold text-ink">Welcome back</h1>
-        <p className="mt-2 text-[16px] text-muted">Sign in to continue with your coach.</p>
+        <h1 className="font-display">{C.title}</h1>
+        <p className="mt-2 text-[16px] text-muted">{C.subtitle}</p>
 
         <form onSubmit={submit} noValidate className="mt-8 flex flex-col gap-4">
           <div>
-            <label htmlFor="email" className="mb-1.5 block text-[14px] font-semibold text-ink">
-              Work email
+            <label htmlFor="email" className="mb-1.5 block text-[14px] font-medium text-ink">
+              {C.emailLabel}
             </label>
             <input
               id="email"
@@ -81,8 +80,8 @@ export default function LoginPage() {
             {errors.email && <p className="mt-1.5 text-[13px] text-error">{errors.email}</p>}
           </div>
           <div>
-            <label htmlFor="password" className="mb-1.5 block text-[14px] font-semibold text-ink">
-              Password
+            <label htmlFor="password" className="mb-1.5 block text-[14px] font-medium text-ink">
+              {C.passwordLabel}
             </label>
             <input
               id="password"
@@ -94,50 +93,51 @@ export default function LoginPage() {
               className={inputCls}
               aria-invalid={!!errors.password}
             />
-            {errors.password && (
-              <p className="mt-1.5 text-[13px] text-error">{errors.password}</p>
-            )}
+            {errors.password && <p className="mt-1.5 text-[13px] text-error">{errors.password}</p>}
           </div>
           <button type="submit" className={`${btnPrimary} mt-2 w-full`}>
-            Sign in
+            {C.submit}
           </button>
         </form>
 
         <p className="mt-5 text-[15px] text-muted">
-          New here?{" "}
-          <Link href="/register" className="gm-focus rounded-sm font-semibold text-purple hover:underline">
-            Create an account
+          {C.activatePrompt}{" "}
+          <Link href="/register" className="gm-focus rounded-sm font-medium text-purple hover:underline">
+            {C.activateCta}
           </Link>
         </p>
 
-        {/* Demo accounts — subtle but accessible for the presenter */}
+        {/* Presenter shortcuts — clearly separated from the normal flow */}
         <div className="mt-10 border-t border-hair pt-5">
           <button
             type="button"
             onClick={() => setShowDemo((s) => !s)}
             aria-expanded={showDemo}
-            className="gm-focus inline-flex items-center gap-1 rounded-sm text-[13px] font-semibold text-muted transition-colors hover:text-ink"
+            className="gm-focus inline-flex items-center gap-1 rounded-sm text-[13px] font-medium text-muted transition-colors hover:text-ink"
           >
             <span className={`transition-transform ${showDemo ? "rotate-90" : ""}`}>
               <IconChevronRight size={14} />
             </span>
-            Demo accounts
+            {C.demoAccounts}
           </button>
           {showDemo && (
-            <ul className="gm-rise mt-3 flex flex-col gap-2">
-              {DEMO_LIST.map((d) => (
-                <li key={d.email}>
-                  <button
-                    type="button"
-                    onClick={() => go(d.email)}
-                    className="gm-focus flex w-full items-baseline justify-between gap-3 rounded-[var(--radius-input)] border border-hair bg-surface px-4 py-2.5 text-left transition-colors hover:border-purple"
-                  >
-                    <span className="text-[14px] font-semibold text-ink">{d.name}</span>
-                    <span className="text-[13px] text-muted">{d.note}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
+            <>
+              <p className="gm-rise mt-2 text-[13px] leading-relaxed text-muted">{C.demoNote}</p>
+              <ul className="gm-rise mt-3 flex flex-col gap-2">
+                {DEMO_LIST.map((d) => (
+                  <li key={d.email}>
+                    <button
+                      type="button"
+                      onClick={() => go(d.email, false)}
+                      className="gm-focus flex w-full items-baseline justify-between gap-3 rounded-[var(--radius-input)] border border-hair bg-surface px-4 py-2.5 text-left transition-colors hover:border-purple"
+                    >
+                      <span className="text-[14px] font-medium text-ink">{d.name}</span>
+                      <span className="text-[13px] text-muted">{d.note}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
         </div>
       </div>
