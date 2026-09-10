@@ -10,6 +10,14 @@
  * SIMULATED in this demo.
  */
 
+/**
+ * Depth of guidance — a range of conversations, not final. Defined once and
+ * reused in the hero subtext, the "How it works" step 3, and the meta
+ * description (see app/page.tsx). TODO: confirm session range with Dickey.
+ */
+export const SESSION_RANGE = "five to ten";
+const SESSION_RANGE_CAP = SESSION_RANGE.charAt(0).toUpperCase() + SESSION_RANGE.slice(1);
+
 export const PLATFORM = {
   brand: "Gingermood",
 
@@ -32,43 +40,48 @@ export const PLATFORM = {
   // ── Homepage — primarily helps a prospective employer evaluate the service,
   //    while making the employee route easy to find. ────────────────────────────
   home: {
-    eyebrow: "Coaching, properly matched",
-    title: "The right coach for every person in your organisation",
+    eyebrow: "Personal guidance, carefully matched",
+    // H1 is two sentences; the second renders on its own line at every breakpoint
+    // (EXCEPTION 1) via a <br> in app/page.tsx.
+    h1a: "Not just any psychologist or coach.",
+    h1b: "The right one.",
     subtitle:
-      "Gingermood gives your people ongoing access to professional coaching — matched to what they actually need, with a real person involved in every match.",
+      `We match each person to one of our [X] psychologists and coaches, based on what they actually need. Then we take the time: ${SESSION_RANGE} conversations of at least an hour, to understand what's really going on and to do something about it.`,
     primaryCta: "Explore employer access",
     secondaryCta: "I have access through my employer",
+    proofLine:
+      "[X] BIG/NIP-registered psychologists and NOBCO coaches · [98% — definition pending] · Trusted by [client names — confirm permission]",
 
     audience: {
       title: "Where would you like to start?",
       employer: {
         label: "For employers",
-        body: "Annual access for your covered employees, individual matching, and anonymous, aggregate reporting — never individual answers.",
+        body: "Annual access for your employees to carefully matched psychologists and coaches, for in-depth conversations of at least an hour. You see anonymous, aggregate reporting — never individual answers.",
         cta: "See how it works for organisations",
         href: "/employers",
       },
       employee: {
         label: "For employees",
-        body: "Your employer provides access. Find the coach who fits your situation, and keep the support going over time.",
+        body: "Your employer provides access. We match you to a psychologist or coach who fits what you're going through, for a series of full-hour conversations.",
         cta: "See what's available to you",
         href: "/employees",
       },
     },
 
     steps: {
-      title: "How the matching works",
+      title: "How it works",
       items: [
         {
           title: "Tell us what's going on",
           body: "A short, adaptive intake — in your own words, typed or spoken. You don't need a neatly formulated question to begin.",
         },
         {
-          title: "We match on needs, a person confirms",
-          body: "Your specific needs are matched to a coach's actual competencies — not a personality type. A Gingermood matchmaker reviews the match before it reaches you.",
+          title: "We find the right psychologist or coach",
+          body: "Your situation is matched to the actual expertise of our psychologists and coaches — not to a personality type, and not to whoever is available first. A Gingermood matching advisor checks every match before it reaches you.",
         },
         {
-          title: "Grow with your coach over time",
-          body: "Book sessions, keep a thread with your coach, and check in periodically. Support continues beyond the first conversation.",
+          title: "Take the time to work on it",
+          body: `${SESSION_RANGE_CAP} conversations of at least an hour, with the same person. Enough time to get past the surface and change something. Between conversations you can message your psychologist or coach, and periodic check-ins help you see your progress.`,
         },
       ],
     },
@@ -77,13 +90,14 @@ export const PLATFORM = {
       title: "What Gingermood is built on",
       items: [
         {
-          title: "Matched on real needs",
-          body: "Coaching starts from a person's specific situation and a coach's real competencies — not a quiz result or a personality label.",
+          title: "The right person, not the first available",
+          body: "We match a person's specific situation to the real expertise of our psychologists and coaches. Software proposes; a Gingermood matching advisor confirms.",
         },
         {
-          title: "A human stays involved",
-          body: "Software proposes; a person confirms. Support continues after the first match, not just at the start.",
+          title: "Depth, not a quick fix",
+          body: "Fast to start, never rushed. Full-hour conversations leave room to get to the root of things, not just the surface.",
         },
+        // TODO: privacy wording pending review by Franka. Do not edit without her sign-off.
         {
           title: "Private by intent",
           body: "Individual answers are meant for the employee alone. Employers see only anonymous, aggregate patterns — never a single person's answers.",
@@ -92,7 +106,7 @@ export const PLATFORM = {
     },
 
     closing: {
-      title: "Bring considered coaching to your organisation",
+      title: "Bring considered personal guidance to your organisation",
       body: "We'll walk you through annual access, matching, and what your team would see — and what they wouldn't.",
       cta: "Discuss your organisation's needs",
     },

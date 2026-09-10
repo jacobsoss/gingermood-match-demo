@@ -40,8 +40,8 @@ export function MarketingShell({ children }: { children: React.ReactNode }) {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/logo.svg" alt="Gingermood" className="h-6 w-auto" />
             <p className="mt-3 max-w-xs text-[14px] leading-relaxed text-muted">
-              The right coach for every person. Matched on real needs — with a person involved,
-              and support that continues over time.
+              The right psychologist or coach for every person. Matched on real needs — with a
+              person involved.
             </p>
           </div>
           <nav aria-label="Footer">

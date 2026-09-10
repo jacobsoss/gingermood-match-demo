@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PLATFORM } from "@/lib/platform/copy";
+import { PLATFORM, SESSION_RANGE } from "@/lib/platform/copy";
 import { btnPrimaryLg, headingUi } from "@/lib/platform/ui-classes";
 import { MarketingShell } from "@/components/platform/MarketingShell";
 import { IconChevronRight, IconShield, IconUser, IconCheck } from "@/components/platform/icons";
@@ -8,9 +8,8 @@ import { IconChevronRight, IconShield, IconUser, IconCheck } from "@/components/
 const H = PLATFORM.home;
 
 export const metadata: Metadata = {
-  title: "Gingermood — The right coach for every person",
-  description:
-    "Ongoing coaching access for your organisation. Matched on real needs, with a person involved — and support that continues over time. Product demo with illustrative data.",
+  title: "Gingermood — the right psychologist or coach",
+  description: `Gingermood matches employees to the right psychologist or coach for ${SESSION_RANGE} in-depth conversations. Carefully matched on what they need, and checked by a person.`,
 };
 
 const AUDIENCE_ICONS = { employer: IconShield, employee: IconUser } as const;
@@ -24,7 +23,9 @@ export default function HomePage() {
           <div>
             <p className="eyebrow gm-rise text-purple">{H.eyebrow}</p>
             <h1 className="gm-rise mt-4 font-display" style={{ animationDelay: "60ms" }}>
-              {H.title}
+              {H.h1a}
+              <br />
+              {H.h1b}
             </h1>
             <p className="gm-rise measure mt-5 text-[18px] leading-relaxed text-muted" style={{ animationDelay: "120ms" }}>
               {H.subtitle}
@@ -41,6 +42,9 @@ export default function HomePage() {
                 <IconChevronRight size={16} />
               </Link>
             </div>
+            <p className="gm-rise mt-4 text-[13px] text-muted" style={{ animationDelay: "200ms" }}>
+              {H.proofLine}
+            </p>
           </div>
 
           {/* Photo — cropped to the two people; labelled as an illustrative example */}
@@ -49,12 +53,12 @@ export default function HomePage() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/onafhankelijke-coaches.jpg"
-                alt="A coach and client in conversation at a table"
+                alt="A psychologist or coach in conversation with a client at a table"
                 className="h-full w-full object-cover"
                 style={{ objectPosition: "57% 50%" }}
               />
             </div>
-            <p className="mt-2 text-[12px] text-muted">Illustrative example — not a real coach or client.</p>
+            <p className="mt-2 text-[12px] text-muted">Illustrative photo — not a real client, psychologist or coach.</p>
           </div>
         </div>
       </section>
