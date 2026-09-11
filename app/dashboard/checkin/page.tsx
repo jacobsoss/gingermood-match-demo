@@ -23,7 +23,7 @@ import {
   IconPulse,
   IconShield,
 } from "@/components/platform/icons";
-import { useCopy } from "@/components/platform/LanguageProvider";
+import { useCopy, useLang } from "@/components/platform/LanguageProvider";
 
 type DimensionKey = keyof CheckinScores;
 
@@ -100,6 +100,7 @@ function HelpCard({ id }: { id: string }) {
 
 export default function CheckinPage() {
   const t = useCopy();
+  const { lang } = useLang();
   const { ready, user, employee, completeCheckin } = useDemo();
 
   const QUESTIONS: Question[] = [
@@ -361,7 +362,7 @@ export default function CheckinPage() {
               {t.checkin.intro.again}
             </button>
             {lastCheckin && (
-              <p className="text-[14px] text-muted">{t.checkin.intro.lastCheckin(timeAgo(lastCheckin.dateISO))}</p>
+              <p className="text-[14px] text-muted">{t.checkin.intro.lastCheckin(timeAgo(lastCheckin.dateISO, lang))}</p>
             )}
           </div>
 
@@ -374,7 +375,7 @@ export default function CheckinPage() {
               <div className="mt-4">
                 <TrendChart
                   data={checkins.map((c) => ({
-                    label: formatDayShort(c.dateISO),
+                    label: formatDayShort(c.dateISO, lang),
                     value: c.scores.overall,
                   }))}
                   min={1}

@@ -9,7 +9,7 @@ import { getCoach } from "@/data/coaches";
 import { buildIcs, downloadIcs } from "@/lib/demo/ics";
 import type { CoachingSession, SessionType } from "@/lib/demo/types";
 import { Avatar } from "@/components/Avatar";
-import { useCopy } from "@/components/platform/LanguageProvider";
+import { useCopy, useLang } from "@/components/platform/LanguageProvider";
 import {
   Card,
   EmptyState,
@@ -74,7 +74,7 @@ function SlotGrid({
   excludeId?: string;
   onPick: (iso: string) => void;
 }) {
-  const t = useCopy();
+  const { lang, t } = useLang();
   const [showAll, setShowAll] = useState(false);
   const days = groupByDay(slots);
   const visible = showAll ? days : days.slice(0, 5);
@@ -84,7 +84,7 @@ function SlotGrid({
       {visible.map((day) => (
         <div key={day.key}>
           <p className="text-[13px] font-semibold uppercase tracking-[0.12em] text-muted">
-            {formatDayShort(day.slots[0]!.iso)}
+            {formatDayShort(day.slots[0]!.iso, lang)}
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
             {day.slots.map((slot) => {
@@ -101,7 +101,7 @@ function SlotGrid({
                       : "border-hair bg-surface text-ink hover:border-purple hover:text-purple-700 active:scale-[0.98]"
                   }`}
                 >
-                  {formatTime(slot.iso)}
+                  {formatTime(slot.iso, lang)}
                 </button>
               );
             })}
@@ -124,7 +124,7 @@ function SlotGrid({
 /* ── Rating (past sessions) ─────────────────────────────────────────────────── */
 
 function RatingControl({ onRate }: { onRate: (n: number) => void }) {
-  const t = useCopy();
+  const { t } = useLang();
   const [hover, setHover] = useState(0);
   return (
     <div className="flex items-center" onMouseLeave={() => setHover(0)}>
@@ -165,7 +165,7 @@ function StarsSmall({ rating }: { rating: number }) {
 /* ── Page ───────────────────────────────────────────────────────────────────── */
 
 export default function SessionsPage() {
-  const t = useCopy();
+  const { lang, t } = useLang();
   const { ready, user, employee, bookSession, cancelSession, rescheduleSession, rateSession } =
     useDemo();
 
@@ -300,7 +300,7 @@ export default function SessionsPage() {
                   <Avatar initials={coach.initials} size="sm" />
                   <div className="min-w-0">
                     <p className="text-[16px] font-semibold text-ink">
-                      {formatDay(s.whenISO)} {t.common.datetime.at} {formatTime(s.whenISO)}
+                      {formatDay(s.whenISO, lang)} {t.common.datetime.at} {formatTime(s.whenISO, lang)}
                     </p>
                     <p className="mt-1 flex items-center gap-2 text-[14px] text-muted">
                       <span className="text-purple">
@@ -386,7 +386,7 @@ export default function SessionsPage() {
                       {s.topic ?? t.sessions.past.fallbackTitle(coachFirst)}
                     </p>
                     <p className="mt-0.5 text-[13px] text-muted">
-                      {formatDayShort(s.whenISO)} · {typeLabel(s.type)}
+                      {formatDayShort(s.whenISO, lang)} · {typeLabel(s.type)}
                     </p>
                   </div>
                   {s.id === justRated && s.rating ? (
@@ -426,7 +426,7 @@ export default function SessionsPage() {
               <IconCheck size={22} />
             </span>
             <p className="text-[17px] font-semibold text-ink">
-              {t.sessions.bookingModal.bookedWhen(formatDay(booked.whenISO), formatTime(booked.whenISO))}
+              {t.sessions.bookingModal.bookedWhen(formatDay(booked.whenISO, lang), formatTime(booked.whenISO, lang))}
             </p>
             <p className="text-[15px] leading-relaxed text-muted">
               {t.sessions.bookingModal.addedNote}
@@ -451,7 +451,7 @@ export default function SessionsPage() {
           bookingSlot && (
             <div className="flex flex-col gap-4">
               <p className="text-[15px] text-ink">
-                {t.sessions.bookingModal.slotSummary(formatDay(bookingSlot), formatTime(bookingSlot), coachFirst)}
+                {t.sessions.bookingModal.slotSummary(formatDay(bookingSlot, lang), formatTime(bookingSlot, lang), coachFirst)}
               </p>
               <div className="flex flex-col gap-2" role="radiogroup" aria-label={t.sessions.a11y.sessionType}>
                 {typeOptions.map((opt) => {
@@ -513,8 +513,8 @@ export default function SessionsPage() {
         {rescheduleTarget && (
           <p className="text-[14px] text-muted">
             {t.sessions.reschedule.current(
-              formatDay(rescheduleTarget.whenISO),
-              formatTime(rescheduleTarget.whenISO),
+              formatDay(rescheduleTarget.whenISO, lang),
+              formatTime(rescheduleTarget.whenISO, lang),
             )}
           </p>
         )}

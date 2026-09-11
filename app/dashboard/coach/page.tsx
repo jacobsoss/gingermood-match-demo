@@ -18,7 +18,7 @@ import {
   btnSecondary,
 } from "@/components/platform/ui";
 import { IconCheck, IconClock, IconUser } from "@/components/platform/icons";
-import { useCopy } from "@/components/platform/LanguageProvider";
+import { useCopy, useLang } from "@/components/platform/LanguageProvider";
 
 const inputCls =
   "gm-focus w-full rounded-[var(--radius-input)] border-[1.5px] border-hair bg-surface px-4 py-3 text-[16px] text-ink outline-none transition-colors placeholder:text-muted";
@@ -34,6 +34,7 @@ function Tag({ children }: { children: React.ReactNode }) {
 
 export default function CoachPage() {
   const t = useCopy();
+  const { lang } = useLang();
   const { ready, employee, sendMessage } = useDemo();
   const [draft, setDraft] = useState("");
 
@@ -190,8 +191,8 @@ export default function CoachPage() {
                       {t.coachPage.nextSession.label}
                     </p>
                     <p className="mt-0.5 text-[15px] text-ink">
-                      {formatDay(nextSession.whenISO)} {t.common.datetime.at}{" "}
-                      {formatTime(nextSession.whenISO)} ·{" "}
+                      {formatDay(nextSession.whenISO, lang)} {t.common.datetime.at}{" "}
+                      {formatTime(nextSession.whenISO, lang)} ·{" "}
                       {sessionTypeLabel[nextSession.type]}
                     </p>
                   </div>
@@ -228,7 +229,7 @@ export default function CoachPage() {
                         <div className="rounded-[var(--radius-input)] bg-wash p-3.5 text-[15px] leading-relaxed text-ink">
                           {m.text}
                         </div>
-                        <p className="mt-1 text-[12px] text-muted">{timeAgo(m.dateISO)}</p>
+                        <p className="mt-1 text-[12px] text-muted">{timeAgo(m.dateISO, lang)}</p>
                       </div>
                     </li>
                   ) : (
@@ -238,7 +239,7 @@ export default function CoachPage() {
                           {m.text}
                         </div>
                         <p className="mt-1 text-right text-[12px] text-muted">
-                          {timeAgo(m.dateISO)}
+                          {timeAgo(m.dateISO, lang)}
                         </p>
                       </div>
                     </li>

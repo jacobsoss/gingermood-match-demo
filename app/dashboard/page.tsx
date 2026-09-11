@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDemo } from "@/lib/demo/store";
-import { useCopy } from "@/components/platform/LanguageProvider";
+import { useCopy, useLang } from "@/components/platform/LanguageProvider";
 import { LIBRARY_BY_ID, recommendedFor } from "@/lib/demo/seeds";
 import { firstName, formatDay, formatTime, timeOfDay } from "@/lib/demo/format";
 import { getCoach } from "@/data/coaches";
@@ -112,6 +112,7 @@ function PrivacyLine() {
 export default function DashboardHome() {
   const { ready, user, employee, respondNudge, setTourDone } = useDemo();
   const t = useCopy();
+  const { lang } = useLang();
   const router = useRouter();
   const [showTour, setShowTour] = useState<boolean | null>(null);
 
@@ -255,7 +256,7 @@ export default function DashboardHome() {
                 <span className="text-purple">
                   <IconClock size={16} />
                 </span>
-                {t.dash.coach.nextSession(formatDay(nextSession.whenISO), formatTime(nextSession.whenISO))}
+                {t.dash.coach.nextSession(formatDay(nextSession.whenISO, lang), formatTime(nextSession.whenISO, lang))}
               </p>
             ) : (
               <p className="mt-5 text-[15px] text-muted">{t.dash.coach.noSession}</p>

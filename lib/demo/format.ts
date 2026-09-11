@@ -1,27 +1,30 @@
-/** Date/text formatting for the platform (English UI, Dutch-market context). */
+/** Date/text formatting for the platform. Locale follows the chosen UI language. */
 
-export function formatDay(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", {
+type DateLang = "en" | "nl";
+const LOCALE: Record<DateLang, string> = { en: "en-GB", nl: "nl-NL" };
+
+export function formatDay(iso: string, lang: DateLang = "en"): string {
+  return new Date(iso).toLocaleDateString(LOCALE[lang], {
     weekday: "long",
     day: "numeric",
     month: "long",
   });
 }
 
-export function formatDayShort(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-GB", {
+export function formatDayShort(iso: string, lang: DateLang = "en"): string {
+  return new Date(iso).toLocaleDateString(LOCALE[lang], {
     weekday: "short",
     day: "numeric",
     month: "short",
   });
 }
 
-export function formatTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+export function formatTime(iso: string, lang: DateLang = "en"): string {
+  return new Date(iso).toLocaleTimeString(LOCALE[lang], { hour: "2-digit", minute: "2-digit" });
 }
 
-export function formatDayTime(iso: string): string {
-  return `${formatDayShort(iso)} · ${formatTime(iso)}`;
+export function formatDayTime(iso: string, lang: DateLang = "en"): string {
+  return `${formatDayShort(iso, lang)} · ${formatTime(iso, lang)}`;
 }
 
 /** "Good morning" / "Good afternoon" / "Good evening". */
@@ -40,9 +43,16 @@ export function timeOfDay(d = new Date()): "morning" | "afternoon" | "evening" {
   return "evening";
 }
 
-/** "3 weeks ago", "yesterday", "today" — rough, friendly. */
-export function timeAgo(iso: string, now = new Date()): string {
+/** "3 weeks ago", "yesterday", "today" — rough, friendly. Localised per language. */
+export function timeAgo(iso: string, lang: DateLang = "en", now = new Date()): string {
   const days = Math.floor((now.getTime() - new Date(iso).getTime()) / 86_400_000);
+  if (lang === "nl") {
+    if (days <= 0) return "vandaag";
+    if (days === 1) return "gisteren";
+    if (days < 7) return `${days} dagen geleden`;
+    const weeks = Math.round(days / 7);
+    return weeks === 1 ? "vorige week" : `${weeks} weken geleden`;
+  }
   if (days <= 0) return "today";
   if (days === 1) return "yesterday";
   if (days < 7) return `${days} days ago`;
