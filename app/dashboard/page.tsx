@@ -34,36 +34,19 @@ import {
 // comparisons; the page module reloads every visit).
 const PAGE_LOADED_AT = Date.now();
 
-const TOUR_STEPS = [
-  {
-    target: '[data-tour="match"]',
-    title: "Start with your match",
-    body: "Answer a few questions — in your own words or out loud — and we find the coach who actually fits you.",
-  },
-  {
-    target: '[data-tour="library"]',
-    title: "Browse the library",
-    body: "Short, practical reads and videos — picked for what you're working on.",
-  },
-  {
-    target: '[data-tour="checkin"]',
-    title: "Check in each quarter",
-    body: "Six quick questions. Personal to you — your employer only ever sees anonymous team trends.",
-  },
-];
-
 /** Quieter cards that sit around the main element in both states. */
 function LibraryTeaser({ ids }: { ids: string[] }) {
+  const t = useCopy();
   const items = ids.map((id) => LIBRARY_BY_ID[id]).filter(Boolean);
   return (
     <Card className="p-6" data-tour="library">
       <div className="flex items-center justify-between gap-3">
-        <SectionLabel>From the library</SectionLabel>
+        <SectionLabel>{t.dash.libraryTeaser.title}</SectionLabel>
         <Link
           href="/dashboard/library"
           className="gm-focus rounded-sm text-[14px] font-semibold text-purple hover:underline"
         >
-          Browse all
+          {t.dash.libraryTeaser.browseAll}
         </Link>
       </div>
       <ul className="mt-4 flex flex-col gap-3">
@@ -81,7 +64,7 @@ function LibraryTeaser({ ids }: { ids: string[] }) {
                   {item.title}
                 </span>
                 <span className="mt-0.5 block text-[13px] text-muted">
-                  {item.category} · {item.minutes} min
+                  {t.dash.libraryTeaser.meta(item.category, item.minutes)}
                 </span>
               </span>
             </Link>
@@ -93,6 +76,7 @@ function LibraryTeaser({ ids }: { ids: string[] }) {
 }
 
 function CheckinTeaser({ done }: { done: boolean }) {
+  const t = useCopy();
   return (
     <Card className="p-6" data-tour="checkin">
       <div className="flex items-start gap-3">
@@ -100,14 +84,12 @@ function CheckinTeaser({ done }: { done: boolean }) {
           <IconPulse size={18} />
         </span>
         <div className="min-w-0 flex-1">
-          <SectionLabel>Quarterly check-in</SectionLabel>
+          <SectionLabel>{t.dash.checkinTeaser.label}</SectionLabel>
           <p className="mt-2 text-[15px] leading-relaxed text-muted">
-            {done
-              ? "Done for this quarter — your trends are on the check-in page."
-              : "Six quick questions about how work feels right now. About a minute."}
+            {done ? t.dash.checkinTeaser.done : t.dash.checkinTeaser.todo}
           </p>
           <Link href="/dashboard/checkin" className={`${btnSecondary} mt-4`}>
-            {done ? "View my trends" : "Start check-in"}
+            {done ? t.dash.checkinTeaser.viewTrends : t.dash.checkinTeaser.start}
           </Link>
         </div>
       </div>
@@ -116,12 +98,13 @@ function CheckinTeaser({ done }: { done: boolean }) {
 }
 
 function PrivacyLine() {
+  const t = useCopy();
   return (
     <p className="flex items-start gap-2 text-[13px] leading-relaxed text-muted">
       <span className="mt-0.5 shrink-0 text-purple">
         <IconShield size={15} />
       </span>
-      Your employer never sees your individual answers — only anonymous, team-level insights.
+      {t.dash.privacyLine}
     </p>
   );
 }
@@ -131,6 +114,24 @@ export default function DashboardHome() {
   const t = useCopy();
   const router = useRouter();
   const [showTour, setShowTour] = useState<boolean | null>(null);
+
+  const TOUR_STEPS = [
+    {
+      target: '[data-tour="match"]',
+      title: t.dash.tour.match.title,
+      body: t.dash.tour.match.body,
+    },
+    {
+      target: '[data-tour="library"]',
+      title: t.dash.tour.library.title,
+      body: t.dash.tour.library.body,
+    },
+    {
+      target: '[data-tour="checkin"]',
+      title: t.dash.tour.checkin.title,
+      body: t.dash.tour.checkin.body,
+    },
+  ];
 
   if (!ready || !user || !employee) {
     return (
@@ -170,7 +171,7 @@ export default function DashboardHome() {
         </h1>
         <p className="mt-1 text-[15px] text-muted">
           {matched && coach
-            ? `Trajectory with ${firstName(coach.name)} · ${SPECIALISM_LABEL[matched.theme]}`
+            ? t.dash.trajectoryWith(firstName(coach.name), SPECIALISM_LABEL[matched.theme])
             : t.dashboard.greetingNew}
         </p>
       </header>
@@ -183,7 +184,7 @@ export default function DashboardHome() {
             className="gm-rise rounded-[var(--radius-card)] border border-hair bg-surface p-7 shadow-[var(--shadow-coach)] sm:p-9"
             style={{ animationDelay: "60ms" }}
           >
-            <p className="eyebrow text-purple">Your next step</p>
+            <p className="eyebrow text-purple">{t.dash.stateA.nextStepEyebrow}</p>
             <h2 className="mt-3 font-body text-[24px] font-semibold leading-snug text-ink sm:text-[27px]">
               {t.dashboard.actions.findSupport.title}
             </h2>
@@ -217,7 +218,7 @@ export default function DashboardHome() {
                     {t.dashboard.actions.checkin.body}
                   </p>
                   <Link href="/dashboard/checkin" className={`${btnSecondary} mt-4`}>
-                    Check in
+                    {t.dash.stateA.checkinCta}
                   </Link>
                 </div>
               </div>
@@ -254,21 +255,21 @@ export default function DashboardHome() {
                 <span className="text-purple">
                   <IconClock size={16} />
                 </span>
-                Next session: {formatDay(nextSession.whenISO)} at {formatTime(nextSession.whenISO)}
+                {t.dash.coach.nextSession(formatDay(nextSession.whenISO), formatTime(nextSession.whenISO))}
               </p>
             ) : (
-              <p className="mt-5 text-[15px] text-muted">No session booked yet.</p>
+              <p className="mt-5 text-[15px] text-muted">{t.dash.coach.noSession}</p>
             )}
 
             <div className="mt-5 flex flex-wrap gap-2.5">
               <Link href="/dashboard/sessions" className={btnPrimary}>
-                Book a session
+                {t.dash.coach.book}
               </Link>
               <Link href="/dashboard/coach" className={btnSecondary}>
-                View profile
+                {t.dash.coach.viewProfile}
               </Link>
               <Link href="/dashboard/coach#messages" className={btnSecondary}>
-                Send a message
+                {t.dash.coach.sendMessage}
               </Link>
             </div>
 
@@ -276,11 +277,13 @@ export default function DashboardHome() {
             <div className="mt-6 border-t border-hair pt-4">
               <div className="mb-1.5 flex items-baseline justify-between">
                 <p className="text-[13px] font-semibold uppercase tracking-[0.12em] text-muted">
-                  Trajectory
+                  {t.dash.coach.trajectoryLabel}
                 </p>
                 <p className="text-[13px] tabular-nums text-muted">
-                  session {Math.min(completed + 1, matched.sessionsPlanned)} of{" "}
-                  {matched.sessionsPlanned}
+                  {t.dash.coach.sessionCount(
+                    Math.min(completed + 1, matched.sessionsPlanned),
+                    matched.sessionsPlanned,
+                  )}
                 </p>
               </div>
               <Bar value={(completed / matched.sessionsPlanned) * 100} />
@@ -295,10 +298,10 @@ export default function DashboardHome() {
           <div className="gm-rise grid gap-4 sm:grid-cols-2" style={{ animationDelay: "100ms" }}>
             {energySeries.length >= 2 && (
               <Card className="p-6">
-                <SectionLabel>Your wellbeing</SectionLabel>
+                <SectionLabel>{t.dash.wellbeing.label}</SectionLabel>
                 <div className="mt-3 flex items-center justify-between gap-4">
                   <p className="text-[15px] leading-relaxed text-ink">
-                    Your energy is trending up since you started.
+                    {t.dash.wellbeing.trendUp}
                   </p>
                   <Sparkline values={energySeries} />
                 </div>
@@ -306,17 +309,16 @@ export default function DashboardHome() {
                   href="/dashboard/checkin"
                   className="gm-focus mt-3 inline-block rounded-sm text-[14px] font-semibold text-purple hover:underline"
                 >
-                  View check-in history
+                  {t.dash.wellbeing.viewHistory}
                 </Link>
               </Card>
             )}
 
             {employee.nudge && (
               <Card className="p-6">
-                <SectionLabel>From your last session</SectionLabel>
+                <SectionLabel>{t.dash.nudge.label}</SectionLabel>
                 <p className="mt-3 text-[15px] leading-relaxed text-ink">
-                  You wanted to try the &lsquo;{employee.nudge.habit.toLowerCase()}&rsquo; habit.
-                  How&apos;s it going?
+                  {t.dash.nudge.prompt(employee.nudge.habit.toLowerCase())}
                 </p>
                 {employee.nudge.response ? (
                   <p className="gm-rise mt-3 flex items-start gap-2 text-[14px] leading-relaxed text-muted">
@@ -324,8 +326,8 @@ export default function DashboardHome() {
                       <IconCheck size={15} />
                     </span>
                     {employee.nudge.response === "well"
-                      ? "Noted — nice and steady. Mara will be glad to hear it."
-                      : "Noted. That's useful to know — bring it to your next session, or revisit the article below."}
+                      ? t.dash.nudge.notedWell
+                      : t.dash.nudge.notedStruggling}
                   </p>
                 ) : (
                   <div className="mt-4 flex gap-2.5">
@@ -334,14 +336,14 @@ export default function DashboardHome() {
                       onClick={() => respondNudge("well")}
                       className={`${btnSecondary} min-h-[40px] px-5 text-[14px]`}
                     >
-                      Going well
+                      {t.dash.nudge.goingWell}
                     </button>
                     <button
                       type="button"
                       onClick={() => respondNudge("struggling")}
                       className={`${btnSecondary} min-h-[40px] px-5 text-[14px]`}
                     >
-                      Struggling
+                      {t.dash.nudge.struggling}
                     </button>
                   </div>
                 )}
@@ -349,7 +351,7 @@ export default function DashboardHome() {
                   href={`/dashboard/library/${employee.nudge.libraryId}`}
                   className="gm-focus mt-3 inline-block rounded-sm text-[14px] font-semibold text-purple hover:underline"
                 >
-                  Re-read the article
+                  {t.dash.nudge.reread}
                 </Link>
               </Card>
             )}

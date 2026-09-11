@@ -9,6 +9,7 @@ import { getCoach } from "@/data/coaches";
 import { buildIcs, downloadIcs } from "@/lib/demo/ics";
 import type { CoachingSession, SessionType } from "@/lib/demo/types";
 import { Avatar } from "@/components/Avatar";
+import { useCopy } from "@/components/platform/LanguageProvider";
 import {
   Card,
   EmptyState,
@@ -30,12 +31,6 @@ import {
 } from "@/components/platform/icons";
 
 /* ── Small helpers ──────────────────────────────────────────────────────────── */
-
-function typeLabel(type: SessionType, region: string): string {
-  if (type === "video") return "Video call";
-  if (type === "in-person") return `In person — ${region}`;
-  return "Phone";
-}
 
 function TypeIcon({ type, size = 16 }: { type: SessionType; size?: number }) {
   if (type === "video") return <IconVideo size={size} />;
@@ -79,6 +74,7 @@ function SlotGrid({
   excludeId?: string;
   onPick: (iso: string) => void;
 }) {
+  const t = useCopy();
   const [showAll, setShowAll] = useState(false);
   const days = groupByDay(slots);
   const visible = showAll ? days : days.slice(0, 5);
@@ -118,7 +114,7 @@ function SlotGrid({
           onClick={() => setShowAll((v) => !v)}
           className={`${btnLink} min-h-[40px] self-start`}
         >
-          {showAll ? "Show fewer days" : "Show more days"}
+          {showAll ? t.sessions.slots.showFewer : t.sessions.slots.showMore}
         </button>
       )}
     </div>
@@ -128,6 +124,7 @@ function SlotGrid({
 /* ── Rating (past sessions) ─────────────────────────────────────────────────── */
 
 function RatingControl({ onRate }: { onRate: (n: number) => void }) {
+  const t = useCopy();
   const [hover, setHover] = useState(0);
   return (
     <div className="flex items-center" onMouseLeave={() => setHover(0)}>
@@ -135,7 +132,7 @@ function RatingControl({ onRate }: { onRate: (n: number) => void }) {
         <button
           key={n}
           type="button"
-          aria-label={n === 1 ? "1 star" : `${n} stars`}
+          aria-label={t.sessions.rating.stars(n)}
           onMouseEnter={() => setHover(n)}
           onFocus={() => setHover(n)}
           onClick={() => onRate(n)}
@@ -151,10 +148,11 @@ function RatingControl({ onRate }: { onRate: (n: number) => void }) {
 }
 
 function StarsSmall({ rating }: { rating: number }) {
+  const t = useCopy();
   return (
     <span
       role="img"
-      aria-label={`Rated ${rating} out of 5`}
+      aria-label={t.sessions.rating.ratedOutOf(rating)}
       className="flex items-center gap-0.5 text-muted"
     >
       {[1, 2, 3, 4, 5].map((n) => (
@@ -167,6 +165,7 @@ function StarsSmall({ rating }: { rating: number }) {
 /* ── Page ───────────────────────────────────────────────────────────────────── */
 
 export default function SessionsPage() {
+  const t = useCopy();
   const { ready, user, employee, bookSession, cancelSession, rescheduleSession, rateSession } =
     useDemo();
 
@@ -200,18 +199,18 @@ export default function SessionsPage() {
       <div className="mx-auto w-full max-w-[880px] px-6 py-8 sm:px-8">
         <header className="gm-rise">
           <h1 className="font-display text-[28px] font-semibold text-ink sm:text-[32px]">
-            Sessions
+            {t.sessions.header.title}
           </h1>
-          <p className="mt-1 text-[15px] text-muted">Booking opens once you have a coach.</p>
+          <p className="mt-1 text-[15px] text-muted">{t.sessions.empty.subtitle}</p>
         </header>
         <div className="gm-rise mt-7" style={{ animationDelay: "80ms" }}>
           <EmptyState
             icon={<IconCalendar size={22} />}
-            title="Book sessions once you're matched"
-            body="Sessions happen with your own coach — and you don't have one yet. Do the short intake first; it takes about 5 minutes, and a human checks every match before it reaches you."
+            title={t.sessions.empty.title}
+            body={t.sessions.empty.body}
             action={
               <Link href="/dashboard/match" className={btnPrimary}>
-                Get matched
+                {t.sessions.empty.getMatched}
               </Link>
             }
           />
@@ -221,6 +220,12 @@ export default function SessionsPage() {
   }
 
   const coachFirst = firstName(coach.name);
+
+  const typeLabel = (type: SessionType): string => {
+    if (type === "video") return t.sessions.type.video;
+    if (type === "in-person") return t.sessions.type.inPerson(coach.region);
+    return t.sessions.type.phone;
+  };
 
   const upcoming = employee.sessions
     .filter((s) => s.status === "upcoming")
@@ -235,25 +240,25 @@ export default function SessionsPage() {
 
   const icsFor = (whenISO: string, type: SessionType, durationMin: number, note?: string) =>
     buildIcs({
-      title: `Coaching session with ${coach.name}`,
-      description: note ?? "Coaching session booked via Gingermood.",
+      title: t.sessions.ics.title(coach.name),
+      description: note ?? t.sessions.ics.descFallback,
       startISO: whenISO,
       durationMin,
       location:
         type === "video"
-          ? "Video call (link follows from Gingermood)"
+          ? t.sessions.ics.locationVideo
           : type === "in-person"
             ? coach.region
-            : "Phone call",
+            : t.sessions.ics.locationPhone,
     });
 
   const downloadSessionIcs = (whenISO: string, type: SessionType, durationMin: number, note?: string) =>
     downloadIcs(`gingermood-session-${whenISO.slice(0, 10)}.ics`, icsFor(whenISO, type, durationMin, note));
 
   const typeOptions: { value: SessionType; label: string; icon: ReactNode }[] = [
-    { value: "video", label: "Video call", icon: <IconVideo size={18} /> },
-    { value: "in-person", label: `In person — ${coach.region}`, icon: <IconMapPin size={18} /> },
-    { value: "phone", label: "Phone", icon: <IconPhone size={18} /> },
+    { value: "video", label: t.sessions.type.video, icon: <IconVideo size={18} /> },
+    { value: "in-person", label: t.sessions.type.inPerson(coach.region), icon: <IconMapPin size={18} /> },
+    { value: "phone", label: t.sessions.type.phone, icon: <IconPhone size={18} /> },
   ];
 
   const confirmBooking = () => {
@@ -273,20 +278,20 @@ export default function SessionsPage() {
   return (
     <div className="mx-auto w-full max-w-[880px] px-6 py-8 sm:px-8">
       <header className="gm-rise">
-        <h1 className="font-display text-[28px] font-semibold text-ink sm:text-[32px]">Sessions</h1>
-        <p className="mt-1 text-[15px] text-muted">
-          Plan time with {coachFirst}, and look back at what you&apos;ve already covered.
-        </p>
+        <h1 className="font-display text-[28px] font-semibold text-ink sm:text-[32px]">
+          {t.sessions.header.title}
+        </h1>
+        <p className="mt-1 text-[15px] text-muted">{t.sessions.header.subtitle(coachFirst)}</p>
       </header>
 
       {/* ── Upcoming ─────────────────────────────────────────────────────────── */}
       <section className="gm-rise mt-7" style={{ animationDelay: "60ms" }}>
-        <SectionLabel>Upcoming</SectionLabel>
+        <SectionLabel>{t.sessions.upcoming.label}</SectionLabel>
         <div className="mt-3 flex flex-col gap-4">
           {upcoming.length === 0 ? (
             <EmptyState
-              title="Nothing booked"
-              body={`Pick a time below that suits you — ${coachFirst} keeps slots open most weekdays.`}
+              title={t.sessions.upcoming.emptyTitle}
+              body={t.sessions.upcoming.emptyBody(coachFirst)}
             />
           ) : (
             upcoming.map((s) => (
@@ -295,13 +300,13 @@ export default function SessionsPage() {
                   <Avatar initials={coach.initials} size="sm" />
                   <div className="min-w-0">
                     <p className="text-[16px] font-semibold text-ink">
-                      {formatDay(s.whenISO)} at {formatTime(s.whenISO)}
+                      {formatDay(s.whenISO)} {t.common.datetime.at} {formatTime(s.whenISO)}
                     </p>
                     <p className="mt-1 flex items-center gap-2 text-[14px] text-muted">
                       <span className="text-purple">
                         <TypeIcon type={s.type} />
                       </span>
-                      {typeLabel(s.type, coach.region)} · {s.durationMin} min with {coachFirst}
+                      {typeLabel(s.type)} · {t.sessions.card.durationWith(s.durationMin, coachFirst)}
                     </p>
                     {s.note && (
                       <p className="mt-2 text-[14px] leading-relaxed text-muted">
@@ -317,21 +322,21 @@ export default function SessionsPage() {
                     className={`${btnLink} inline-flex min-h-[40px] items-center gap-1.5`}
                   >
                     <IconDownload size={15} />
-                    Add to calendar
+                    {t.sessions.card.addToCalendar}
                   </button>
                   <button
                     type="button"
                     onClick={() => setRescheduleId(s.id)}
                     className={`${btnLink} min-h-[40px]`}
                   >
-                    Reschedule
+                    {t.sessions.reschedule.action}
                   </button>
                   <button
                     type="button"
                     onClick={() => setCancelId(s.id)}
                     className={`${btnLink} min-h-[40px]`}
                   >
-                    Cancel
+                    {t.common.actions.cancel}
                   </button>
                 </div>
               </Card>
@@ -342,17 +347,15 @@ export default function SessionsPage() {
 
       {/* ── Book a session ───────────────────────────────────────────────────── */}
       <section className="gm-rise mt-8" style={{ animationDelay: "120ms" }}>
-        <SectionLabel>Book a session</SectionLabel>
+        <SectionLabel>{t.sessions.book.label}</SectionLabel>
         <Card className="mt-3 p-6 sm:p-7">
           <div className="flex items-center gap-3.5">
             <Avatar initials={coach.initials} size="sm" />
             <div className="min-w-0">
               <h2 className="font-display text-xl font-semibold text-ink">
-                Available with {coach.name}
+                {t.sessions.book.availableWith(coach.name)}
               </h2>
-              <p className="mt-0.5 text-[14px] text-muted">
-                Sessions are 60 minutes — video, in person, or by phone.
-              </p>
+              <p className="mt-0.5 text-[14px] text-muted">{t.sessions.book.duration}</p>
             </div>
           </div>
           <div className="mt-6">
@@ -367,11 +370,9 @@ export default function SessionsPage() {
 
       {/* ── Past sessions ────────────────────────────────────────────────────── */}
       <section className="gm-rise mt-8" style={{ animationDelay: "180ms" }}>
-        <SectionLabel>Past sessions</SectionLabel>
+        <SectionLabel>{t.sessions.past.label}</SectionLabel>
         {past.length === 0 ? (
-          <p className="mt-3 text-[15px] text-muted">
-            No completed sessions yet — your history builds here after the first one.
-          </p>
+          <p className="mt-3 text-[15px] text-muted">{t.sessions.past.empty}</p>
         ) : (
           <Card className="mt-3 px-6 py-1">
             <ul className="divide-y divide-hair">
@@ -382,24 +383,22 @@ export default function SessionsPage() {
                 >
                   <div className="min-w-0">
                     <p className="text-[15px] font-semibold leading-snug text-ink">
-                      {s.topic ?? `Session with ${coachFirst}`}
+                      {s.topic ?? t.sessions.past.fallbackTitle(coachFirst)}
                     </p>
                     <p className="mt-0.5 text-[13px] text-muted">
-                      {formatDayShort(s.whenISO)} · {typeLabel(s.type, coach.region)}
+                      {formatDayShort(s.whenISO)} · {typeLabel(s.type)}
                     </p>
                   </div>
                   {s.id === justRated && s.rating ? (
                     <div className="gm-rise flex flex-col items-start gap-1">
                       <StarsSmall rating={s.rating} />
-                      <p className="text-[13px] text-muted">
-                        Thanks — this helps us measure what works.
-                      </p>
+                      <p className="text-[13px] text-muted">{t.sessions.past.rateThanks}</p>
                     </div>
                   ) : s.rating ? (
                     <StarsSmall rating={s.rating} />
                   ) : s.id === ratePromptId ? (
                     <div>
-                      <p className="text-[14px] font-semibold text-ink">How was this session?</p>
+                      <p className="text-[14px] font-semibold text-ink">{t.sessions.past.ratePrompt}</p>
                       <RatingControl
                         onRate={(n) => {
                           rateSession(s.id, n);
@@ -419,7 +418,7 @@ export default function SessionsPage() {
       <Modal
         open={bookingSlot !== null}
         onClose={closeBooking}
-        title={booked ? "Session booked" : "Book a session"}
+        title={booked ? t.sessions.bookingModal.titleBooked : t.sessions.bookingModal.title}
       >
         {booked ? (
           <div className="flex flex-col items-start gap-3">
@@ -427,10 +426,10 @@ export default function SessionsPage() {
               <IconCheck size={22} />
             </span>
             <p className="text-[17px] font-semibold text-ink">
-              Booked. {formatDay(booked.whenISO)} at {formatTime(booked.whenISO)}
+              {t.sessions.bookingModal.bookedWhen(formatDay(booked.whenISO), formatTime(booked.whenISO))}
             </p>
             <p className="text-[15px] leading-relaxed text-muted">
-              Added to your sessions — calendar file below.
+              {t.sessions.bookingModal.addedNote}
             </p>
             <div className="mt-2 flex flex-wrap gap-2.5">
               <button
@@ -441,10 +440,10 @@ export default function SessionsPage() {
                 className={`${btnSecondary} gap-2`}
               >
                 <IconDownload size={16} />
-                Add to calendar (.ics)
+                {t.sessions.bookingModal.addToCalendarIcs}
               </button>
               <button type="button" onClick={closeBooking} className={btnSecondary}>
-                Close
+                {t.sessions.bookingModal.close}
               </button>
             </div>
           </div>
@@ -452,9 +451,9 @@ export default function SessionsPage() {
           bookingSlot && (
             <div className="flex flex-col gap-4">
               <p className="text-[15px] text-ink">
-                {formatDay(bookingSlot)} at {formatTime(bookingSlot)} · 60 min with {coachFirst}
+                {t.sessions.bookingModal.slotSummary(formatDay(bookingSlot), formatTime(bookingSlot), coachFirst)}
               </p>
-              <div className="flex flex-col gap-2" role="radiogroup" aria-label="Session type">
+              <div className="flex flex-col gap-2" role="radiogroup" aria-label={t.sessions.a11y.sessionType}>
                 {typeOptions.map((opt) => {
                   const selected = bookingType === opt.value;
                   return (
@@ -481,23 +480,23 @@ export default function SessionsPage() {
                   htmlFor="booking-note"
                   className="text-[13px] font-semibold uppercase tracking-[0.12em] text-muted"
                 >
-                  Note (optional)
+                  {t.sessions.bookingModal.noteLabel}
                 </label>
                 <textarea
                   id="booking-note"
                   rows={2}
                   value={bookingNote}
                   onChange={(e) => setBookingNote(e.target.value)}
-                  placeholder={`Anything you want ${coachFirst} to know beforehand?`}
+                  placeholder={t.sessions.ph.note(coachFirst)}
                   className="gm-focus mt-2 w-full resize-none rounded-[var(--radius-input)] border-[1.5px] border-hair bg-surface px-4 py-3 text-[15px] text-ink placeholder:text-muted"
                 />
               </div>
               <div className="flex flex-wrap gap-2.5">
                 <button type="button" onClick={confirmBooking} className={btnPrimary}>
-                  Confirm booking
+                  {t.sessions.bookingModal.confirm}
                 </button>
                 <button type="button" onClick={closeBooking} className={btnSecondary}>
-                  Back
+                  {t.common.actions.back}
                 </button>
               </div>
             </div>
@@ -509,12 +508,14 @@ export default function SessionsPage() {
       <Modal
         open={rescheduleId !== null}
         onClose={() => setRescheduleId(null)}
-        title="Pick a new time"
+        title={t.sessions.reschedule.title}
       >
         {rescheduleTarget && (
           <p className="text-[14px] text-muted">
-            Currently {formatDay(rescheduleTarget.whenISO)} at{" "}
-            {formatTime(rescheduleTarget.whenISO)}.
+            {t.sessions.reschedule.current(
+              formatDay(rescheduleTarget.whenISO),
+              formatTime(rescheduleTarget.whenISO),
+            )}
           </p>
         )}
         <div className="mt-4 max-h-[55vh] overflow-y-auto pr-1">
@@ -534,14 +535,14 @@ export default function SessionsPage() {
       <Modal
         open={cancelId !== null}
         onClose={() => setCancelId(null)}
-        title="Cancel this session?"
+        title={t.sessions.cancel.title}
       >
         <p className="text-[15px] leading-relaxed text-muted">
-          {coachFirst} will be notified. No costs for the demo.
+          {t.sessions.cancel.body(coachFirst)}
         </p>
         <div className="mt-5 flex flex-wrap gap-2.5">
           <button type="button" onClick={() => setCancelId(null)} className={btnSecondary}>
-            Keep it
+            {t.sessions.cancel.keep}
           </button>
           <button
             type="button"
@@ -551,7 +552,7 @@ export default function SessionsPage() {
             }}
             className={btnPrimary}
           >
-            Cancel session
+            {t.sessions.cancel.confirm}
           </button>
         </div>
       </Modal>

@@ -17,6 +17,7 @@ function pct(fraction: number): string {
 
 /** Minimal employer chrome — same 3px stripe + 68px bar as the product shell. */
 function EmployerChrome() {
+  const t = useCopy();
   const { user, logout } = useDemo();
   const router = useRouter();
 
@@ -41,8 +42,8 @@ function EmployerChrome() {
                 logout();
                 router.push("/login");
               }}
-              aria-label="Sign out"
-              title="Sign out"
+              aria-label={t.employerView.a11y.signOut}
+              title={t.employerView.a11y.signOut}
               className="gm-focus flex h-10 w-10 items-center justify-center rounded-full text-muted transition-colors hover:bg-wash hover:text-ink"
             >
               <IconLogout size={18} />
@@ -64,11 +65,11 @@ function EmployerOverview() {
       <header className="gm-rise">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <h1 className="font-body text-[28px] font-semibold text-ink sm:text-[32px]">
-            {EMPLOYER.company} — Workforce wellbeing overview
+            {t.employerView.header.title(EMPLOYER.company)}
           </h1>
           <IllustrativeTag />
         </div>
-        <p className="mt-1 text-[15px] text-muted">Quarterly view · updated this week</p>
+        <p className="mt-1 text-[15px] text-muted">{t.employerView.header.subtitle}</p>
         <p className="mt-3 flex items-start gap-2 text-[13px] leading-relaxed text-muted">
           <span className="mt-0.5 shrink-0 text-purple">
             <IconShield size={15} />
@@ -83,30 +84,30 @@ function EmployerOverview() {
         style={{ animationDelay: "60ms" }}
       >
         <Card className="p-6">
-          <Stat label="Participation" value={pct(k.participation)} />
+          <Stat label={t.employerView.kpis.participation} value={pct(k.participation)} />
         </Card>
         <Card className="p-6">
           <Stat
-            label="Average wellbeing index"
+            label={t.employerView.kpis.avgWellbeingIndex}
             value={k.wellbeingIndex.toFixed(1)}
             sub={
               <span className="inline-flex items-center gap-1">
                 <span className="text-purple">
                   <IconArrowUp size={13} />
                 </span>
-                +{k.indexDelta.toFixed(1)} vs last quarter
+                {t.employerView.kpis.indexDelta(k.indexDelta.toFixed(1))}
               </span>
             }
           />
         </Card>
         <Card className="p-6">
-          <Stat label="Sessions this quarter" value={k.sessionsQuarter} />
+          <Stat label={t.employerView.kpis.sessionsQuarter} value={k.sessionsQuarter} />
         </Card>
         <Card className="p-6">
           <Stat
-            label="Check-ins in the green"
+            label={t.employerView.kpis.checkinsGreen}
             value={`${k.checkinSplit.green}%`}
-            sub={`${k.checkinSplit.orange}% orange · ${k.checkinSplit.red}% red`}
+            sub={t.employerView.kpis.checkinSplit(k.checkinSplit.orange, k.checkinSplit.red)}
           />
         </Card>
       </div>
@@ -115,7 +116,7 @@ function EmployerOverview() {
       <div className="gm-rise mt-4" style={{ animationDelay: "120ms" }}>
         <Card className="p-6 sm:p-7">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <SectionLabel>Wellbeing by department</SectionLabel>
+            <SectionLabel>{t.employerView.departments.title}</SectionLabel>
             <ZoneLegend />
           </div>
           <ul className="mt-5 flex flex-col gap-5">
@@ -123,7 +124,7 @@ function EmployerOverview() {
               <li key={d.name}>
                 <div className="flex items-baseline justify-between gap-3">
                   <p className="text-[15px] font-semibold text-ink">{d.name}</p>
-                  <p className="text-[13px] tabular-nums text-muted">{d.headcount} people</p>
+                  <p className="text-[13px] tabular-nums text-muted">{t.employerView.departments.headcount(d.headcount)}</p>
                 </div>
                 <div className="mt-2">
                   <ZoneBar green={d.green} orange={d.orange} red={d.red} />
@@ -139,7 +140,7 @@ function EmployerOverview() {
               <span className="mt-0.5 shrink-0 text-purple">
                 <IconShield size={15} />
               </span>
-              Minimum group size {EMPLOYER.minGroupSize} — individual answers are never shown.
+              {t.employerView.departments.minGroupNote(EMPLOYER.minGroupSize)}
             </p>
           </div>
         </Card>
@@ -151,37 +152,37 @@ function EmployerOverview() {
         style={{ animationDelay: "180ms" }}
       >
         <Card className="p-6 sm:p-7">
-          <SectionLabel>Wellbeing trend</SectionLabel>
+          <SectionLabel>{t.employerView.trend.title}</SectionLabel>
           <div className="mt-4">
             <TrendChart data={[...EMPLOYER.trend]} min={6} max={8} />
           </div>
           <p className="mt-3 text-[15px] leading-relaxed text-ink">
-            Steady upward drift since the programme started.
+            {t.employerView.trend.note}
           </p>
         </Card>
 
         <Card className="p-6 sm:p-7">
-          <SectionLabel>Matching quality</SectionLabel>
+          <SectionLabel>{t.employerView.matching.title}</SectionLabel>
           <div className="mt-5 grid gap-6 sm:grid-cols-3">
-            <Stat label="Intake completion" value={pct(EMPLOYER.matching.completionRate)} />
+            <Stat label={t.employerView.matching.intakeCompletion} value={pct(EMPLOYER.matching.completionRate)} />
             <Stat
-              label="Re-match rate"
+              label={t.employerView.matching.rematchRate}
               value={pct(EMPLOYER.matching.rematchRate)}
-              sub="people who asked for a different coach"
+              sub={t.employerView.matching.rematchSub}
             />
             <Stat
-              label="Average session rating"
+              label={t.employerView.matching.avgSessionRating}
               value={`${EMPLOYER.matching.avgRating.toFixed(1)} / 5`}
             />
           </div>
           <p className="mt-6 border-t border-hair pt-4 text-[14px] leading-relaxed text-muted">
-            We measure whether matches work — and fix the ones that don&apos;t.
+            {t.employerView.matching.note}
           </p>
         </Card>
       </div>
 
       <p className="gm-rise mt-6 text-[14px] text-muted" style={{ animationDelay: "240ms" }}>
-        Full employer analytics arrive with the pilot programme.
+        {t.employerView.footer}
       </p>
     </div>
   );

@@ -5,6 +5,7 @@ import type { Coach } from "@/lib/types";
 import { Avatar } from "@/components/Avatar";
 import { Bar } from "@/components/Bar";
 import { METHOD_LABEL, SPECIALISM_LABEL, STYLE_LABEL } from "@/lib/labels";
+import { useCopy } from "@/components/platform/LanguageProvider";
 
 /** Small lavender supply tag (§4). */
 function Tag({ children }: { children: React.ReactNode }) {
@@ -42,13 +43,14 @@ function useCountUp(target: number, ms = 400): number {
 }
 
 function Score({ score }: { score: number }) {
+  const t = useCopy();
   const shown = useCountUp(score);
   return (
     <div className="w-28 shrink-0 text-right">
       <div className="font-display text-4xl font-semibold leading-none text-ink tabular-nums">
         {shown}
       </div>
-      <div className="mt-1 text-[13px] text-muted">% match</div>
+      <div className="mt-1 text-[13px] text-muted">{t.coachCard.matchLabel}</div>
       <div className="mt-2">
         <Bar value={score} />
       </div>

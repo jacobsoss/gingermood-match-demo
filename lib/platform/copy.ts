@@ -542,6 +542,456 @@ export const en = {
       link: "See how matching works",
     },
   },
+
+  // ── Batch 2: authenticated app. ──
+  charts: {
+    a11y: {
+      trend: "Trend chart",
+      distribution: (g: string | number, o: string | number, r: string | number): string => `${g}% green, ${o}% orange, ${r}% red`,
+    },
+    zone: {
+      green: "Doing well",
+      orange: "Keep an eye",
+      red: "Needs attention",
+    },
+  },
+
+  checkin: {
+    questions: {
+      energy: {
+        label: "How is your energy at work lately?",
+        low: "Running on empty",
+        high: "Fully charged",
+        short: "Energy",
+      },
+      workload: {
+        label: "How manageable is your workload?",
+        low: "Drowning in it",
+        high: "Comfortably manageable",
+        short: "Workload",
+      },
+      balance: {
+        label: "How is the balance between work and the rest of life?",
+        low: "Work takes everything",
+        high: "Healthy balance",
+        short: "Balance",
+      },
+      sleep: {
+        label: "How are you sleeping?",
+        low: "Poorly, most nights",
+        high: "Well, most nights",
+        short: "Sleep",
+      },
+      connection: {
+        label: "How connected do you feel to the people you work with?",
+        low: "Quite isolated",
+        high: "Genuinely connected",
+        short: "Connection",
+      },
+      overall: {
+        label: "All things considered, how are you doing at work?",
+        low: "Struggling",
+        high: "Doing well",
+        short: "Overall",
+      },
+    },
+    dimensionNoun: {
+      energy: "energy",
+      workload: "workload",
+      balance: "work-life balance",
+      sleep: "sleep",
+      connection: "connection with colleagues",
+      overall: "overall picture",
+    },
+    weakPhrase: {
+      energy: "your energy is running low",
+      workload: "workload is creeping up on you",
+      balance: "work is leaking into the rest of life",
+      sleep: "sleep is coming up short",
+      connection: "you're feeling more isolated than you'd like",
+      overall: "work feels heavier than it should right now",
+    },
+    privacyCard: {
+      label: "Private by design",
+      body: "Your answers are personal to you. Your employer only ever sees anonymous, team-level trends — never your individual answers.",
+      line: "Your answers are personal to you — your employer only ever sees anonymous, team-level trends.",
+    },
+    helpCard: {
+      meta: (kind: string | number, minutes: string | number): string => `${kind === "video" ? "Video" : "Article"} · ${minutes} min`,
+    },
+    employerEmpty: {
+      title: "Check-ins live in the employee view",
+      body: "The quarterly check-in is personal to each employee. Employers only ever see anonymous, team-level trends — sign in with an employee account to try it.",
+    },
+    flow: {
+      progress: (current: string | number, total: string | number): string => `Question ${current} of ${total}`,
+    },
+    a11y: {
+      option: (n: string | number): string => `${n} of 5`,
+    },
+    result: {
+      thanks: (name: string | number): string => `Thanks, ${name}`,
+      subtitle: "That's this quarter done. Here's what stood out.",
+      noticed: "What we noticed",
+      summarySteady: "Things look steady across the board — nothing is flashing orange. Keep doing whatever you're doing, and we'll ask again next quarter.",
+      solidHigh: "look solid",
+      solidBest: "are holding up best",
+      summary: (noun0: string | number, noun1: string | number, phrase: string | number, weak: string | number): string => `Your ${noun0} and ${noun1} ${phrase}. At the same time, ${weak} — worth keeping an eye on before it grows.`,
+      help: "Two things that might help",
+      backToOverview: "Back to overview",
+    },
+    intro: {
+      title: "Wellbeing check-in",
+      subtitle: "Six quick questions, about a minute. Personal to you.",
+      firstTitle: "Your first check-in",
+      firstBody: "Every quarter we ask the same six questions — energy, workload, balance, sleep, connection, and how you're doing overall. Answer honestly; there are no wrong answers. Over time this builds your personal trend, so you spot what's shifting before it becomes a problem.",
+      start: "Start check-in",
+      again: "Check in again",
+      lastCheckin: (ago: string | number): string => `Last check-in ${ago}.`,
+    },
+    trend: {
+      label: "Your trend",
+      desc: "How you answered 'all things considered' over time, from 1 to 5.",
+      byDimension: "By dimension",
+      score: (latest: string | number): string => `${latest}/5`,
+    },
+  },
+
+  coachCard: {
+    matchLabel: "% match",
+  },
+
+  coachPage: {
+    sessionType: {
+      video: "Video call",
+      inPerson: "In person",
+      phone: "Phone call",
+    },
+    empty: {
+      title: "My coach",
+      intro: "This is where your coach lives once you're matched.",
+      noCoachTitle: "No coach yet",
+      noCoachBody: "Get matched first — it takes about 5 minutes and starts with your story, not a form.",
+      getMatched: "Get matched",
+    },
+    header: {
+      title: "My coach",
+      intro: (coachFirst: string | number): string => `Profile, planning and messages — everything between you and ${coachFirst} in one place.`,
+    },
+    profile: {
+      yearsExperience: "yrs experience",
+      werkwijze: "Werkwijze",
+      bestFitFor: "Best fit for",
+      bookSession: "Book a session",
+      sendMessage: "Send a message",
+    },
+    nextSession: {
+      label: "Next session",
+      manage: "Manage sessions",
+    },
+    messages: {
+      heading: (coachFirst: string | number): string => `Messages with ${coachFirst}`,
+      empty: (coachFirst: string | number): string => `No messages yet. Say hello, or share what's on your mind before your first session — ${coachFirst} reads everything personally.`,
+      send: "Send",
+      disclaimer: "Replies usually within one working day. Not for urgent matters.",
+    },
+    a11y: {
+      messageLabel: (coachFirst: string | number): string => `Message to ${coachFirst}`,
+    },
+    ph: {
+      message: (coachFirst: string | number): string => `Write to ${coachFirst}…`,
+    },
+  },
+
+  common: {
+    actions: {
+      back: "Back",
+      goToDashboard: "Go to dashboard",
+      cancel: "Cancel",
+    },
+    datetime: {
+      at: "at",
+    },
+  },
+
+  dash: {
+    tour: {
+      match: {
+        title: "Start with your match",
+        body: "Answer a few questions — in your own words or out loud — and we find the coach who actually fits you.",
+      },
+      library: {
+        title: "Browse the library",
+        body: "Short, practical reads and videos — picked for what you're working on.",
+      },
+      checkin: {
+        title: "Check in each quarter",
+        body: "Six quick questions. Personal to you — your employer only ever sees anonymous team trends.",
+      },
+    },
+    libraryTeaser: {
+      title: "From the library",
+      browseAll: "Browse all",
+      meta: (category: string | number, minutes: string | number): string => `${category} · ${minutes} min`,
+    },
+    checkinTeaser: {
+      label: "Quarterly check-in",
+      done: "Done for this quarter — your trends are on the check-in page.",
+      todo: "Six quick questions about how work feels right now. About a minute.",
+      viewTrends: "View my trends",
+      start: "Start check-in",
+    },
+    privacyLine: "Your employer never sees your individual answers — only anonymous, team-level insights.",
+    trajectoryWith: (name: string | number, specialism: string | number): string => `Trajectory with ${name} · ${specialism}`,
+    stateA: {
+      nextStepEyebrow: "Your next step",
+      checkinCta: "Check in",
+    },
+    coach: {
+      nextSession: (day: string | number, time: string | number): string => `Next session: ${day} at ${time}`,
+      noSession: "No session booked yet.",
+      book: "Book a session",
+      viewProfile: "View profile",
+      sendMessage: "Send a message",
+      trajectoryLabel: "Trajectory",
+      sessionCount: (n: string | number, total: string | number): string => `session ${n} of ${total}`,
+    },
+    wellbeing: {
+      label: "Your wellbeing",
+      trendUp: "Your energy is trending up since you started.",
+      viewHistory: "View check-in history",
+    },
+    nudge: {
+      label: "From your last session",
+      prompt: (habit: string | number): string => `You wanted to try the ‘${habit}’ habit. How’s it going?`,
+      notedWell: "Noted — nice and steady. Mara will be glad to hear it.",
+      notedStruggling: "Noted. That's useful to know — bring it to your next session, or revisit the article below.",
+      goingWell: "Going well",
+      struggling: "Struggling",
+      reread: "Re-read the article",
+    },
+  },
+
+  employerView: {
+    a11y: {
+      signOut: "Sign out",
+    },
+    header: {
+      title: (company: string | number): string => `${company} — Workforce wellbeing overview`,
+      subtitle: "Quarterly view · updated this week",
+    },
+    kpis: {
+      participation: "Participation",
+      avgWellbeingIndex: "Average wellbeing index",
+      indexDelta: (delta: string | number): string => `+${delta} vs last quarter`,
+      sessionsQuarter: "Sessions this quarter",
+      checkinsGreen: "Check-ins in the green",
+      checkinSplit: (orange: string | number, red: string | number): string => `${orange}% orange · ${red}% red`,
+    },
+    departments: {
+      title: "Wellbeing by department",
+      headcount: (count: string | number): string => `${count} people`,
+      minGroupNote: (size: string | number): string => `Minimum group size ${size} — individual answers are never shown.`,
+    },
+    trend: {
+      title: "Wellbeing trend",
+      note: "Steady upward drift since the programme started.",
+    },
+    matching: {
+      title: "Matching quality",
+      intakeCompletion: "Intake completion",
+      rematchRate: "Re-match rate",
+      rematchSub: "people who asked for a different coach",
+      avgSessionRating: "Average session rating",
+      note: "We measure whether matches work — and fix the ones that don't.",
+    },
+    footer: "Full employer analytics arrive with the pilot programme.",
+  },
+
+  library: {
+    minutesBadge: (minutes: string | number): string => `${minutes} min`,
+    header: {
+      title: "Library",
+      subtitle: "Short, practical — picked for what you're working on.",
+    },
+    search: {
+      placeholder: "Search the library",
+      ariaLabel: "Search the library",
+      clearAria: "Clear search",
+    },
+    filters: {
+      all: "All",
+    },
+    recommended: {
+      heading: "Recommended for you",
+    },
+    noMatches: {
+      title: "No matches",
+      body: "Try another word — or clear the search and browse by category.",
+      action: "Clear search",
+    },
+    kindLabel: (kind: string | number, minutes: string | number): string => kind === "video" ? `Video · ${minutes} min` : `Article · ${minutes} min read`,
+    detail: {
+      backLink: "← Library",
+      relatedHeading: (category: string | number): string => `More on ${category}`,
+      articleMeta: (category: string | number, minutes: string | number): string => `${category} · ${minutes} min read`,
+      videoMeta: (category: string | number, minutes: string | number): string => `${category} · Video · ${minutes} min`,
+      articleFullVersion: "This article is available in the full version",
+      videoFullVersion: "Video available in the full version",
+      backToLibrary: "Back to the library",
+    },
+    notFound: {
+      title: "We couldn't find that one",
+      body: "The link may be out of date, or the item has moved. The library has plenty more worth your time.",
+    },
+  },
+
+  matchResult: {
+    confirm: {
+      heading: "Happy with this match?",
+      body: "Every match is reviewed by a Gingermood matcher before it's final — software proposes, a human confirms.",
+      cta: "Confirm my coach",
+      reviewing: "Your match has been sent to the Gingermood team for review — normally you're confirmed within one working day.",
+      confirmed: (name: string | number): string => `${name} is confirmed as your coach. You'll find your next steps on your dashboard.`,
+      goToDashboard: "Go to your dashboard",
+    },
+  },
+
+  sessions: {
+    type: {
+      video: "Video call",
+      inPerson: (region: string | number): string => `In person — ${region}`,
+      phone: "Phone",
+    },
+    slots: {
+      showFewer: "Show fewer days",
+      showMore: "Show more days",
+    },
+    rating: {
+      stars: (n: string | number): string => n === 1 ? "1 star" : `${n} stars`,
+      ratedOutOf: (rating: string | number): string => `Rated ${rating} out of 5`,
+    },
+    header: {
+      title: "Sessions",
+      subtitle: (coach: string | number): string => `Plan time with ${coach}, and look back at what you’ve already covered.`,
+    },
+    empty: {
+      subtitle: "Booking opens once you have a coach.",
+      title: "Book sessions once you're matched",
+      body: "Sessions happen with your own coach — and you don't have one yet. Do the short intake first; it takes about 5 minutes, and a human checks every match before it reaches you.",
+      getMatched: "Get matched",
+    },
+    upcoming: {
+      label: "Upcoming",
+      emptyTitle: "Nothing booked",
+      emptyBody: (coach: string | number): string => `Pick a time below that suits you — ${coach} keeps slots open most weekdays.`,
+    },
+    card: {
+      durationWith: (min: string | number, coach: string | number): string => `${min} min with ${coach}`,
+      addToCalendar: "Add to calendar",
+    },
+    reschedule: {
+      action: "Reschedule",
+      title: "Pick a new time",
+      current: (day: string | number, time: string | number): string => `Currently ${day} at ${time}.`,
+    },
+    book: {
+      label: "Book a session",
+      availableWith: (coach: string | number): string => `Available with ${coach}`,
+      duration: "Sessions are 60 minutes — video, in person, or by phone.",
+    },
+    past: {
+      label: "Past sessions",
+      empty: "No completed sessions yet — your history builds here after the first one.",
+      fallbackTitle: (coach: string | number): string => `Session with ${coach}`,
+      rateThanks: "Thanks — this helps us measure what works.",
+      ratePrompt: "How was this session?",
+    },
+    bookingModal: {
+      titleBooked: "Session booked",
+      title: "Book a session",
+      bookedWhen: (day: string | number, time: string | number): string => `Booked. ${day} at ${time}`,
+      addedNote: "Added to your sessions — calendar file below.",
+      addToCalendarIcs: "Add to calendar (.ics)",
+      close: "Close",
+      slotSummary: (day: string | number, time: string | number, coach: string | number): string => `${day} at ${time} · 60 min with ${coach}`,
+      noteLabel: "Note (optional)",
+      confirm: "Confirm booking",
+    },
+    a11y: {
+      sessionType: "Session type",
+    },
+    ph: {
+      note: (coach: string | number): string => `Anything you want ${coach} to know beforehand?`,
+    },
+    cancel: {
+      title: "Cancel this session?",
+      body: (coach: string | number): string => `${coach} will be notified. No costs for the demo.`,
+      keep: "Keep it",
+      confirm: "Cancel session",
+    },
+    ics: {
+      title: (coach: string | number): string => `Coaching session with ${coach}`,
+      descFallback: "Coaching session booked via Gingermood.",
+      locationVideo: "Video call (link follows from Gingermood)",
+      locationPhone: "Phone call",
+    },
+  },
+
+  settings: {
+    header: {
+      title: "Settings",
+      subtitle: "Your account, our privacy promises, and the demo controls.",
+    },
+    account: {
+      label: "Account",
+      roleLabel: (role: string | number): string => role === "employer" ? "Employer" : "Employee",
+      demoNote: "Demo account — details are not editable here.",
+    },
+    privacy: {
+      label: "Privacy",
+      answersTitle: "Your answers stay yours",
+      answersBody: "Your employer only sees anonymous, team-level trends — never your individual answers.",
+      minimizationTitle: "Data minimization",
+      minimizationBody: "We store only what matching needs — nothing extra, nothing for later.",
+      deleteTitle: "Delete anytime",
+      deleteBody: "One request and everything we hold about you is erased. No hoops.",
+      deletionNoted: "Noted — in the live product your data would be erased within 30 days.",
+      requestDeletion: "Request deletion",
+    },
+    demo: {
+      label: "Demo controls",
+      stageTitle: "Stage mode",
+      stageBody: "Runs the intake fully offline on the deterministic engine — for live presentations with unreliable wifi.",
+      resetTitle: "Reset demo data",
+      resetBody: "Puts every demo account back to its rehearsed starting point.",
+      resetButton: "Reset demo data",
+      shortcut: "Shortcut: hold Shift, press R then D.",
+    },
+    signout: {
+      note: "Done here? You can sign back in with any demo account.",
+      button: "Sign out",
+    },
+    deleteModal: {
+      title: "Request deletion",
+      body: "In the live product this starts the formal erasure of your answers, match and session history. In this demo, nothing leaves your browser to begin with.",
+      confirm: "Request deletion",
+    },
+    resetModal: {
+      title: "Reset demo data",
+      body: "This restores Emma, Daan and the HR account to their starting state. Bookings, check-ins and messages from this session are wiped.",
+      confirm: "Reset demo",
+    },
+  },
+
+  tour: {
+    a11y: {
+      dialog: "Quick tour",
+    },
+    progress: (current: string | number, total: string | number): string => `${current} of ${total}`,
+    skip: "Skip tour",
+    nextOrDone: (last: boolean): string => (last ? "Done" : "Next"),
+  },
 };
 
 export type Lang = "en" | "nl";

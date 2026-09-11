@@ -14,6 +14,7 @@ import {
   btnSecondary,
 } from "@/components/platform/ui";
 import { IconCheck, IconShield } from "@/components/platform/icons";
+import { useCopy } from "@/components/platform/LanguageProvider";
 
 /** One privacy promise: purple icon + short bold title + one honest line. */
 function PrivacyRow({
@@ -40,6 +41,7 @@ function PrivacyRow({
 }
 
 export default function SettingsPage() {
+  const t = useCopy();
   const { ready, user, stageMode, setStageMode, resetDemo, logout } = useDemo();
   const router = useRouter();
 
@@ -60,23 +62,23 @@ export default function SettingsPage() {
     );
   }
 
-  const roleLabel = user.role === "employer" ? "Employer" : "Employee";
+  const roleLabel = t.settings.account.roleLabel(user.role);
 
   return (
     <div className="mx-auto w-full max-w-[880px] px-6 py-8 sm:px-8">
       <div className="max-w-[640px]">
         <header className="gm-rise">
           <h1 className="font-display text-[28px] font-semibold text-ink sm:text-[32px]">
-            Settings
+            {t.settings.header.title}
           </h1>
           <p className="mt-1 text-[15px] text-muted">
-            Your account, our privacy promises, and the demo controls.
+            {t.settings.header.subtitle}
           </p>
         </header>
 
         {/* ── Account ─────────────────────────────────────────────────────── */}
         <Card className="gm-rise mt-7 p-6 sm:p-7">
-          <SectionLabel>Account</SectionLabel>
+          <SectionLabel>{t.settings.account.label}</SectionLabel>
           <div className="mt-4 flex items-center gap-4">
             <Avatar initials={initialsOf(user.name)} size="md" />
             <div className="min-w-0">
@@ -90,36 +92,36 @@ export default function SettingsPage() {
             </div>
           </div>
           <p className="mt-5 border-t border-hair pt-4 text-[13px] text-muted">
-            Demo account — details are not editable here.
+            {t.settings.account.demoNote}
           </p>
         </Card>
 
         {/* ── Privacy ─────────────────────────────────────────────────────── */}
         <div className="gm-rise mt-4" style={{ animationDelay: "80ms" }}>
           <Card className="p-6 sm:p-7">
-          <SectionLabel>Privacy</SectionLabel>
+          <SectionLabel>{t.settings.privacy.label}</SectionLabel>
           <div className="mt-5 flex flex-col gap-5">
             <PrivacyRow
               icon={<IconShield size={18} />}
-              title="Your answers stay yours"
-              body="Your employer only sees anonymous, team-level trends — never your individual answers."
+              title={t.settings.privacy.answersTitle}
+              body={t.settings.privacy.answersBody}
             />
             <PrivacyRow
               icon={<IconCheck size={18} />}
-              title="Data minimization"
-              body="We store only what matching needs — nothing extra, nothing for later."
+              title={t.settings.privacy.minimizationTitle}
+              body={t.settings.privacy.minimizationBody}
             />
             <PrivacyRow
               icon={<IconShield size={18} />}
-              title="Delete anytime"
-              body="One request and everything we hold about you is erased. No hoops."
+              title={t.settings.privacy.deleteTitle}
+              body={t.settings.privacy.deleteBody}
             >
               {deletionRequested ? (
                 <p className="gm-rise mt-3 flex items-start gap-2 text-[14px] leading-relaxed text-muted">
                   <span className="mt-0.5 shrink-0 text-purple">
                     <IconCheck size={15} />
                   </span>
-                  Noted — in the live product your data would be erased within 30 days.
+                  {t.settings.privacy.deletionNoted}
                 </p>
               ) : (
                 <button
@@ -127,7 +129,7 @@ export default function SettingsPage() {
                   onClick={() => setDeleteModalOpen(true)}
                   className={`${btnSecondary} mt-3 min-h-[40px] px-5 text-[14px]`}
                 >
-                  Request deletion
+                  {t.settings.privacy.requestDeletion}
                 </button>
               )}
             </PrivacyRow>
@@ -138,21 +140,20 @@ export default function SettingsPage() {
         {/* ── Demo controls ───────────────────────────────────────────────── */}
         <div className="gm-rise mt-4" style={{ animationDelay: "140ms" }}>
           <Card className="p-6 sm:p-7">
-          <SectionLabel>Demo controls</SectionLabel>
+          <SectionLabel>{t.settings.demo.label}</SectionLabel>
 
           <div className="mt-5 flex items-start justify-between gap-4">
             <div className="min-w-0">
-              <p className="text-[15px] font-semibold leading-snug text-ink">Stage mode</p>
+              <p className="text-[15px] font-semibold leading-snug text-ink">{t.settings.demo.stageTitle}</p>
               <p className="mt-0.5 text-[14px] leading-relaxed text-muted">
-                Runs the intake fully offline on the deterministic engine — for live
-                presentations with unreliable wifi.
+                {t.settings.demo.stageBody}
               </p>
             </div>
             <button
               type="button"
               role="switch"
               aria-checked={stageMode}
-              aria-label="Stage mode"
+              aria-label={t.settings.demo.stageTitle}
               onClick={() => setStageMode(!stageMode)}
               className="gm-focus -m-1.5 mt-0.5 shrink-0 rounded-full p-1.5"
             >
@@ -171,19 +172,19 @@ export default function SettingsPage() {
           </div>
 
           <div className="mt-5 border-t border-hair pt-5">
-            <p className="text-[15px] font-semibold leading-snug text-ink">Reset demo data</p>
+            <p className="text-[15px] font-semibold leading-snug text-ink">{t.settings.demo.resetTitle}</p>
             <p className="mt-0.5 text-[14px] leading-relaxed text-muted">
-              Puts every demo account back to its rehearsed starting point.
+              {t.settings.demo.resetBody}
             </p>
             <button
               type="button"
               onClick={() => setResetModalOpen(true)}
               className={`${btnSecondary} mt-3 min-h-[40px] px-5 text-[14px]`}
             >
-              Reset demo data
+              {t.settings.demo.resetButton}
             </button>
             <p className="mt-3 text-[13px] text-muted">
-              Shortcut: hold Shift, press R then D.
+              {t.settings.demo.shortcut}
             </p>
           </div>
           </Card>
@@ -194,7 +195,7 @@ export default function SettingsPage() {
           <Card className="p-6 sm:p-7">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className="text-[14px] leading-relaxed text-muted">
-              Done here? You can sign back in with any demo account.
+              {t.settings.signout.note}
             </p>
             <button
               type="button"
@@ -204,7 +205,7 @@ export default function SettingsPage() {
               }}
               className={btnSecondary}
             >
-              Sign out
+              {t.settings.signout.button}
             </button>
           </div>
           </Card>
@@ -215,11 +216,10 @@ export default function SettingsPage() {
       <Modal
         open={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
-        title="Request deletion"
+        title={t.settings.deleteModal.title}
       >
         <p className="text-[15px] leading-relaxed text-muted">
-          In the live product this starts the formal erasure of your answers, match and
-          session history. In this demo, nothing leaves your browser to begin with.
+          {t.settings.deleteModal.body}
         </p>
         <div className="mt-6 flex flex-wrap justify-end gap-2.5">
           <button
@@ -227,7 +227,7 @@ export default function SettingsPage() {
             onClick={() => setDeleteModalOpen(false)}
             className={btnSecondary}
           >
-            Cancel
+            {t.common.actions.cancel}
           </button>
           <button
             type="button"
@@ -237,7 +237,7 @@ export default function SettingsPage() {
             }}
             className={btnPrimary}
           >
-            Request deletion
+            {t.settings.deleteModal.confirm}
           </button>
         </div>
       </Modal>
@@ -246,11 +246,10 @@ export default function SettingsPage() {
       <Modal
         open={resetModalOpen}
         onClose={() => setResetModalOpen(false)}
-        title="Reset demo data"
+        title={t.settings.resetModal.title}
       >
         <p className="text-[15px] leading-relaxed text-muted">
-          This restores Emma, Daan and the HR account to their starting state. Bookings,
-          check-ins and messages from this session are wiped.
+          {t.settings.resetModal.body}
         </p>
         <div className="mt-6 flex flex-wrap justify-end gap-2.5">
           <button
@@ -258,7 +257,7 @@ export default function SettingsPage() {
             onClick={() => setResetModalOpen(false)}
             className={btnSecondary}
           >
-            Cancel
+            {t.common.actions.cancel}
           </button>
           <button
             type="button"
@@ -268,7 +267,7 @@ export default function SettingsPage() {
             }}
             className={btnPrimary}
           >
-            Reset demo
+            {t.settings.resetModal.confirm}
           </button>
         </div>
       </Modal>

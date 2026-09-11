@@ -1,8 +1,12 @@
+"use client";
+
 /**
  * Hand-rolled SVG charts — no chart dependency, tokens only, reliable on stage.
  * Orange/green/red here are SEMANTIC data colors (check-in zones), distinct from
  * the "orange = actions" rule that governs interactive UI (see DECISIONS.md).
  */
+
+import { useCopy } from "@/components/platform/LanguageProvider";
 
 const PURPLE = "var(--gm-purple-500)";
 const TINT = "var(--gm-border)";
@@ -64,6 +68,7 @@ export function TrendChart({
   height?: number;
   formatValue?: (v: number) => string;
 }) {
+  const t = useCopy();
   const w = 560;
   const padX = 16;
   const padY = 22;
@@ -81,7 +86,7 @@ export function TrendChart({
       viewBox={`0 0 ${w} ${height}`}
       className="w-full"
       role="img"
-      aria-label="Trend chart"
+      aria-label={t.charts.a11y.trend}
     >
       {/* gridlines */}
       {[0, 0.5, 1].map((t) => (
@@ -146,6 +151,7 @@ export function ZoneBar({
   red: number;
   height?: number;
 }) {
+  const t = useCopy();
   const total = Math.max(1, green + orange + red);
   const g = (green / total) * 100;
   const o = (orange / total) * 100;
@@ -155,7 +161,7 @@ export function ZoneBar({
       className="flex w-full overflow-hidden rounded-full"
       style={{ height }}
       role="img"
-      aria-label={`${Math.round(g)}% green, ${Math.round(o)}% orange, ${Math.round(r)}% red`}
+      aria-label={t.charts.a11y.distribution(Math.round(g), Math.round(o), Math.round(r))}
     >
       <div style={{ width: `${g}%`, background: GREEN }} />
       <div style={{ width: `${o}%`, background: ORANGE }} />
@@ -171,16 +177,17 @@ function Dot({ color }: { color: string }) {
 }
 
 export function ZoneLegend() {
+  const t = useCopy();
   return (
     <div className="flex items-center gap-4 text-[13px] text-muted">
       <span className="inline-flex items-center gap-1.5">
-        <Dot color={GREEN} /> Doing well
+        <Dot color={GREEN} /> {t.charts.zone.green}
       </span>
       <span className="inline-flex items-center gap-1.5">
-        <Dot color={ORANGE} /> Keep an eye
+        <Dot color={ORANGE} /> {t.charts.zone.orange}
       </span>
       <span className="inline-flex items-center gap-1.5">
-        <Dot color={RED} /> Needs attention
+        <Dot color={RED} /> {t.charts.zone.red}
       </span>
     </div>
   );

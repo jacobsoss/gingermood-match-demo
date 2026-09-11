@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { btnPrimary } from "./ui";
+import { useCopy } from "@/components/platform/LanguageProvider";
 
 export interface TourStep {
   /** CSS selector of the element this step points at (e.g. [data-tour="match"]). */
@@ -16,6 +17,7 @@ export interface TourStep {
  * card when a target isn't on screen), no dependencies.
  */
 export function Tour({ steps, onDone }: { steps: TourStep[]; onDone: () => void }) {
+  const t = useCopy();
   const [i, setI] = useState(0);
   const [rect, setRect] = useState<DOMRect | null>(null);
 
@@ -53,7 +55,7 @@ export function Tour({ steps, onDone }: { steps: TourStep[]; onDone: () => void 
     : undefined;
 
   return (
-    <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label="Quick tour">
+    <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={t.tour.a11y.dialog}>
       {/* Soft dim layer */}
       <div className="absolute inset-0 bg-ink/25" onClick={onDone} role="presentation" />
 
@@ -81,7 +83,7 @@ export function Tour({ steps, onDone }: { steps: TourStep[]; onDone: () => void 
         }
       >
         <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
-          {i + 1} of {steps.length}
+          {t.tour.progress(i + 1, steps.length)}
         </p>
         <h3 className="mt-1.5 font-display text-lg font-semibold text-ink">{step.title}</h3>
         <p className="mt-1.5 text-[14px] leading-relaxed text-muted">{step.body}</p>
@@ -91,14 +93,14 @@ export function Tour({ steps, onDone }: { steps: TourStep[]; onDone: () => void 
             onClick={onDone}
             className="gm-focus rounded-sm text-[14px] font-semibold text-muted transition-colors hover:text-ink"
           >
-            Skip tour
+            {t.tour.skip}
           </button>
           <button
             type="button"
             onClick={() => (last ? onDone() : setI((n) => n + 1))}
             className={`${btnPrimary} min-h-[40px] px-5 text-[14px]`}
           >
-            {last ? "Done" : "Next"}
+            {t.tour.nextOrDone(last)}
           </button>
         </div>
       </div>

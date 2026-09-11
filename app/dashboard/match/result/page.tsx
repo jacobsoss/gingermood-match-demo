@@ -12,6 +12,7 @@ import { ResultCard } from "@/components/ResultCard";
 import { ProcessingScreen } from "@/components/ProcessingScreen";
 import { LoadingDots } from "@/components/LoadingDots";
 import { Card, ConfirmedBadge, Skeleton, btnPrimary, btnLink } from "@/components/platform/ui";
+import { useCopy } from "@/components/platform/LanguageProvider";
 
 /**
  * The existing match-reveal, inside the dashboard shell, plus the one addition
@@ -35,6 +36,7 @@ const RERUN_CEILING_MS = 65_000;
 const RERUN_NOTICE_MS = 6_000;
 
 function ConfirmCoach({ result }: { result: MatchResponse }) {
+  const t = useCopy();
   const { confirmMatch } = useDemo();
   const router = useRouter();
   const [phase, setPhase] = useState<"idle" | "reviewing" | "confirmed">("idle");
@@ -63,14 +65,13 @@ function ConfirmCoach({ result }: { result: MatchResponse }) {
       {phase === "idle" && (
         <div className="flex flex-col items-start gap-3">
           <h3 className="font-display text-xl font-semibold text-ink">
-            Happy with this match?
+            {t.matchResult.confirm.heading}
           </h3>
           <p className="text-[15px] leading-relaxed text-muted">
-            Every match is reviewed by a Gingermood matcher before it&apos;s final — software
-            proposes, a human confirms.
+            {t.matchResult.confirm.body}
           </p>
           <button type="button" onClick={start} className={`${btnPrimary} mt-1`}>
-            Confirm my coach
+            {t.matchResult.confirm.cta}
           </button>
         </div>
       )}
@@ -79,8 +80,7 @@ function ConfirmCoach({ result }: { result: MatchResponse }) {
         <div className="flex flex-col items-start gap-3 py-2" aria-live="polite">
           <LoadingDots />
           <p className="text-[15px] leading-relaxed text-muted">
-            Your match has been sent to the Gingermood team for review — normally you&apos;re
-            confirmed within one working day.
+            {t.matchResult.confirm.reviewing}
           </p>
         </div>
       )}
@@ -89,15 +89,14 @@ function ConfirmCoach({ result }: { result: MatchResponse }) {
         <div className="gm-rise flex flex-col items-start gap-3" aria-live="polite">
           <ConfirmedBadge />
           <p className="text-[15px] leading-relaxed text-ink">
-            {firstName(result.coach.name)} is confirmed as your coach. You&apos;ll find your
-            next steps on your dashboard.
+            {t.matchResult.confirm.confirmed(firstName(result.coach.name))}
           </p>
           <button
             type="button"
             onClick={() => router.push("/dashboard")}
             className={`${btnPrimary} mt-1`}
           >
-            Go to your dashboard
+            {t.matchResult.confirm.goToDashboard}
           </button>
         </div>
       )}

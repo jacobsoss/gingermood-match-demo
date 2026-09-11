@@ -512,4 +512,454 @@ export const nl: Copy = {
       link: "Bekijk hoe matchen werkt",
     },
   },
+
+  // ── Batch 2: authenticated app. ──
+  charts: {
+    a11y: {
+      trend: "Trendgrafiek",
+      distribution: (g, o, r) => `${g}% groen, ${o}% oranje, ${r}% rood`,
+    },
+    zone: {
+      green: "Gaat goed",
+      orange: "Even opletten",
+      red: "Vraagt aandacht",
+    },
+  },
+
+  checkin: {
+    questions: {
+      energy: {
+        label: "Hoe is je energie de laatste tijd op je werk?",
+        low: "Helemaal leeg",
+        high: "Helemaal opgeladen",
+        short: "Energie",
+      },
+      workload: {
+        label: "Hoe behapbaar is je werkdruk?",
+        low: "Ik verzuip erin",
+        high: "Prima te doen",
+        short: "Werkdruk",
+      },
+      balance: {
+        label: "Hoe is de balans tussen werk en de rest van je leven?",
+        low: "Werk slokt alles op",
+        high: "Gezonde balans",
+        short: "Balans",
+      },
+      sleep: {
+        label: "Hoe slaap je?",
+        low: "Slecht, de meeste nachten",
+        high: "Goed, de meeste nachten",
+        short: "Slaap",
+      },
+      connection: {
+        label: "Hoe verbonden voel je je met de mensen met wie je werkt?",
+        low: "Behoorlijk geïsoleerd",
+        high: "Echt verbonden",
+        short: "Verbinding",
+      },
+      overall: {
+        label: "Alles bij elkaar genomen, hoe gaat het met je op je werk?",
+        low: "Ik worstel",
+        high: "Het gaat goed",
+        short: "Algemeen",
+      },
+    },
+    dimensionNoun: {
+      energy: "energie",
+      workload: "werkdruk",
+      balance: "werk-privébalans",
+      sleep: "slaap",
+      connection: "verbinding met collega's",
+      overall: "algemene beeld",
+    },
+    weakPhrase: {
+      energy: "raakt je energie op",
+      workload: "kruipt de werkdruk omhoog",
+      balance: "lekt werk door in de rest van je leven",
+      sleep: "komt je slaap tekort",
+      connection: "voel je je meer geïsoleerd dan je zou willen",
+      overall: "voelt werk op dit moment zwaarder dan het zou moeten",
+    },
+    privacyCard: {
+      label: "Standaard privé",
+      body: "Je antwoorden zijn persoonlijk voor jou. Je werkgever ziet alleen anonieme trends op teamniveau — nooit je individuele antwoorden.",
+      line: "Je antwoorden zijn persoonlijk voor jou — je werkgever ziet alleen anonieme trends op teamniveau.",
+    },
+    helpCard: {
+      meta: (kind, minutes) => `${kind === "video" ? "Video" : "Artikel"} · ${minutes} min`,
+    },
+    employerEmpty: {
+      title: "Check-ins vind je in de medewerkersweergave",
+      body: "De kwartaal-check-in is persoonlijk voor elke medewerker. Werkgevers zien alleen anonieme trends op teamniveau — log in met een medewerkersaccount om het te proberen.",
+    },
+    flow: {
+      progress: (current, total) => `Vraag ${current} van ${total}`,
+    },
+    a11y: {
+      option: (n) => `${n} van 5`,
+    },
+    result: {
+      thanks: (name) => `Bedankt, ${name}`,
+      subtitle: "Dit kwartaal zit erop. Dit viel op.",
+      noticed: "Wat ons opviel",
+      summarySteady: "Alles ziet er stabiel uit — niets staat op oranje. Blijf doen wat je doet, en volgend kwartaal vragen we het opnieuw.",
+      solidHigh: "zien er goed uit",
+      solidBest: "houden zich het beste staande",
+      summary: (noun0, noun1, phrase, weak) => `Je ${noun0} en ${noun1} ${phrase}. Tegelijkertijd ${weak} — de moeite waard om in de gaten te houden voordat het groter wordt.`,
+      help: "Twee dingen die kunnen helpen",
+      backToOverview: "Terug naar overzicht",
+    },
+    intro: {
+      title: "Welzijnscheck-in",
+      subtitle: "Zes korte vragen, ongeveer een minuut. Persoonlijk voor jou.",
+      firstTitle: "Je eerste check-in",
+      firstBody: "Elk kwartaal stellen we dezelfde zes vragen — energie, werkdruk, balans, slaap, verbinding, en hoe het over het geheel met je gaat. Antwoord eerlijk; er zijn geen foute antwoorden. Na verloop van tijd bouwt dit je persoonlijke trend op, zodat je ziet wat er verschuift voordat het een probleem wordt.",
+      start: "Start check-in",
+      again: "Opnieuw inchecken",
+      lastCheckin: (ago) => `Laatste check-in ${ago}.`,
+    },
+    trend: {
+      label: "Jouw trend",
+      desc: "Hoe je in de loop van de tijd 'alles bij elkaar genomen' hebt beantwoord, van 1 tot 5.",
+      byDimension: "Per dimensie",
+      score: (latest) => `${latest}/5`,
+    },
+  },
+
+  coachCard: {
+    matchLabel: "% match",
+  },
+
+  coachPage: {
+    sessionType: {
+      video: "Videogesprek",
+      inPerson: "Op locatie",
+      phone: "Telefoongesprek",
+    },
+    empty: {
+      title: "Mijn coach",
+      intro: "Hier vind je jouw coach zodra je gematcht bent.",
+      noCoachTitle: "Nog geen coach",
+      noCoachBody: "Match eerst — dat kost ongeveer 5 minuten en begint met jouw verhaal, niet met een formulier.",
+      getMatched: "Match starten",
+    },
+    header: {
+      title: "Mijn coach",
+      intro: (coachFirst) => `Profiel, planning en berichten — alles tussen jou en ${coachFirst} op één plek.`,
+    },
+    profile: {
+      yearsExperience: "jaar ervaring",
+      werkwijze: "Werkwijze",
+      bestFitFor: "Past het best bij",
+      bookSession: "Plan een gesprek",
+      sendMessage: "Stuur een bericht",
+    },
+    nextSession: {
+      label: "Volgend gesprek",
+      manage: "Gesprekken beheren",
+    },
+    messages: {
+      heading: (coachFirst) => `Berichten met ${coachFirst}`,
+      empty: (coachFirst) => `Nog geen berichten. Zeg gedag, of deel wat je bezighoudt vóór je eerste gesprek — ${coachFirst} leest alles persoonlijk.`,
+      send: "Versturen",
+      disclaimer: "Antwoord meestal binnen één werkdag. Niet voor dringende zaken.",
+    },
+    a11y: {
+      messageLabel: (coachFirst) => `Bericht aan ${coachFirst}`,
+    },
+    ph: {
+      message: (coachFirst) => `Schrijf aan ${coachFirst}…`,
+    },
+  },
+
+  common: {
+    actions: {
+      back: "Terug",
+      goToDashboard: "Naar dashboard",
+      cancel: "Annuleren",
+    },
+    datetime: {
+      at: "om",
+    },
+  },
+
+  dash: {
+    tour: {
+      match: {
+        title: "Begin met je match",
+        body: "Beantwoord een paar vragen — in je eigen woorden of hardop — en wij vinden de coach die echt bij je past.",
+      },
+      library: {
+        title: "Verken de bibliotheek",
+        body: "Korte, praktische artikelen en video's — gekozen op waar je mee bezig bent.",
+      },
+      checkin: {
+        title: "Check elk kwartaal in",
+        body: "Zes korte vragen. Persoonlijk voor jou — je werkgever ziet alleen anonieme teamtrends.",
+      },
+    },
+    libraryTeaser: {
+      title: "Uit de bibliotheek",
+      browseAll: "Bekijk alles",
+      meta: (category, minutes) => `${category} · ${minutes} min`,
+    },
+    checkinTeaser: {
+      label: "Kwartaal-check-in",
+      done: "Klaar voor dit kwartaal — je trends staan op de check-in-pagina.",
+      todo: "Zes korte vragen over hoe werk nu voelt. Ongeveer een minuut.",
+      viewTrends: "Bekijk mijn trends",
+      start: "Start check-in",
+    },
+    privacyLine: "Je werkgever ziet nooit je individuele antwoorden — alleen anonieme inzichten op teamniveau.",
+    trajectoryWith: (name, specialism) => `Traject met ${name} · ${specialism}`,
+    stateA: {
+      nextStepEyebrow: "Jouw volgende stap",
+      checkinCta: "Check in",
+    },
+    coach: {
+      nextSession: (day, time) => `Volgend gesprek: ${day} om ${time}`,
+      noSession: "Nog geen gesprek gepland.",
+      book: "Plan een gesprek",
+      viewProfile: "Bekijk profiel",
+      sendMessage: "Stuur een bericht",
+      trajectoryLabel: "Traject",
+      sessionCount: (n, total) => `gesprek ${n} van ${total}`,
+    },
+    wellbeing: {
+      label: "Jouw welzijn",
+      trendUp: "Je energie stijgt sinds je bent begonnen.",
+      viewHistory: "Bekijk check-in-geschiedenis",
+    },
+    nudge: {
+      label: "Uit je laatste gesprek",
+      prompt: (habit) => `Je wilde de gewoonte ‘${habit}’ uitproberen. Hoe gaat het ermee?`,
+      notedWell: "Genoteerd — mooi en stabiel. Mara hoort dat vast graag.",
+      notedStruggling: "Genoteerd. Goed om te weten — neem het mee naar je volgende gesprek, of lees het artikel hieronder nog eens.",
+      goingWell: "Gaat goed",
+      struggling: "Moeizaam",
+      reread: "Lees het artikel opnieuw",
+    },
+  },
+
+  employerView: {
+    a11y: {
+      signOut: "Uitloggen",
+    },
+    header: {
+      title: (company) => `${company} — Overzicht welzijn medewerkers`,
+      subtitle: "Kwartaaloverzicht · deze week bijgewerkt",
+    },
+    kpis: {
+      participation: "Deelname",
+      avgWellbeingIndex: "Gemiddelde welzijnsindex",
+      indexDelta: (delta) => `+${delta} t.o.v. vorig kwartaal`,
+      sessionsQuarter: "Gesprekken dit kwartaal",
+      checkinsGreen: "Check-ins in het groen",
+      checkinSplit: (orange, red) => `${orange}% oranje · ${red}% rood`,
+    },
+    departments: {
+      title: "Welzijn per afdeling",
+      headcount: (count) => `${count} mensen`,
+      minGroupNote: (size) => `Minimale groepsgrootte ${size} — individuele antwoorden worden nooit getoond.`,
+    },
+    trend: {
+      title: "Welzijnstrend",
+      note: "Gestage stijging sinds de start van het programma.",
+    },
+    matching: {
+      title: "Matchkwaliteit",
+      intakeCompletion: "Intake voltooid",
+      rematchRate: "Rematch-percentage",
+      rematchSub: "mensen die om een andere coach vroegen",
+      avgSessionRating: "Gemiddelde gesprekbeoordeling",
+      note: "We meten of matches werken — en verbeteren de matches die dat niet doen.",
+    },
+    footer: "Volledige werkgeversanalyses komen met het pilotprogramma.",
+  },
+
+  library: {
+    minutesBadge: (minutes) => `${minutes} min`,
+    header: {
+      title: "Bibliotheek",
+      subtitle: "Kort en praktisch — uitgekozen voor waar je mee bezig bent.",
+    },
+    search: {
+      placeholder: "Zoek in de bibliotheek",
+      ariaLabel: "Zoek in de bibliotheek",
+      clearAria: "Zoekopdracht wissen",
+    },
+    filters: {
+      all: "Alles",
+    },
+    recommended: {
+      heading: "Aanbevolen voor jou",
+    },
+    noMatches: {
+      title: "Geen resultaten",
+      body: "Probeer een ander woord — of wis de zoekopdracht en blader per categorie.",
+      action: "Zoekopdracht wissen",
+    },
+    kindLabel: (kind, minutes) => kind === "video" ? `Video · ${minutes} min` : `Artikel · ${minutes} min lezen`,
+    detail: {
+      backLink: "← Bibliotheek",
+      relatedHeading: (category) => `Meer over ${category}`,
+      articleMeta: (category, minutes) => `${category} · ${minutes} min lezen`,
+      videoMeta: (category, minutes) => `${category} · Video · ${minutes} min`,
+      articleFullVersion: "Dit artikel is beschikbaar in de volledige versie",
+      videoFullVersion: "Video beschikbaar in de volledige versie",
+      backToLibrary: "Terug naar de bibliotheek",
+    },
+    notFound: {
+      title: "Die konden we niet vinden",
+      body: "De link is misschien verouderd, of het item is verplaatst. De bibliotheek heeft nog genoeg dat je tijd waard is.",
+    },
+  },
+
+  matchResult: {
+    confirm: {
+      heading: "Tevreden met deze match?",
+      body: "Elke match wordt door een Gingermood matching-adviseur nagekeken voordat die definitief is — software stelt voor, een mens bevestigt.",
+      cta: "Bevestig mijn coach",
+      reviewing: "Je match is naar het Gingermood-team gestuurd voor controle — normaal ben je binnen één werkdag bevestigd.",
+      confirmed: (name) => `${name} is bevestigd als jouw coach. Je vindt je volgende stappen op je dashboard.`,
+      goToDashboard: "Ga naar je dashboard",
+    },
+  },
+
+  sessions: {
+    type: {
+      video: "Videogesprek",
+      inPerson: (region) => `Op locatie — ${region}`,
+      phone: "Telefonisch",
+    },
+    slots: {
+      showFewer: "Minder dagen tonen",
+      showMore: "Meer dagen tonen",
+    },
+    rating: {
+      stars: (n) => n === 1 ? "1 ster" : `${n} sterren`,
+      ratedOutOf: (rating) => `Beoordeeld met ${rating} van 5`,
+    },
+    header: {
+      title: "Gesprekken",
+      subtitle: (coach) => `Plan tijd met ${coach} en kijk terug op wat je al hebt besproken.`,
+    },
+    empty: {
+      subtitle: "Plannen kan zodra je een coach hebt.",
+      title: "Plan gesprekken zodra je gematcht bent",
+      body: "Gesprekken vinden plaats met jouw eigen coach — en die heb je nog niet. Doe eerst de korte intake; dat kost ongeveer 5 minuten, en een matching-adviseur controleert elke match voordat die bij je komt.",
+      getMatched: "Word gematcht",
+    },
+    upcoming: {
+      label: "Binnenkort",
+      emptyTitle: "Nog niets gepland",
+      emptyBody: (coach) => `Kies hieronder een tijd die jou schikt — ${coach} houdt op de meeste doordeweekse dagen ruimte vrij.`,
+    },
+    card: {
+      durationWith: (min, coach) => `${min} min met ${coach}`,
+      addToCalendar: "Toevoegen aan agenda",
+    },
+    reschedule: {
+      action: "Verzetten",
+      title: "Kies een nieuwe tijd",
+      current: (day, time) => `Nu ${day} om ${time}.`,
+    },
+    book: {
+      label: "Plan een gesprek",
+      availableWith: (coach) => `Beschikbaar met ${coach}`,
+      duration: "Gesprekken duren 60 minuten — via video, op locatie of telefonisch.",
+    },
+    past: {
+      label: "Eerdere gesprekken",
+      empty: "Nog geen afgeronde gesprekken — je overzicht bouwt zich hier op na het eerste.",
+      fallbackTitle: (coach) => `Gesprek met ${coach}`,
+      rateThanks: "Bedankt — dit helpt ons meten wat werkt.",
+      ratePrompt: "Hoe was dit gesprek?",
+    },
+    bookingModal: {
+      titleBooked: "Gesprek gepland",
+      title: "Plan een gesprek",
+      bookedWhen: (day, time) => `Gepland. ${day} om ${time}`,
+      addedNote: "Toegevoegd aan je gesprekken — agendabestand hieronder.",
+      addToCalendarIcs: "Toevoegen aan agenda (.ics)",
+      close: "Sluiten",
+      slotSummary: (day, time, coach) => `${day} om ${time} · 60 min met ${coach}`,
+      noteLabel: "Notitie (optioneel)",
+      confirm: "Planning bevestigen",
+    },
+    a11y: {
+      sessionType: "Type gesprek",
+    },
+    ph: {
+      note: (coach) => `Nog iets wat je ${coach} vooraf wilt laten weten?`,
+    },
+    cancel: {
+      title: "Dit gesprek annuleren?",
+      body: (coach) => `${coach} krijgt bericht. Geen kosten voor de demo.`,
+      keep: "Behouden",
+      confirm: "Gesprek annuleren",
+    },
+    ics: {
+      title: (coach) => `Coachgesprek met ${coach}`,
+      descFallback: "Coachgesprek gepland via Gingermood.",
+      locationVideo: "Videogesprek (link volgt van Gingermood)",
+      locationPhone: "Telefoongesprek",
+    },
+  },
+
+  settings: {
+    header: {
+      title: "Instellingen",
+      subtitle: "Jouw account, onze privacybeloftes en de demo-instellingen.",
+    },
+    account: {
+      label: "Account",
+      roleLabel: (role) => role === "employer" ? "Werkgever" : "Medewerker",
+      demoNote: "Demo-account — gegevens zijn hier niet aan te passen.",
+    },
+    privacy: {
+      label: "Privacy",
+      answersTitle: "Jouw antwoorden blijven van jou",
+      answersBody: "Je werkgever ziet alleen anonieme trends op teamniveau — nooit jouw individuele antwoorden.",
+      minimizationTitle: "Dataminimalisatie",
+      minimizationBody: "We bewaren alleen wat de match nodig heeft — niets extra, niets voor later.",
+      deleteTitle: "Altijd te verwijderen",
+      deleteBody: "Eén verzoek en alles wat we van je bewaren wordt gewist. Geen gedoe.",
+      deletionNoted: "Genoteerd — in het echte product zouden je gegevens binnen 30 dagen gewist zijn.",
+      requestDeletion: "Verwijdering aanvragen",
+    },
+    demo: {
+      label: "Demo-instellingen",
+      stageTitle: "Podiummodus",
+      stageBody: "Draait de intake volledig offline op de deterministische engine — voor live presentaties met onbetrouwbare wifi.",
+      resetTitle: "Demo-data resetten",
+      resetBody: "Zet elk demo-account terug naar het ingestudeerde startpunt.",
+      resetButton: "Demo-data resetten",
+      shortcut: "Sneltoets: houd Shift ingedrukt, druk R en dan D.",
+    },
+    signout: {
+      note: "Klaar hier? Je kunt weer inloggen met elk demo-account.",
+      button: "Uitloggen",
+    },
+    deleteModal: {
+      title: "Verwijdering aanvragen",
+      body: "In het echte product start dit de formele verwijdering van je antwoorden, match- en gespreksgeschiedenis. In deze demo verlaat er sowieso niets je browser.",
+      confirm: "Verwijdering aanvragen",
+    },
+    resetModal: {
+      title: "Demo-data resetten",
+      body: "Dit zet Emma, Daan en het HR-account terug naar hun beginstaat. Boekingen, check-ins en berichten uit deze sessie worden gewist.",
+      confirm: "Demo resetten",
+    },
+  },
+
+  tour: {
+    a11y: {
+      dialog: "Korte rondleiding",
+    },
+    progress: (current, total) => `${current} van ${total}`,
+    skip: "Tour overslaan",
+    nextOrDone: (last) => last ? "Klaar" : "Volgende",
+  },
 };

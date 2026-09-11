@@ -18,12 +18,7 @@ import {
   btnSecondary,
 } from "@/components/platform/ui";
 import { IconCheck, IconClock, IconUser } from "@/components/platform/icons";
-
-const SESSION_TYPE_LABEL: Record<SessionType, string> = {
-  video: "Video call",
-  "in-person": "In person",
-  phone: "Phone call",
-};
+import { useCopy } from "@/components/platform/LanguageProvider";
 
 const inputCls =
   "gm-focus w-full rounded-[var(--radius-input)] border-[1.5px] border-hair bg-surface px-4 py-3 text-[16px] text-ink outline-none transition-colors placeholder:text-muted";
@@ -38,8 +33,15 @@ function Tag({ children }: { children: React.ReactNode }) {
 }
 
 export default function CoachPage() {
+  const t = useCopy();
   const { ready, employee, sendMessage } = useDemo();
   const [draft, setDraft] = useState("");
+
+  const sessionTypeLabel: Record<SessionType, string> = {
+    video: t.coachPage.sessionType.video,
+    "in-person": t.coachPage.sessionType.inPerson,
+    phone: t.coachPage.sessionType.phone,
+  };
 
   if (!ready || !employee) {
     return (
@@ -60,20 +62,20 @@ export default function CoachPage() {
       <div className="mx-auto w-full max-w-[880px] px-6 py-8 sm:px-8">
         <header className="gm-rise">
           <h1 className="font-display text-[28px] font-semibold text-ink sm:text-[32px]">
-            My coach
+            {t.coachPage.empty.title}
           </h1>
           <p className="mt-1 text-[15px] text-muted">
-            This is where your coach lives once you&apos;re matched.
+            {t.coachPage.empty.intro}
           </p>
         </header>
         <div className="gm-rise mt-7" style={{ animationDelay: "80ms" }}>
           <EmptyState
             icon={<IconUser size={22} />}
-            title="No coach yet"
-            body="Get matched first — it takes about 5 minutes and starts with your story, not a form."
+            title={t.coachPage.empty.noCoachTitle}
+            body={t.coachPage.empty.noCoachBody}
             action={
               <Link href="/dashboard/match" className={btnPrimary}>
-                Get matched
+                {t.coachPage.empty.getMatched}
               </Link>
             }
           />
@@ -100,10 +102,10 @@ export default function CoachPage() {
     <div className="mx-auto w-full max-w-[880px] px-6 py-8 sm:px-8">
       <header className="gm-rise">
         <h1 className="font-display text-[28px] font-semibold text-ink sm:text-[32px]">
-          My coach
+          {t.coachPage.header.title}
         </h1>
         <p className="mt-1 text-[15px] text-muted">
-          Profile, planning and messages — everything between you and {coachFirst} in one place.
+          {t.coachPage.header.intro(coachFirst)}
         </p>
       </header>
 
@@ -117,7 +119,7 @@ export default function CoachPage() {
                 <h2 className="font-display text-2xl font-semibold text-ink">{coach.name}</h2>
                 <p className="mt-1 text-[15px] text-muted">
                   {SPECIALISM_LABEL[coach.specialisms[0]!]} · {coach.region} ·{" "}
-                  {coach.yearsExperience} yrs experience
+                  {coach.yearsExperience} {t.coachPage.profile.yearsExperience}
                 </p>
               </div>
             </div>
@@ -139,7 +141,7 @@ export default function CoachPage() {
           </div>
 
           <div className="mt-5 border-t border-hair pt-4">
-            <p className="text-[13px] text-muted">Werkwijze</p>
+            <p className="text-[13px] text-muted">{t.coachPage.profile.werkwijze}</p>
             <div className="mt-2 flex flex-wrap gap-2">
               {coach.methods.map((m) => (
                 <Tag key={m}>{METHOD_LABEL[m]}</Tag>
@@ -148,7 +150,7 @@ export default function CoachPage() {
           </div>
 
           <div className="mt-5 border-t border-hair pt-4">
-            <p className="text-[13px] text-muted">Best fit for</p>
+            <p className="text-[13px] text-muted">{t.coachPage.profile.bestFitFor}</p>
             <ul className="mt-2 flex flex-col gap-2">
               {coach.bestFitFor.slice(0, 3).map((line) => (
                 <li
@@ -166,10 +168,10 @@ export default function CoachPage() {
 
           <div className="mt-6 flex flex-wrap gap-2.5">
             <Link href="/dashboard/sessions" className={btnPrimary}>
-              Book a session
+              {t.coachPage.profile.bookSession}
             </Link>
             <a href="#messages" className={btnSecondary}>
-              Send a message
+              {t.coachPage.profile.sendMessage}
             </a>
           </div>
         </Card>
@@ -185,11 +187,12 @@ export default function CoachPage() {
                   </span>
                   <div>
                     <p className="text-[13px] font-semibold uppercase tracking-[0.12em] text-muted">
-                      Next session
+                      {t.coachPage.nextSession.label}
                     </p>
                     <p className="mt-0.5 text-[15px] text-ink">
-                      {formatDay(nextSession.whenISO)} at {formatTime(nextSession.whenISO)} ·{" "}
-                      {SESSION_TYPE_LABEL[nextSession.type]}
+                      {formatDay(nextSession.whenISO)} {t.common.datetime.at}{" "}
+                      {formatTime(nextSession.whenISO)} ·{" "}
+                      {sessionTypeLabel[nextSession.type]}
                     </p>
                   </div>
                 </div>
@@ -197,7 +200,7 @@ export default function CoachPage() {
                   href="/dashboard/sessions"
                   className="gm-focus rounded-sm text-[14px] font-semibold text-purple hover:underline"
                 >
-                  Manage sessions
+                  {t.coachPage.nextSession.manage}
                 </Link>
               </div>
             </Card>
@@ -208,13 +211,12 @@ export default function CoachPage() {
         <div id="messages" className="gm-rise scroll-mt-24" style={{ animationDelay: "160ms" }}>
           <Card className="p-6 sm:p-7">
             <h2 className="font-display text-xl font-semibold text-ink">
-              Messages with {coachFirst}
+              {t.coachPage.messages.heading(coachFirst)}
             </h2>
 
             {thread.length === 0 ? (
               <p className="mt-4 text-[15px] leading-relaxed text-muted">
-                No messages yet. Say hello, or share what&apos;s on your mind before your first
-                session — {coachFirst} reads everything personally.
+                {t.coachPage.messages.empty(coachFirst)}
               </p>
             ) : (
               <ul className="mt-5 flex flex-col gap-4">
@@ -247,7 +249,7 @@ export default function CoachPage() {
 
             <form onSubmit={submit} className="mt-6 flex gap-2.5 border-t border-hair pt-5">
               <label htmlFor="coach-message" className="sr-only">
-                Message to {coachFirst}
+                {t.coachPage.a11y.messageLabel(coachFirst)}
               </label>
               <input
                 id="coach-message"
@@ -255,7 +257,7 @@ export default function CoachPage() {
                 autoComplete="off"
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
-                placeholder={`Write to ${coachFirst}…`}
+                placeholder={t.coachPage.ph.message(coachFirst)}
                 className={`${inputCls} min-w-0 flex-1`}
               />
               <button
@@ -263,11 +265,11 @@ export default function CoachPage() {
                 disabled={!draft.trim()}
                 className={`${btnPrimary} min-h-[44px] px-6 text-[15px]`}
               >
-                Send
+                {t.coachPage.messages.send}
               </button>
             </form>
             <p className="mt-3 text-[13px] text-muted">
-              Replies usually within one working day. Not for urgent matters.
+              {t.coachPage.messages.disclaimer}
             </p>
           </Card>
         </div>

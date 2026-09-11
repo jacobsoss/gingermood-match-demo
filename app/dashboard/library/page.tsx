@@ -14,18 +14,14 @@ import {
   btnSecondary,
 } from "@/components/platform/ui";
 import { IconBook, IconPlay, IconSearch, IconX } from "@/components/platform/icons";
-
-function kindLabel(item: LibraryItem): string {
-  return item.kind === "video"
-    ? `Video · ${item.minutes} min`
-    : `Article · ${item.minutes} min read`;
-}
+import { useCopy } from "@/components/platform/LanguageProvider";
 
 function KindIcon({ item, size = 15 }: { item: LibraryItem; size?: number }) {
   return item.kind === "video" ? <IconPlay size={size} /> : <IconBook size={size} />;
 }
 
 function LibraryCard({ item }: { item: LibraryItem }) {
+  const t = useCopy();
   return (
     <Link
       href={`/dashboard/library/${item.id}`}
@@ -38,7 +34,7 @@ function LibraryCard({ item }: { item: LibraryItem }) {
               <IconPlay size={18} />
             </span>
             <span className="absolute bottom-2 right-2 rounded-full bg-ink/70 px-2 py-0.5 text-[12px] font-medium text-white">
-              {item.minutes} min
+              {t.library.minutesBadge(item.minutes)}
             </span>
           </div>
         )}
@@ -46,7 +42,7 @@ function LibraryCard({ item }: { item: LibraryItem }) {
           <span className="text-purple">
             <KindIcon item={item} />
           </span>
-          {kindLabel(item)}
+          {t.library.kindLabel(item.kind, item.minutes)}
         </p>
         <h3 className="mt-2 font-display text-lg font-semibold leading-snug text-ink transition-colors group-hover:text-purple-700">
           {item.title}
@@ -63,6 +59,7 @@ function LibraryCard({ item }: { item: LibraryItem }) {
 }
 
 export default function LibraryPage() {
+  const t = useCopy();
   const { ready, employee } = useDemo();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<LibraryCategory | "All">("All");
@@ -96,9 +93,9 @@ export default function LibraryPage() {
   return (
     <div className="mx-auto w-full max-w-[880px] px-6 py-8 sm:px-8">
       <header className="gm-rise">
-        <h1 className="font-display text-[28px] font-semibold text-ink sm:text-[32px]">Library</h1>
+        <h1 className="font-display text-[28px] font-semibold text-ink sm:text-[32px]">{t.library.header.title}</h1>
         <p className="mt-1 text-[15px] text-muted">
-          Short, practical — picked for what you&apos;re working on.
+          {t.library.header.subtitle}
         </p>
       </header>
 
@@ -112,15 +109,15 @@ export default function LibraryPage() {
             type="text"
             value={query}
             autoComplete="off"
-            aria-label="Search the library"
-            placeholder="Search the library"
+            aria-label={t.library.search.ariaLabel}
+            placeholder={t.library.search.placeholder}
             onChange={(e) => setQuery(e.target.value)}
             className="gm-focus w-full rounded-[var(--radius-input)] border-[1.5px] border-hair bg-surface py-3.5 pl-12 pr-11 text-[16px] text-ink outline-none transition-colors placeholder:text-muted"
           />
           {query && (
             <button
               type="button"
-              aria-label="Clear search"
+              aria-label={t.library.search.clearAria}
               onClick={() => setQuery("")}
               className="gm-focus absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-muted transition-colors hover:bg-wash hover:text-ink"
             >
@@ -130,7 +127,7 @@ export default function LibraryPage() {
         </div>
         <div className="mt-4 flex flex-wrap gap-2">
           <Chip active={category === "All"} onClick={() => setCategory("All")}>
-            All
+            {t.library.filters.all}
           </Chip>
           {LIBRARY_CATEGORIES.map((c) => (
             <Chip key={c} active={category === c} onClick={() => setCategory(c)}>
@@ -143,7 +140,7 @@ export default function LibraryPage() {
       {/* Recommended for you — only with a confirmed match, only when unfiltered */}
       {showRecs && (
         <section className="gm-rise mt-7" style={{ animationDelay: "120ms" }}>
-          <SectionLabel>Recommended for you</SectionLabel>
+          <SectionLabel>{t.library.recommended.heading}</SectionLabel>
           <div className="mt-3 grid gap-3 sm:grid-cols-3">
             {recs.map((item) => (
               <Link
@@ -158,7 +155,7 @@ export default function LibraryPage() {
                   <span className="block text-[14px] font-semibold leading-snug text-ink transition-colors group-hover:text-purple-700">
                     {item.title}
                   </span>
-                  <span className="mt-0.5 block text-[12px] text-muted">{kindLabel(item)}</span>
+                  <span className="mt-0.5 block text-[12px] text-muted">{t.library.kindLabel(item.kind, item.minutes)}</span>
                 </span>
               </Link>
             ))}
@@ -171,8 +168,8 @@ export default function LibraryPage() {
         {filtered.length === 0 ? (
           <EmptyState
             icon={<IconSearch size={20} />}
-            title="No matches"
-            body="Try another word — or clear the search and browse by category."
+            title={t.library.noMatches.title}
+            body={t.library.noMatches.body}
             action={
               <button
                 type="button"
@@ -182,7 +179,7 @@ export default function LibraryPage() {
                 }}
                 className={btnSecondary}
               >
-                Clear search
+                {t.library.noMatches.action}
               </button>
             }
           />

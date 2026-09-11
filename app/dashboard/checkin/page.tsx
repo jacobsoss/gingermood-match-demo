@@ -23,6 +23,7 @@ import {
   IconPulse,
   IconShield,
 } from "@/components/platform/icons";
+import { useCopy } from "@/components/platform/LanguageProvider";
 
 type DimensionKey = keyof CheckinScores;
 
@@ -33,71 +34,6 @@ interface Question {
   high: string;
   short: string;
 }
-
-const QUESTIONS: Question[] = [
-  {
-    key: "energy",
-    label: "How is your energy at work lately?",
-    low: "Running on empty",
-    high: "Fully charged",
-    short: "Energy",
-  },
-  {
-    key: "workload",
-    label: "How manageable is your workload?",
-    low: "Drowning in it",
-    high: "Comfortably manageable",
-    short: "Workload",
-  },
-  {
-    key: "balance",
-    label: "How is the balance between work and the rest of life?",
-    low: "Work takes everything",
-    high: "Healthy balance",
-    short: "Balance",
-  },
-  {
-    key: "sleep",
-    label: "How are you sleeping?",
-    low: "Poorly, most nights",
-    high: "Well, most nights",
-    short: "Sleep",
-  },
-  {
-    key: "connection",
-    label: "How connected do you feel to the people you work with?",
-    low: "Quite isolated",
-    high: "Genuinely connected",
-    short: "Connection",
-  },
-  {
-    key: "overall",
-    label: "All things considered, how are you doing at work?",
-    low: "Struggling",
-    high: "Doing well",
-    short: "Overall",
-  },
-];
-
-/** How we name a dimension mid-sentence in the result summary. */
-const DIMENSION_NOUN: Record<DimensionKey, string> = {
-  energy: "energy",
-  workload: "workload",
-  balance: "work-life balance",
-  sleep: "sleep",
-  connection: "connection with colleagues",
-  overall: "overall picture",
-};
-
-/** Plain-language flag for the weakest dimension. */
-const WEAK_PHRASE: Record<DimensionKey, string> = {
-  energy: "your energy is running low",
-  workload: "workload is creeping up on you",
-  balance: "work is leaking into the rest of life",
-  sleep: "sleep is coming up short",
-  connection: "you're feeling more isolated than you'd like",
-  overall: "work feels heavier than it should right now",
-};
 
 /** Two library picks per weakest dimension. */
 const HELP_BY_DIMENSION: Record<DimensionKey, [string, string]> = {
@@ -110,6 +46,7 @@ const HELP_BY_DIMENSION: Record<DimensionKey, [string, string]> = {
 };
 
 function PrivacyCard({ delay }: { delay?: string }) {
+  const t = useCopy();
   return (
     <div className="gm-rise" style={delay ? { animationDelay: delay } : undefined}>
       <Card className="flex items-start gap-3 p-6">
@@ -117,10 +54,9 @@ function PrivacyCard({ delay }: { delay?: string }) {
           <IconShield size={18} />
         </span>
         <div>
-          <SectionLabel>Private by design</SectionLabel>
+          <SectionLabel>{t.checkin.privacyCard.label}</SectionLabel>
           <p className="mt-1.5 text-[15px] leading-relaxed text-muted">
-            Your answers are personal to you. Your employer only ever sees anonymous, team-level
-            trends — never your individual answers.
+            {t.checkin.privacyCard.body}
           </p>
         </div>
       </Card>
@@ -129,18 +65,19 @@ function PrivacyCard({ delay }: { delay?: string }) {
 }
 
 function PrivacyLine() {
+  const t = useCopy();
   return (
     <p className="flex items-start gap-2 text-[13px] leading-relaxed text-muted">
       <span className="mt-0.5 shrink-0 text-purple">
         <IconShield size={15} />
       </span>
-      Your answers are personal to you — your employer only ever sees anonymous, team-level
-      trends.
+      {t.checkin.privacyCard.line}
     </p>
   );
 }
 
 function HelpCard({ id }: { id: string }) {
+  const t = useCopy();
   const item = LIBRARY_BY_ID[id];
   if (!item) return null;
   return (
@@ -149,7 +86,7 @@ function HelpCard({ id }: { id: string }) {
         <span className="flex items-center gap-2 text-purple">
           {item.kind === "video" ? <IconPlay size={16} /> : <IconBook size={16} />}
           <span className="text-[13px] font-semibold">
-            {item.kind === "video" ? "Video" : "Article"} · {item.minutes} min
+            {t.checkin.helpCard.meta(item.kind, item.minutes)}
           </span>
         </span>
         <p className="mt-2.5 text-[15px] font-semibold leading-snug text-ink group-hover:text-purple-700">
@@ -162,7 +99,17 @@ function HelpCard({ id }: { id: string }) {
 }
 
 export default function CheckinPage() {
+  const t = useCopy();
   const { ready, user, employee, completeCheckin } = useDemo();
+
+  const QUESTIONS: Question[] = [
+    { key: "energy", ...t.checkin.questions.energy },
+    { key: "workload", ...t.checkin.questions.workload },
+    { key: "balance", ...t.checkin.questions.balance },
+    { key: "sleep", ...t.checkin.questions.sleep },
+    { key: "connection", ...t.checkin.questions.connection },
+    { key: "overall", ...t.checkin.questions.overall },
+  ];
 
   const [view, setView] = useState<"intro" | "flow" | "result">("intro");
   const [step, setStep] = useState(0);
@@ -194,11 +141,11 @@ export default function CheckinPage() {
       <div className="mx-auto w-full max-w-[880px] px-6 py-8 sm:px-8">
         <EmptyState
           icon={<IconPulse size={22} />}
-          title="Check-ins live in the employee view"
-          body="The quarterly check-in is personal to each employee. Employers only ever see anonymous, team-level trends — sign in with an employee account to try it."
+          title={t.checkin.employerEmpty.title}
+          body={t.checkin.employerEmpty.body}
           action={
             <Link href="/dashboard" className={btnSecondary}>
-              Go to dashboard
+              {t.common.actions.goToDashboard}
             </Link>
           }
         />
@@ -270,10 +217,10 @@ export default function CheckinPage() {
               <span className="rotate-180">
                 <IconChevronRight size={16} />
               </span>
-              Back
+              {t.common.actions.back}
             </button>
             <p className="text-[13px] font-semibold tabular-nums text-muted">
-              Question {step + 1} of {QUESTIONS.length}
+              {t.checkin.flow.progress(step + 1, QUESTIONS.length)}
             </p>
           </div>
           <div className="mt-3">
@@ -292,7 +239,7 @@ export default function CheckinPage() {
                 type="button"
                 onClick={() => select(n)}
                 aria-pressed={current === n}
-                aria-label={`${n} of 5`}
+                aria-label={t.checkin.a11y.option(n)}
                 className={`gm-focus min-h-[56px] rounded-full text-[17px] font-semibold transition-colors active:scale-[0.98] ${
                   current === n ? "bg-purple text-white" : "bg-wash text-purple-700 hover:bg-tint"
                 }`}
@@ -322,31 +269,34 @@ export default function CheckinPage() {
     const helpIds = HELP_BY_DIMENSION[weakest.key];
 
     const summary = allSteady
-      ? "Things look steady across the board — nothing is flashing orange. Keep doing whatever you're doing, and we'll ask again next quarter."
-      : `Your ${DIMENSION_NOUN[strongest[0].key]} and ${DIMENSION_NOUN[strongest[1].key]} ${
-          strongest[1].value >= 4 ? "look solid" : "are holding up best"
-        }. At the same time, ${WEAK_PHRASE[weakest.key]} — worth keeping an eye on before it grows.`;
+      ? t.checkin.result.summarySteady
+      : t.checkin.result.summary(
+          t.checkin.dimensionNoun[strongest[0].key],
+          t.checkin.dimensionNoun[strongest[1].key],
+          strongest[1].value >= 4 ? t.checkin.result.solidHigh : t.checkin.result.solidBest,
+          t.checkin.weakPhrase[weakest.key],
+        );
 
     return (
       <div className="mx-auto w-full max-w-[880px] px-6 py-8 sm:px-8">
         <header className="gm-rise">
           <h1 className="font-display text-[28px] font-semibold text-ink sm:text-[32px]">
-            Thanks, {firstName(user.name)}
+            {t.checkin.result.thanks(firstName(user.name))}
           </h1>
           <p className="mt-1 text-[15px] text-muted">
-            That&apos;s this quarter done. Here&apos;s what stood out.
+            {t.checkin.result.subtitle}
           </p>
         </header>
 
         <div className="gm-rise mt-7" style={{ animationDelay: "60ms" }}>
           <Card className="p-6 sm:p-7">
-            <SectionLabel>What we noticed</SectionLabel>
+            <SectionLabel>{t.checkin.result.noticed}</SectionLabel>
             <p className="mt-3 max-w-[560px] text-[16px] leading-relaxed text-ink">{summary}</p>
           </Card>
         </div>
 
         <div className="gm-rise mt-6" style={{ animationDelay: "120ms" }}>
-          <SectionLabel>Two things that might help</SectionLabel>
+          <SectionLabel>{t.checkin.result.help}</SectionLabel>
           <div className="mt-3 grid gap-4 sm:grid-cols-2">
             <HelpCard id={helpIds[0]} />
             <HelpCard id={helpIds[1]} />
@@ -358,10 +308,10 @@ export default function CheckinPage() {
           style={{ animationDelay: "180ms" }}
         >
           <button type="button" onClick={() => setView("intro")} className={btnPrimary}>
-            Back to overview
+            {t.checkin.result.backToOverview}
           </button>
           <Link href="/dashboard" className={btnSecondary}>
-            Go to dashboard
+            {t.common.actions.goToDashboard}
           </Link>
         </div>
 
@@ -377,10 +327,10 @@ export default function CheckinPage() {
     <div className="mx-auto w-full max-w-[880px] px-6 py-8 sm:px-8">
       <header className="gm-rise">
         <h1 className="font-display text-[28px] font-semibold text-ink sm:text-[32px]">
-          Wellbeing check-in
+          {t.checkin.intro.title}
         </h1>
         <p className="mt-1 text-[15px] text-muted">
-          Six quick questions, about a minute. Personal to you.
+          {t.checkin.intro.subtitle}
         </p>
       </header>
 
@@ -391,16 +341,13 @@ export default function CheckinPage() {
               <IconPulse size={22} />
             </span>
             <h2 className="mt-3 font-display text-[22px] font-semibold text-ink">
-              Your first check-in
+              {t.checkin.intro.firstTitle}
             </h2>
             <p className="mt-2 max-w-[560px] text-[15px] leading-relaxed text-muted">
-              Every quarter we ask the same six questions — energy, workload, balance, sleep,
-              connection, and how you&apos;re doing overall. Answer honestly; there are no wrong
-              answers. Over time this builds your personal trend, so you spot what&apos;s shifting
-              before it becomes a problem.
+              {t.checkin.intro.firstBody}
             </p>
             <button type="button" onClick={startFlow} className={`${btnPrimary} mt-6`}>
-              Start check-in
+              {t.checkin.intro.start}
             </button>
           </Card>
         </div>
@@ -411,18 +358,18 @@ export default function CheckinPage() {
             style={{ animationDelay: "60ms" }}
           >
             <button type="button" onClick={startFlow} className={btnPrimary}>
-              Check in again
+              {t.checkin.intro.again}
             </button>
             {lastCheckin && (
-              <p className="text-[14px] text-muted">Last check-in {timeAgo(lastCheckin.dateISO)}.</p>
+              <p className="text-[14px] text-muted">{t.checkin.intro.lastCheckin(timeAgo(lastCheckin.dateISO))}</p>
             )}
           </div>
 
           <div className="gm-rise mt-4" style={{ animationDelay: "120ms" }}>
             <Card className="p-6 sm:p-7">
-              <SectionLabel>Your trend</SectionLabel>
+              <SectionLabel>{t.checkin.trend.label}</SectionLabel>
               <p className="mt-2 text-[15px] text-muted">
-                How you answered &lsquo;all things considered&rsquo; over time, from 1 to 5.
+                {t.checkin.trend.desc}
               </p>
               <div className="mt-4">
                 <TrendChart
@@ -437,7 +384,7 @@ export default function CheckinPage() {
               </div>
 
               <div className="mt-5 border-t border-hair pt-5">
-                <SectionLabel>By dimension</SectionLabel>
+                <SectionLabel>{t.checkin.trend.byDimension}</SectionLabel>
                 <ul className="mt-2 flex flex-col divide-y divide-hair">
                   {QUESTIONS.map((q) => {
                     const series = checkins.map((c) => c.scores[q.key]);
@@ -447,7 +394,7 @@ export default function CheckinPage() {
                         <span className="flex-1 text-[14px] font-semibold text-ink">{q.short}</span>
                         <Sparkline values={series} />
                         <span className="w-9 text-right text-[14px] tabular-nums text-muted">
-                          {latest}/5
+                          {t.checkin.trend.score(latest)}
                         </span>
                       </li>
                     );
