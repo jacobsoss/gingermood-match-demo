@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useDemo } from "@/lib/demo/store";
 import { useCopy } from "@/components/platform/LanguageProvider";
 import { LIBRARY_BY_ID, recommendedFor } from "@/lib/demo/seeds";
-import { firstName, formatDay, formatTime, timeGreeting } from "@/lib/demo/format";
+import { firstName, formatDay, formatTime, timeOfDay } from "@/lib/demo/format";
 import { getCoach } from "@/data/coaches";
 import { SPECIALISM_LABEL } from "@/lib/labels";
 import { Avatar } from "@/components/Avatar";
@@ -167,7 +167,7 @@ export default function DashboardHome() {
       {/* Greeting */}
       <header className="gm-rise">
         <h1 className="font-body text-[28px] font-semibold text-ink sm:text-[32px]">
-          {timeGreeting()}, {firstName(user.name)}
+          {t.dash.greeting[timeOfDay()]}, {firstName(user.name)}
         </h1>
         <p className="mt-1 text-[15px] text-muted">
           {matched && coach

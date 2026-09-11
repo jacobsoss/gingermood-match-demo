@@ -685,6 +685,11 @@ export const nl: Copy = {
   },
 
   dash: {
+    greeting: {
+      morning: "Goedemorgen",
+      afternoon: "Goedemiddag",
+      evening: "Goedenavond",
+    },
     tour: {
       match: {
         title: "Begin met je match",

@@ -715,6 +715,11 @@ export const en = {
   },
 
   dash: {
+    greeting: {
+      morning: "Good morning",
+      afternoon: "Good afternoon",
+      evening: "Good evening",
+    },
     tour: {
       match: {
         title: "Start with your match",

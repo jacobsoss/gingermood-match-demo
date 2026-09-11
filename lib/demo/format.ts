@@ -32,6 +32,14 @@ export function timeGreeting(d = new Date()): string {
   return "Good evening";
 }
 
+/** Time-of-day bucket, so the greeting can be looked up from the copy layer. */
+export function timeOfDay(d = new Date()): "morning" | "afternoon" | "evening" {
+  const h = d.getHours();
+  if (h < 12) return "morning";
+  if (h < 18) return "afternoon";
+  return "evening";
+}
+
 /** "3 weeks ago", "yesterday", "today" — rough, friendly. */
 export function timeAgo(iso: string, now = new Date()): string {
   const days = Math.floor((now.getTime() - new Date(iso).getTime()) / 86_400_000);
